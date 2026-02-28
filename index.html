@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatics CLO–PLO Mapping Toolkit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1612;
+            --cream: #f5f0e8;
+            --warm: #e8dcc8;
+            --rust: #c4541a;
+            --amber: #d97706;
+            --forest: #2d5a27;
+            --slate: #64748b;
+            --border: #d1c4aa;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--ink);
+            min-height: 100vh;
+            color: var(--cream);
+        }
+
+        /* ── Header ── */
+        .hero {
+            border-bottom: 3px solid var(--rust);
+            padding: 60px 24px 48px;
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
+            color: var(--amber);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+        }
+        .hero p {
+            font-size: 15px;
+            color: rgba(245,240,232,0.55);
+            line-height: 1.6;
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        /* ── Content ── */
+        .content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* ── Section headers ── */
+        h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: var(--amber);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(245,240,232,0.08);
+        }
+
+        .section { margin-bottom: 40px; }
+
+        p, li {
+            font-size: 14px;
+            color: rgba(245,240,232,0.7);
+            line-height: 1.7;
+        }
+        p + p { margin-top: 12px; }
+
+        /* ── Tool Cards ── */
+        .tools {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .tool-card {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            background: rgba(245,240,232,0.03);
+            border: 1px solid rgba(245,240,232,0.08);
+            border-radius: 8px;
+            padding: 24px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .tool-card:hover {
+            border-color: var(--amber);
+            background: rgba(245,240,232,0.05);
+        }
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+        .tool-icon.entry { background: rgba(196,84,26,0.2); color: var(--rust); }
+        .tool-icon.viewer { background: rgba(45,90,39,0.2); color: #4ade80; }
+        .tool-icon.gpt { background: rgba(217,119,6,0.2); color: var(--amber); }
+        .tool-info { flex: 1; }
+        .tool-info h3 {
+            font-size: 16px;
+            color: var(--cream);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .tool-info .tool-desc {
+            font-size: 13px;
+            color: rgba(245,240,232,0.5);
+            line-height: 1.5;
+        }
+        .tool-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            background: rgba(245,240,232,0.06);
+            color: rgba(245,240,232,0.4);
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        /* ── Steps ── */
+        .steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+        }
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 0 0 24px 48px;
+            border-left: 1px solid rgba(245,240,232,0.08);
+            margin-left: 16px;
+        }
+        .steps li:last-child { border-left: none; padding-bottom: 0; }
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: -16px;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--rust);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+        }
+        .steps li strong {
+            color: var(--cream);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ── Pillar grid ── */
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .pillar-card {
+            background: rgba(245,240,232,0.03);
+            border: 1px solid rgba(245,240,232,0.08);
+            border-radius: 6px;
+            padding: 16px;
+            border-top: 3px solid;
+        }
+        .pillar-card.comp { border-top-color: #c4541a; }
+        .pillar-card.socio { border-top-color: #2d5a27; }
+        .pillar-card.design { border-top-color: #1d4ed8; }
+        .pillar-card h4 {
+            font-size: 13px;
+            color: var(--cream);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .pillar-card p {
+            font-size: 11px;
+            color: rgba(245,240,232,0.4);
+            line-height: 1.5;
+        }
+
+        /* ── Code sample ── */
+        .code-block {
+            background: rgba(245,240,232,0.03);
+            border: 1px solid rgba(245,240,232,0.08);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: rgba(245,240,232,0.55);
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+            margin-top: 12px;
+        }
+        .code-block .key { color: var(--amber); }
+        .code-block .str { color: #4ade80; }
+        .code-block .comment { color: rgba(245,240,232,0.25); }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            border-top: 1px solid rgba(245,240,232,0.06);
+            font-size: 11px;
+            color: rgba(245,240,232,0.2);
+        }
+
+        @media (max-width: 640px) {
+            .pillar-grid { grid-template-columns: 1fr; }
+            .tool-card { flex-direction: column; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>CLO–PLO Mapping Toolkit</h1>
+    <p>Map your Course Learning Outcomes to our program's Programmatic Learning Outcomes. This helps us understand curriculum coverage and identify gaps across the Informatics program.</p>
+</div>
+
+<div class="content">
+
+    <!-- Tools -->
+    <div class="section">
+        <h2>Tools</h2>
+        <div class="tools">
+            <a class="tool-card" href="CLO_data_entry.html">
+                <div class="tool-icon entry">&#9998;</div>
+                <div class="tool-info">
+                    <h3>CLO Data Entry</h3>
+                    <p class="tool-desc">Manually enter your course learning outcomes and link each one to PLOs using the pillar/category browser. Preview your data and send it directly to the visualization.</p>
+                    <span class="tool-badge">Start here</span>
+                </div>
+            </a>
+            <a class="tool-card" href="CLO_PLO_mapper.html">
+                <div class="tool-icon viewer">&#9673;</div>
+                <div class="tool-info">
+                    <h3>Interactive Mapper</h3>
+                    <p class="tool-desc">Visualize the relationships between courses, CLOs, and PLOs as an interactive force-directed graph. Explore coverage, check the PLO histogram, and identify gaps.</p>
+                    <span class="tool-badge">Visualize &amp; analyze</span>
+                </div>
+            </a>
+            <a class="tool-card" href="CLO_PLO_mapper_GPT_prompt.md" target="_blank">
+                <div class="tool-icon gpt">&#9881;</div>
+                <div class="tool-info">
+                    <h3>GPT Prompt Guide</h3>
+                    <p class="tool-desc">Set up a custom GPT that automatically extracts CLOs from your syllabus and maps them to PLOs. Just upload your syllabus and get JSON you can paste into the mapper.</p>
+                    <span class="tool-badge">Automated extraction</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="section">
+        <h2>How It Works</h2>
+        <ol class="steps">
+            <li>
+                <strong>Enter your CLOs</strong>
+                Open the Data Entry tool. Add your course number, title, and a short description. Then add each Course Learning Outcome — these are the specific things students will be able to do after completing your course.
+            </li>
+            <li>
+                <strong>Link CLOs to PLOs</strong>
+                For each CLO, click through the three pillars (Computational, Sociotechnical, Design) to browse PLO categories. Click the PLO chips that your CLO aligns with. Hover on any chip to see the full PLO description. Most CLOs map to 1–4 PLOs.
+            </li>
+            <li>
+                <strong>Review and send</strong>
+                Click "Send to Viewer" to see a summary of what you're about to submit. The preview shows warnings for any incomplete entries. Confirm, and the mapper opens with your courses loaded automatically.
+            </li>
+            <li>
+                <strong>Explore the map</strong>
+                In the mapper, your courses appear as nodes connected to PLOs through their CLOs. Click nodes to expand/collapse, drag to rearrange, and right-click to pin. Use the "PLO Coverage" button to see a histogram of which PLOs are well-covered and which have gaps.
+            </li>
+        </ol>
+    </div>
+
+    <!-- PLO Framework -->
+    <div class="section">
+        <h2>The Three Pillars</h2>
+        <p>Our program's PLOs are organized into three pillars, each containing categories of specific learning outcomes.</p>
+        <div class="pillar-grid">
+            <div class="pillar-card comp">
+                <h4>Computational Thinking</h4>
+                <p>Reason logically, curate data, apply algorithms, and effectively implement solutions. 22 PLOs covering programming, data structures, system design, and security.</p>
+            </div>
+            <div class="pillar-card socio">
+                <h4>Sociotechnical Thinking</h4>
+                <p>Ethical sensibility, analyzing solutions, and creating solutions. 17 PLOs covering stakeholder analysis, values-based decisions, and responsible design.</p>
+            </div>
+            <div class="pillar-card design">
+                <h4>Design Thinking</h4>
+                <p>Research, design, evaluate, disseminate, and collaborate. 23 PLOs covering HCI methods, prototyping, user personas, and team-based design.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSON format -->
+    <div class="section">
+        <h2>JSON Format Reference</h2>
+        <p>If you prefer to write JSON directly (or use the GPT to generate it), here's the expected format. PLO IDs follow the pattern <code style="color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">pillar-category-number</code>.</p>
+        <div class="code-block">{
+  <span class="key">"courses"</span>: [
+    {
+      <span class="key">"courseNumber"</span>: <span class="str">"INFO-I 101"</span>,
+      <span class="key">"courseTitle"</span>: <span class="str">"Introduction to Informatics"</span>,
+      <span class="key">"description"</span>: <span class="str">"A ~50-word course description..."</span>,
+      <span class="key">"clos"</span>: [
+        {
+          <span class="key">"text"</span>: <span class="str">"Decompose real-world problems into sub-problems"</span>,
+          <span class="key">"ploMappings"</span>: [<span class="str">"comp-reason-3"</span>, <span class="str">"comp-reason-4"</span>]
+        }
+      ]
+    }
+  ]
+}</div>
+    </div>
+
+    <!-- Tips -->
+    <div class="section">
+        <h2>Tips for Good Mappings</h2>
+        <ol class="steps">
+            <li>
+                <strong>Start with action verbs</strong>
+                Write CLOs that begin with measurable verbs: analyze, construct, evaluate, design, implement. This makes it easier to identify which PLOs align.
+            </li>
+            <li>
+                <strong>Aim for 1–4 PLO mappings per CLO</strong>
+                If a CLO maps to more than 4 PLOs, it might be too broad. Consider splitting it into more specific outcomes. If it maps to zero, it may not align with program goals.
+            </li>
+            <li>
+                <strong>Check cross-pillar coverage</strong>
+                Many courses naturally touch multiple pillars. An implementation-focused course might also have sociotechnical or design components — don't overlook those connections.
+            </li>
+            <li>
+                <strong>Use the histogram</strong>
+                After loading your courses, open the PLO Coverage panel. Look for PLOs with zero hits (gaps in your course) and PLOs with unusually high counts (potential over-emphasis).
+            </li>
+        </ol>
+    </div>
+
+</div>
+
+<div class="footer">
+    Informatics CLO–PLO Mapping Toolkit
+</div>
+
+</body>
+</html>

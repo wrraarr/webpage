@@ -420,8 +420,9 @@
             margin-bottom: 4px; font-size: 10px;
         }
         .hist-label {
-            width: 140px; flex-shrink: 0;
-            font-family: 'Space Mono', monospace;
+            width: 280px; flex-shrink: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
             color: rgba(245,240,232,0.6);
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
@@ -1726,8 +1727,8 @@
                     const rowClass = count === 0 ? 'zero' : (count === maxCount && count > 0 ? 'hot' : '');
 
                     html += `
-                        <div class="hist-row ${rowClass}" title="${ploText}">
-                            <div class="hist-label">${ploId}</div>
+                        <div class="hist-row ${rowClass}" title="${ploId}">
+                            <div class="hist-label">${ploText}</div>
                             <div class="hist-bar-bg">
                                 <div class="hist-bar" style="width:${pct}%; background:${barColor};${count === 0 ? 'opacity:0.2' : ''}"></div>
                             </div>
