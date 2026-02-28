@@ -332,6 +332,122 @@
             font-size: 10px; color: rgba(245,240,232,0.35);
             text-align: center; margin-top: 10px;
         }
+
+        /* ── HISTOGRAM MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 500;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: #1e1a14;
+            border: 1px solid rgba(245,240,232,0.15);
+            border-radius: 10px;
+            width: 90vw; max-width: 960px;
+            max-height: 85vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(245,240,232,0.1);
+        }
+        .modal-header h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px; color: var(--amber);
+            font-weight: 700;
+        }
+        .modal-close {
+            background: none; border: none; color: rgba(245,240,232,0.4);
+            font-size: 20px; cursor: pointer; padding: 4px 8px;
+            border-radius: 4px; transition: all 0.2s;
+        }
+        .modal-close:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+        .modal-body {
+            flex: 1; overflow-y: auto; padding: 20px;
+        }
+        .modal-tabs {
+            display: flex; gap: 4px; margin-bottom: 16px;
+        }
+        .modal-tab {
+            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid rgba(245,240,232,0.15);
+            border-radius: 4px;
+            color: rgba(245,240,232,0.5);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .modal-tab:hover { border-color: var(--amber); color: var(--cream); }
+        .modal-tab.active { background: var(--rust); border-color: var(--rust); color: white; }
+
+        .stats-summary {
+            display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .stat-card {
+            background: rgba(245,240,232,0.04);
+            border: 1px solid rgba(245,240,232,0.08);
+            border-radius: 6px;
+            padding: 12px 16px;
+            flex: 1; min-width: 120px;
+        }
+        .stat-card .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px; font-weight: 700;
+            color: var(--amber);
+        }
+        .stat-card .stat-label {
+            font-size: 10px; color: rgba(245,240,232,0.45);
+            text-transform: uppercase; letter-spacing: 0.06em;
+            margin-top: 4px;
+        }
+
+        .histogram-section { margin-bottom: 20px; }
+        .histogram-section h4 {
+            font-size: 12px; font-weight: 600;
+            color: var(--cream); margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(245,240,232,0.08);
+        }
+        .hist-row {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 4px; font-size: 10px;
+        }
+        .hist-label {
+            width: 140px; flex-shrink: 0;
+            font-family: 'Space Mono', monospace;
+            color: rgba(245,240,232,0.6);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .hist-bar-bg {
+            flex: 1; height: 16px;
+            background: rgba(245,240,232,0.04);
+            border-radius: 3px; overflow: hidden;
+            position: relative;
+        }
+        .hist-bar {
+            height: 100%; border-radius: 3px;
+            transition: width 0.4s ease;
+            min-width: 1px;
+        }
+        .hist-count {
+            width: 28px; text-align: right; flex-shrink: 0;
+            font-family: 'Space Mono', monospace;
+            color: rgba(245,240,232,0.5);
+        }
+        .hist-bar-bg .bar-tooltip {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            cursor: default;
+        }
+        .hist-row.zero .hist-label { color: rgba(245,240,232,0.25); }
+        .hist-row.zero .hist-count { color: rgba(245,240,232,0.2); }
+        .hist-row.hot .hist-label { color: var(--amber); font-weight: 700; }
     </style>
 </head>
 <body>
@@ -339,6 +455,7 @@
         <div id="header">
             <h1>CLO–PLO Mapper</h1>
             <div id="subtitle">Map Course Learning Outcomes to Programmatic Learning Outcomes</div>
+            <a class="header-btn" href="CLO_data_entry.html" title="Open manual CLO data entry form">Data Entry ↗</a>
             <a class="header-btn" href="CLO_PLO_mapper_GPT_prompt.md" target="_blank" title="Open GPT setup guide in a new tab">GPT Prompt ↗</a>
             <button class="header-btn" id="sidebar-toggle" onclick="toggleSidebar()">+ Add Courses</button>
         </div>
@@ -361,6 +478,18 @@
             <button class="control-btn" onclick="expandAll()">Expand All</button>
             <button class="control-btn" onclick="collapseAll()">Collapse All</button>
             <button class="control-btn" id="hide-unlinked-btn" onclick="toggleUnlinked()" style="display:none">Show Linked Only</button>
+            <button class="control-btn" id="stats-btn" onclick="showStats()" style="display:none; background:rgba(45,90,39,0.5); border-color:rgba(45,90,39,0.7);">PLO Coverage</button>
+        </div>
+
+        <!-- Stats Modal -->
+        <div class="modal-overlay" id="statsModal" onclick="if(event.target===this)closeStats()">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>PLO Coverage Analysis</h2>
+                    <button class="modal-close" onclick="closeStats()">&times;</button>
+                </div>
+                <div class="modal-body" id="statsBody"></div>
+            </div>
         </div>
 
         <div class="legend" id="legend">
@@ -1385,6 +1514,7 @@
         updateVisualization();
         updateLegend();
         updateUnlinkedButton();
+        updateStatsButton();
     }
 
     function loadFromPaste() {
@@ -1422,6 +1552,7 @@
         updateVisualization();
         updateLegend();
         updateUnlinkedButton();
+        updateStatsButton();
     }
 
     function clearAllCourses() {
@@ -1437,6 +1568,7 @@
         updateVisualization();
         updateLegend();
         updateUnlinkedButton();
+        updateStatsButton();
     }
 
     function updateCourseList() {
@@ -1492,10 +1624,191 @@
     }
 
     // ═══════════════════════════════════════════════════════════
+    // PLO COVERAGE STATS & HISTOGRAM
+    // ═══════════════════════════════════════════════════════════
+    let statsView = 'all'; // 'all', 'pillar-comp', 'pillar-socio', 'pillar-design'
+
+    function updateStatsButton() {
+        const btn = document.getElementById('stats-btn');
+        btn.style.display = courseData.length > 0 ? 'block' : 'none';
+    }
+
+    function showStats() {
+        document.getElementById('statsModal').classList.add('show');
+        renderStats();
+    }
+
+    function closeStats() {
+        document.getElementById('statsModal').classList.remove('show');
+    }
+
+    function setStatsView(view) {
+        statsView = view;
+        renderStats();
+    }
+
+    function renderStats() {
+        const body = document.getElementById('statsBody');
+
+        // Compute PLO hit counts
+        const ploCounts = {};
+        validPloIds.forEach(id => { ploCounts[id] = 0; });
+        courseData.forEach(course => {
+            course.clos.forEach(clo => {
+                clo.ploMappings.forEach(id => {
+                    if (ploCounts[id] !== undefined) ploCounts[id]++;
+                });
+            });
+        });
+
+        const totalPLOs = validPloIds.size;
+        const linkedPLOs = Object.values(ploCounts).filter(c => c > 0).length;
+        const unlinkedPLOs = totalPLOs - linkedPLOs;
+        const maxCount = Math.max(...Object.values(ploCounts), 1);
+        const totalCLOs = courseData.reduce((sum, c) => sum + c.clos.length, 0);
+
+        // Build summary
+        let html = `
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <div class="stat-value">${courseData.length}</div>
+                    <div class="stat-label">Courses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${totalCLOs}</div>
+                    <div class="stat-label">Total CLOs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${linkedPLOs}<span style="font-size:14px;color:rgba(245,240,232,0.4);">/${totalPLOs}</span></div>
+                    <div class="stat-label">PLOs Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:${unlinkedPLOs > 0 ? '#f87171' : '#4ade80'}">${unlinkedPLOs}</div>
+                    <div class="stat-label">PLOs Uncovered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${Math.round(linkedPLOs/totalPLOs*100)}%</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+            </div>
+        `;
+
+        // Pillar tabs
+        const pillars = [
+            { key: 'all', label: 'All Pillars' },
+            { key: 'pillar-comp', label: 'Computational' },
+            { key: 'pillar-socio', label: 'Sociotechnical' },
+            { key: 'pillar-design', label: 'Design' }
+        ];
+        html += '<div class="modal-tabs">';
+        pillars.forEach(p => {
+            html += `<button class="modal-tab ${statsView === p.key ? 'active' : ''}" onclick="setStatsView('${p.key}')">${p.label}</button>`;
+        });
+        html += '</div>';
+
+        // Build histogram by pillar > category > PLO
+        const pillarColors = { comp: '#c4541a', socio: '#2d5a27', design: '#1d4ed8' };
+        const pillarBarColors = { comp: '#e8652a', socio: '#3dba33', design: '#4b8cf5' };
+
+        ploData.children.forEach(pillar => {
+            const pillarKey = 'pillar-' + pillar.id;
+            if (statsView !== 'all' && statsView !== pillarKey) return;
+
+            pillar.children.forEach(cat => {
+                html += `<div class="histogram-section">`;
+                html += `<h4 style="color:${pillarColors[pillar.id] || 'var(--cream)'};">${pillar.shortName} › ${cat.name.replace(/\n/g, ' ')}</h4>`;
+
+                cat.plos.forEach((ploText, i) => {
+                    const ploId = `${cat.id}-${i}`;
+                    const count = ploCounts[ploId] || 0;
+                    const pct = maxCount > 0 ? (count / maxCount * 100) : 0;
+                    const barColor = pillarBarColors[pillar.id] || '#d97706';
+                    const rowClass = count === 0 ? 'zero' : (count === maxCount && count > 0 ? 'hot' : '');
+
+                    html += `
+                        <div class="hist-row ${rowClass}" title="${ploText}">
+                            <div class="hist-label">${ploId}</div>
+                            <div class="hist-bar-bg">
+                                <div class="hist-bar" style="width:${pct}%; background:${barColor};${count === 0 ? 'opacity:0.2' : ''}"></div>
+                            </div>
+                            <div class="hist-count">${count}</div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+        });
+
+        // Uncovered PLOs callout
+        const uncovered = [];
+        ploData.children.forEach(pillar => {
+            pillar.children.forEach(cat => {
+                cat.plos.forEach((ploText, i) => {
+                    const ploId = `${cat.id}-${i}`;
+                    if (ploCounts[ploId] === 0) {
+                        uncovered.push({ id: ploId, text: ploText, pillar: pillar.shortName, category: cat.name.replace(/\n/g, ' ') });
+                    }
+                });
+            });
+        });
+
+        if (uncovered.length > 0 && statsView === 'all') {
+            html += `<div class="histogram-section">`;
+            html += `<h4 style="color:#f87171;">Uncovered PLOs (${uncovered.length})</h4>`;
+            html += `<div style="font-size:11px; color:rgba(245,240,232,0.5); line-height:1.6;">`;
+            uncovered.forEach(u => {
+                html += `<div style="margin-bottom:4px;"><span style="font-family:'Space Mono',monospace; color:#f87171;">${u.id}</span> <span style="color:rgba(245,240,232,0.35);">›</span> ${u.text} <span style="color:rgba(245,240,232,0.25);">(${u.pillar} › ${u.category})</span></div>`;
+            });
+            html += `</div></div>`;
+        }
+
+        body.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // AUTO-LOAD FROM DATA ENTRY PAGE
+    // ═══════════════════════════════════════════════════════════
+    function checkPendingImport() {
+        try {
+            // Check URL hash for data from data entry page
+            const hash = window.location.hash;
+            if (hash.startsWith('#import=')) {
+                const encoded = hash.substring('#import='.length);
+                const jsonStr = decodeURIComponent(encoded);
+                // Clean the hash so it doesn't re-import on refresh
+                history.replaceState(null, '', window.location.pathname);
+                validateAndLoad(jsonStr);
+                // Open sidebar to show loaded courses
+                const sb = document.getElementById('sidebar');
+                sb.classList.add('open');
+                document.getElementById('sidebar-toggle').classList.add('active');
+                document.getElementById('sidebar-toggle').textContent = 'Close';
+                switchTab('courses');
+                return;
+            }
+            // Fallback: check localStorage (works on http:// origins)
+            const pending = localStorage.getItem('clo_plo_pending');
+            if (pending) {
+                localStorage.removeItem('clo_plo_pending');
+                validateAndLoad(pending);
+                const sb = document.getElementById('sidebar');
+                sb.classList.add('open');
+                document.getElementById('sidebar-toggle').classList.add('active');
+                document.getElementById('sidebar-toggle').textContent = 'Close';
+                switchTab('courses');
+            }
+        } catch (e) {
+            console.warn('Auto-import failed:', e);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
     // INIT
     // ═══════════════════════════════════════════════════════════
     initSimulation();
     renderVisualization();
+    checkPendingImport();
     </script>
 </body>
 </html>
