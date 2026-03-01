@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Journey — Informatics PLO Coverage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1612;
+            --cream: #f5f0e8;
+            --warm: #e8dcc8;
+            --rust: #c4541a;
+            --amber: #d97706;
+            --forest: #2d5a27;
+            --slate: #64748b;
+            --border: rgba(245,240,232,0.1);
+            --comp-color: #d97706;
+            --socio-color: #4a9e3f;
+            --design-color: #3b82f6;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--ink);
+            min-height: 100vh;
+            color: var(--cream);
+            overflow-x: hidden;
+        }
+
+        /* ── Nav bar ── */
+        .page-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--ink);
+            z-index: 50;
+        }
+        .page-nav a {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: rgba(245,240,232,0.4);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .page-nav a:hover { color: var(--amber); }
+        .poc-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            border: 1px solid var(--rust);
+            color: var(--rust);
+            margin-left: auto;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 36px 28px 24px;
+            border-bottom: 3px solid var(--rust);
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            color: var(--amber);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+        }
+        .hero p {
+            font-size: 13px;
+            color: rgba(245,240,232,0.5);
+            max-width: 620px;
+            line-height: 1.6;
+        }
+
+        /* ── Main layout ── */
+        .main-layout {
+            display: flex;
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0;
+            min-height: calc(100vh - 130px);
+        }
+
+        /* ── Left panel ── */
+        .selector-panel {
+            width: 320px;
+            flex-shrink: 0;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 49px;
+            height: calc(100vh - 49px);
+            overflow-y: auto;
+        }
+
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px 0;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .panel-tab {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 5px 5px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            background: none;
+            color: rgba(245,240,232,0.4);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .panel-tab.active {
+            background: rgba(245,240,232,0.05);
+            border-color: var(--border);
+            border-bottom: 1px solid var(--ink);
+            color: var(--cream);
+            margin-bottom: -1px;
+        }
+        .panel-tab:hover:not(.active) { color: var(--cream); }
+
+        .tab-content { display: none; flex-direction: column; flex: 1; overflow-y: auto; }
+        .tab-content.active { display: flex; }
+
+        /* Catalog tab */
+        .search-wrap {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .search-input {
+            width: 100%;
+            background: rgba(245,240,232,0.04);
+            border: 1px solid rgba(245,240,232,0.12);
+            border-radius: 5px;
+            padding: 7px 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            color: var(--cream);
+            outline: none;
+        }
+        .search-input::placeholder { color: rgba(245,240,232,0.25); }
+        .search-input:focus { border-color: var(--amber); }
+
+        .course-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+        .level-group { }
+        .level-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(245,240,232,0.25);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 8px 16px 4px;
+        }
+        .course-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-radius: 0;
+        }
+        .course-item:hover { background: rgba(245,240,232,0.04); }
+        .course-item.selected { background: rgba(217,119,6,0.08); }
+        .course-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--amber);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .course-item-info { flex: 1; min-width: 0; }
+        .course-item-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--amber);
+        }
+        .course-item-title {
+            font-size: 12px;
+            color: var(--cream);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .course-item-clo-count {
+            font-size: 10px;
+            color: rgba(245,240,232,0.3);
+            flex-shrink: 0;
+        }
+
+        /* Transcript tab */
+        .transcript-wrap {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .transcript-area {
+            width: 100%;
+            height: 180px;
+            background: rgba(245,240,232,0.03);
+            border: 1px solid rgba(245,240,232,0.12);
+            border-radius: 5px;
+            padding: 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(245,240,232,0.7);
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+        }
+        .transcript-area:focus { border-color: var(--amber); }
+        .btn-row { display: flex; gap: 8px; }
+        .btn {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: var(--amber);
+            border-color: var(--amber);
+            color: var(--ink);
+        }
+        .btn-primary:hover { background: #b45309; border-color: #b45309; }
+        .btn-secondary {
+            background: transparent;
+            border-color: rgba(245,240,232,0.15);
+            color: rgba(245,240,232,0.6);
+        }
+        .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
+
+        .parse-results { font-size: 12px; }
+        .parse-found { margin-bottom: 8px; }
+        .parse-found-label { color: rgba(245,240,232,0.4); margin-bottom: 4px; font-size: 11px; }
+        .parse-match {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin: 2px;
+            font-family: 'Space Mono', monospace;
+        }
+        .parse-match.hit {
+            background: rgba(74,158,63,0.2);
+            color: #4ade80;
+            border: 1px solid rgba(74,158,63,0.3);
+        }
+        .parse-match.miss {
+            background: rgba(245,240,232,0.04);
+            color: rgba(245,240,232,0.3);
+            border: 1px solid rgba(245,240,232,0.08);
+            text-decoration: line-through;
+        }
+
+        /* Selected summary strip */
+        .selected-strip {
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            flex-shrink: 0;
+            background: rgba(0,0,0,0.2);
+        }
+        .selected-strip-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .selected-strip-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(245,240,232,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .clear-btn {
+            font-size: 10px;
+            color: rgba(245,240,232,0.3);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: color 0.15s;
+        }
+        .clear-btn:hover { color: var(--rust); }
+        .selected-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            min-height: 22px;
+        }
+        .selected-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 3px;
+            background: rgba(217,119,6,0.15);
+            border: 1px solid rgba(217,119,6,0.3);
+            font-size: 10px;
+            font-family: 'Space Mono', monospace;
+            color: var(--amber);
+        }
+        .selected-chip .remove-chip {
+            cursor: pointer;
+            color: rgba(217,119,6,0.5);
+            font-size: 12px;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .selected-chip .remove-chip:hover { color: var(--rust); }
+        .selected-empty {
+            font-size: 11px;
+            color: rgba(245,240,232,0.2);
+            font-style: italic;
+        }
+
+        /* ── Right panel ── */
+        .coverage-panel {
+            flex: 1;
+            padding: 24px 28px 48px;
+            overflow-y: auto;
+            min-width: 0;
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            gap: 12px;
+            opacity: 0.35;
+            text-align: center;
+        }
+        .empty-state-icon { font-size: 48px; }
+        .empty-state h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: var(--cream);
+        }
+        .empty-state p { font-size: 13px; color: rgba(245,240,232,0.6); }
+
+        /* Stats bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: rgba(245,240,232,0.03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+        .stat-value {
+            font-family: 'Space Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--amber);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: rgba(245,240,232,0.4);
+        }
+
+        /* Coverage section header */
+        .coverage-section {
+            margin-bottom: 28px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--cream);
+        }
+        .section-coverage {
+            margin-left: auto;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: rgba(245,240,232,0.5);
+        }
+        .section-bar-wrap {
+            flex-basis: 120px;
+            flex-shrink: 0;
+            height: 5px;
+            background: rgba(245,240,232,0.06);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .section-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+
+        /* Category rows */
+        .category-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .cat-label {
+            width: 120px;
+            flex-shrink: 0;
+            font-size: 11px;
+            color: rgba(245,240,232,0.45);
+            padding-top: 3px;
+            text-align: right;
+            line-height: 1.3;
+        }
+        .cat-plos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            flex: 1;
+        }
+        .plo-cell {
+            width: 22px;
+            height: 22px;
+            border-radius: 3px;
+            background: rgba(245,240,232,0.05);
+            border: 1px solid rgba(245,240,232,0.08);
+            cursor: default;
+            transition: transform 0.1s, border-color 0.2s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-family: 'Space Mono', monospace;
+            color: transparent;
+        }
+        .plo-cell.covered-1 { border-color: transparent; }
+        .plo-cell.covered-2 { border-color: transparent; }
+        .plo-cell.covered-3 { border-color: transparent; }
+        .plo-cell:hover { transform: scale(1.3); z-index: 10; }
+        .plo-cell.covered-1:hover,
+        .plo-cell.covered-2:hover,
+        .plo-cell.covered-3:hover { color: white; }
+
+        /* Tooltip */
+        .tooltip {
+            position: fixed;
+            background: #0f0d0a;
+            border: 1px solid rgba(245,240,232,0.15);
+            border-radius: 6px;
+            padding: 10px 13px;
+            font-size: 12px;
+            color: var(--cream);
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 260px;
+            line-height: 1.5;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+        .tooltip.visible { opacity: 1; }
+        .tooltip-ploname {
+            font-weight: 600;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+        .tooltip-courses {
+            font-size: 11px;
+            color: rgba(245,240,232,0.5);
+        }
+        .tooltip-courses span {
+            display: block;
+            color: var(--amber);
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+        }
+        .tooltip-zero { color: rgba(245,240,232,0.3); font-style: italic; }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 10px 14px;
+            background: rgba(245,240,232,0.02);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+        }
+        .legend-label {
+            font-size: 11px;
+            color: rgba(245,240,232,0.3);
+            margin-right: 4px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: rgba(245,240,232,0.5);
+        }
+        .legend-cell {
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 800px) {
+            .main-layout { flex-direction: column; }
+            .selector-panel { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .tab-content { max-height: 340px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-nav">
+    <a href="index.html">← Toolkit Home</a>
+    <span class="poc-badge">Proof of Concept</span>
+</div>
+
+<div class="hero">
+    <h1>Student Journey</h1>
+    <p>Select courses from the catalog or paste your transcript to see how your coursework maps to the Informatics Program Learning Outcomes. Hover over any PLO cell for details.</p>
+</div>
+
+<div class="main-layout">
+
+    <!-- ── Left: Course Selector ── -->
+    <div class="selector-panel">
+
+        <div class="panel-tabs">
+            <button class="panel-tab active" onclick="setTab('catalog')">📚 Catalog</button>
+            <button class="panel-tab" onclick="setTab('transcript')">📄 Transcript</button>
+        </div>
+
+        <!-- Catalog tab -->
+        <div class="tab-content active" id="tab-catalog">
+            <div class="search-wrap">
+                <input class="search-input" id="search-input" type="text" placeholder="Search courses…" oninput="renderCatalog()">
+            </div>
+            <div class="course-list" id="course-list"></div>
+        </div>
+
+        <!-- Transcript tab -->
+        <div class="tab-content" id="tab-transcript">
+            <div class="transcript-wrap">
+                <div style="font-size:12px; color:rgba(245,240,232,0.45); line-height:1.6;">
+                    Paste your unofficial transcript below. The parser will extract course codes and match them against the course database.
+                </div>
+                <textarea class="transcript-area" id="transcript-input" placeholder="Paste transcript text here…"></textarea>
+                <div class="btn-row">
+                    <button class="btn btn-primary" onclick="parseTranscript()">Parse</button>
+                    <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+                </div>
+                <div id="parse-results" class="parse-results"></div>
+            </div>
+        </div>
+
+        <!-- Selected courses strip -->
+        <div class="selected-strip">
+            <div class="selected-strip-header">
+                <span class="selected-strip-label">Selected (<span id="sel-count">0</span>)</span>
+                <button class="clear-btn" onclick="clearAll()">Clear all</button>
+            </div>
+            <div class="selected-chips" id="selected-chips">
+                <span class="selected-empty">No courses selected</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Right: Coverage ── -->
+    <div class="coverage-panel" id="coverage-panel">
+        <div class="empty-state" id="empty-state">
+            <div class="empty-state-icon">🗺️</div>
+            <h3>No courses selected</h3>
+            <p>Pick courses from the catalog<br>or paste your transcript to begin.</p>
+        </div>
+        <div id="coverage-content" style="display:none">
+            <div class="stats-bar" id="stats-bar"></div>
+            <div class="legend">
+                <span class="legend-label">Coverage:</span>
+                <div class="legend-item"><div class="legend-cell" style="background:rgba(245,240,232,0.06);border:1px solid rgba(245,240,232,0.1)"></div> Not covered</div>
+                <div class="legend-item"><div class="legend-cell" id="leg1"></div> 1 course</div>
+                <div class="legend-item"><div class="legend-cell" id="leg2"></div> 2 courses</div>
+                <div class="legend-item"><div class="legend-cell" id="leg3"></div> 3+ courses</div>
+            </div>
+            <div id="coverage-grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// PLO DATA
+// ═══════════════════════════════════════════════
+const pillars = [
+    {
+        id: 'comp', name: 'Computational Thinking', color: '#d97706',
+        categories: [
+            { id: 'comp-reason', name: 'Reason Logically', plos: [
+                'Translate arguments into formal language',
+                'Manipulate mathematical objects',
+                'Recognize equivalence between structures',
+                'Decompose problems into simpler structures',
+                'Apply data-driven approaches'
+            ]},
+            { id: 'comp-data', name: 'Curate Data', plos: [
+                'Apply visual methods for complex structures',
+                'Recognize and use basic data structures',
+                'Construct data models of systems',
+                'Evaluate data quality',
+                'Convert data into knowledge',
+                'Manage data securely'
+            ]},
+            { id: 'comp-algo', name: 'Apply Algorithms', plos: [
+                'Translate strategies into algorithms',
+                'Apply graph theory to solve problems',
+                'Integrate algorithms into complex ones',
+                'Research new problem-solving strategies',
+                'Address security concerns'
+            ]},
+            { id: 'comp-impl', name: 'Effectively Implement', plos: [
+                'Apply basic programming structures',
+                'Translate algorithms into code',
+                'Construct distributed systems',
+                'Research new software tools',
+                'Implement security solutions',
+                'Evaluate solution effectiveness'
+            ]}
+        ]
+    },
+    {
+        id: 'socio', name: 'Sociotechnical Thinking', color: '#4a9e3f',
+        categories: [
+            { id: 'socio-ethics', name: 'Ethical Sensibility', plos: [
+                'Formulate and articulate ideas',
+                'Recognize assumptions and biases',
+                'Weigh connections between actors',
+                'Consider diversity and responsibility',
+                'Contribute to human well-being'
+            ]},
+            { id: 'socio-analyze', name: 'Analyze Solutions', plos: [
+                'Identify stakeholders',
+                'Identify values at stake',
+                'Discuss diverse perspectives',
+                'Explain technical and social processes',
+                'Assess technological affordances',
+                'Evaluate power dynamics'
+            ]},
+            { id: 'socio-create', name: 'Create Solutions', plos: [
+                'Engage imagination for possibilities',
+                'Collaborate with diverse teams',
+                'Propose harm-reducing solutions',
+                'Communicate with stakeholders',
+                'Make values-based decisions',
+                'Assess policy and governance'
+            ]}
+        ]
+    },
+    {
+        id: 'design', name: 'Design Thinking', color: '#3b82f6',
+        categories: [
+            { id: 'design-research', name: 'Research', plos: [
+                'Classify HCI research methods',
+                'Execute ethical research',
+                'Deconstruct and reframe problems',
+                'Identify design opportunities',
+                'Use design thinking process',
+                'Translate research to prototypes'
+            ]},
+            { id: 'design-design', name: 'Design', plos: [
+                'Select appropriate methods',
+                'Design with HCI techniques',
+                'Generate user personas',
+                'Develop proof-of-concept',
+                'Produce interactive prototypes'
+            ]},
+            { id: 'design-eval', name: 'Evaluate', plos: [
+                'Evaluate with feedback',
+                'Critique designs',
+                'Summarize research insights',
+                'Generate recommendations',
+                'Create improved designs'
+            ]},
+            { id: 'design-dissem', name: 'Disseminate', plos: [
+                'Create design portfolio',
+                'Generate documentation',
+                'Design presentations',
+                'Present research posters'
+            ]},
+            { id: 'design-collab', name: 'Collaborate', plos: [
+                'Work in peer teams',
+                'Understand project roles',
+                'Judge contributions'
+            ]}
+        ]
+    }
+];
+
+// Build flat PLO lookup
+const ploLookup = {};
+pillars.forEach(p => {
+    p.categories.forEach(cat => {
+        cat.plos.forEach((text, i) => {
+            ploLookup[`${cat.id}-${i}`] = { text, category: cat.name, pillar: p.name, color: p.color };
+        });
+    });
+});
+
+// ═══════════════════════════════════════════════
+// COURSE DATABASE (mock)
+// ═══════════════════════════════════════════════
+const courseDB = [
+    {
+        id: 'I101', courseNumber: 'INFO-I 101', courseTitle: 'Introduction to Informatics',
+        credits: 3, level: 100,
+        description: 'Foundational survey of informatics covering technology, society, and data.',
+        clos: [
+            { text: 'Describe the social impacts of information technology', ploMappings: ['socio-ethics-0','socio-analyze-3','socio-analyze-4'] },
+            { text: 'Identify stakeholders in information systems', ploMappings: ['socio-analyze-0','socio-analyze-1'] },
+            { text: 'Apply basic data organization principles', ploMappings: ['comp-data-1','comp-data-4'] },
+            { text: 'Recognize ethical considerations in technology use', ploMappings: ['socio-ethics-1','socio-ethics-3','socio-ethics-4'] }
+        ]
+    },
+    {
+        id: 'I201', courseNumber: 'INFO-I 201', courseTitle: 'Social Informatics',
+        credits: 3, level: 200,
+        description: 'Examines relationships between information technology and social systems.',
+        clos: [
+            { text: 'Analyze power dynamics in sociotechnical systems', ploMappings: ['socio-analyze-5','socio-ethics-2'] },
+            { text: 'Discuss diverse perspectives on technology adoption', ploMappings: ['socio-analyze-2','socio-ethics-1','socio-ethics-3'] },
+            { text: 'Evaluate policy implications of information systems', ploMappings: ['socio-create-5','socio-analyze-4'] },
+            { text: 'Formulate arguments about technology\'s role in society', ploMappings: ['socio-ethics-0','socio-ethics-4'] }
+        ]
+    },
+    {
+        id: 'I211', courseNumber: 'INFO-I 211', courseTitle: 'Introduction to Programming',
+        credits: 4, level: 200,
+        description: 'Fundamentals of programming using Python with emphasis on problem-solving.',
+        clos: [
+            { text: 'Apply basic programming structures to solve problems', ploMappings: ['comp-impl-0','comp-impl-1'] },
+            { text: 'Decompose problems into algorithmic solutions', ploMappings: ['comp-reason-3','comp-algo-0'] },
+            { text: 'Translate algorithms into working code', ploMappings: ['comp-impl-1','comp-algo-0'] },
+            { text: 'Evaluate the effectiveness of programming solutions', ploMappings: ['comp-impl-5','comp-algo-3'] }
+        ]
+    },
+    {
+        id: 'I230', courseNumber: 'INFO-I 230', courseTitle: 'Information Infrastructure',
+        credits: 3, level: 200,
+        description: 'Technical foundations of networked information systems, databases, and storage.',
+        clos: [
+            { text: 'Construct data models for information systems', ploMappings: ['comp-data-2','comp-data-1'] },
+            { text: 'Recognize and use appropriate data structures', ploMappings: ['comp-data-1','comp-data-3'] },
+            { text: 'Manage data with attention to security and quality', ploMappings: ['comp-data-5','comp-data-3','comp-algo-4'] },
+            { text: 'Construct distributed information systems', ploMappings: ['comp-impl-2','comp-impl-4'] }
+        ]
+    },
+    {
+        id: 'I303', courseNumber: 'INFO-I 303', courseTitle: 'Research in Informatics',
+        credits: 3, level: 300,
+        description: 'Methods and ethics of research in the field of informatics.',
+        clos: [
+            { text: 'Classify and apply informatics research methods', ploMappings: ['design-research-0','design-research-1'] },
+            { text: 'Deconstruct and reframe research problems', ploMappings: ['design-research-2','design-research-3'] },
+            { text: 'Execute research following ethical guidelines', ploMappings: ['design-research-1','socio-ethics-3'] },
+            { text: 'Summarize and communicate research findings', ploMappings: ['design-eval-2','design-dissem-1','socio-ethics-0'] }
+        ]
+    },
+    {
+        id: 'I320', courseNumber: 'INFO-I 320', courseTitle: 'Interaction Design Methods',
+        credits: 3, level: 300,
+        description: 'Human-centered design methods, prototyping, and user research.',
+        clos: [
+            { text: 'Use design thinking process to address user needs', ploMappings: ['design-research-4','design-research-2'] },
+            { text: 'Generate user personas and map user journeys', ploMappings: ['design-design-2','design-research-3'] },
+            { text: 'Develop and test proof-of-concept prototypes', ploMappings: ['design-design-3','design-design-4'] },
+            { text: 'Select appropriate design methods for context', ploMappings: ['design-design-0','design-design-1'] },
+            { text: 'Translate research insights into design directions', ploMappings: ['design-research-5','design-eval-3'] }
+        ]
+    },
+    {
+        id: 'I340', courseNumber: 'INFO-I 340', courseTitle: 'Technology, Society and Culture',
+        credits: 3, level: 300,
+        description: 'Critical examination of technology\'s cultural, political, and economic dimensions.',
+        clos: [
+            { text: 'Weigh connections between technology, actors, and institutions', ploMappings: ['socio-ethics-2','socio-analyze-3'] },
+            { text: 'Engage imagination to envision sociotechnical possibilities', ploMappings: ['socio-create-0','socio-ethics-0'] },
+            { text: 'Propose harm-reducing approaches to technology design', ploMappings: ['socio-create-2','socio-ethics-4','socio-ethics-3'] },
+            { text: 'Make values-based decisions about technology use', ploMappings: ['socio-create-4','socio-ethics-1'] }
+        ]
+    },
+    {
+        id: 'I355', courseNumber: 'INFO-I 355', courseTitle: 'Security for Networked Systems',
+        credits: 3, level: 300,
+        description: 'Principles and practices of information security for networked environments.',
+        clos: [
+            { text: 'Address security concerns in algorithm design', ploMappings: ['comp-algo-4','comp-reason-0'] },
+            { text: 'Implement security solutions for networked systems', ploMappings: ['comp-impl-4','comp-impl-2'] },
+            { text: 'Evaluate the effectiveness of security measures', ploMappings: ['comp-impl-5','comp-data-5'] },
+            { text: 'Research new security tools and strategies', ploMappings: ['comp-impl-3','comp-algo-3'] }
+        ]
+    },
+    {
+        id: 'I421', courseNumber: 'INFO-I 421', courseTitle: 'Applied Algorithms',
+        credits: 3, level: 400,
+        description: 'Advanced algorithmic techniques with applications to informatics problems.',
+        clos: [
+            { text: 'Translate complex strategies into efficient algorithms', ploMappings: ['comp-algo-0','comp-reason-0'] },
+            { text: 'Apply graph theory and data structures to real problems', ploMappings: ['comp-algo-1','comp-data-1'] },
+            { text: 'Integrate algorithms into complex systems', ploMappings: ['comp-algo-2','comp-impl-2'] },
+            { text: 'Research and evaluate emerging algorithmic approaches', ploMappings: ['comp-algo-3','comp-impl-5'] },
+            { text: 'Apply data-driven and mathematical reasoning', ploMappings: ['comp-reason-4','comp-reason-1'] }
+        ]
+    },
+    {
+        id: 'I441', courseNumber: 'INFO-I 441', courseTitle: 'Introduction to Human-Computer Interaction',
+        credits: 3, level: 400,
+        description: 'Foundations of HCI theory and practice, evaluation methods, and design.',
+        clos: [
+            { text: 'Classify and critique HCI research methods', ploMappings: ['design-research-0','design-eval-1'] },
+            { text: 'Evaluate designs through user feedback and testing', ploMappings: ['design-eval-0','design-eval-2'] },
+            { text: 'Generate actionable recommendations from evaluations', ploMappings: ['design-eval-3','design-eval-4'] },
+            { text: 'Design interfaces applying HCI techniques', ploMappings: ['design-design-1','design-design-0'] }
+        ]
+    },
+    {
+        id: 'I461', courseNumber: 'INFO-I 461', courseTitle: 'Data Visualization',
+        credits: 3, level: 400,
+        description: 'Principles and techniques for visual representation of complex data.',
+        clos: [
+            { text: 'Apply visual methods to represent complex data structures', ploMappings: ['comp-data-0','comp-data-4'] },
+            { text: 'Convert raw data into actionable knowledge', ploMappings: ['comp-data-4','comp-reason-4'] },
+            { text: 'Evaluate data quality and its visualization impact', ploMappings: ['comp-data-3','comp-data-2'] },
+            { text: 'Recognize equivalence and patterns in data', ploMappings: ['comp-reason-2','comp-data-1'] }
+        ]
+    },
+    {
+        id: 'I481', courseNumber: 'INFO-I 481', courseTitle: 'Capstone Project I',
+        credits: 3, level: 400,
+        description: 'First semester of a year-long capstone project on a real-world informatics problem.',
+        clos: [
+            { text: 'Collaborate with diverse teams on a multi-semester project', ploMappings: ['design-collab-0','design-collab-1','socio-create-1'] },
+            { text: 'Communicate with stakeholders and gather requirements', ploMappings: ['socio-create-3','socio-analyze-0'] },
+            { text: 'Identify design opportunities from user research', ploMappings: ['design-research-3','design-research-4'] },
+            { text: 'Produce interactive prototypes for stakeholder feedback', ploMappings: ['design-design-4','design-design-3'] },
+            { text: 'Create project documentation and design portfolio', ploMappings: ['design-dissem-0','design-dissem-1'] }
+        ]
+    },
+    {
+        id: 'I490', courseNumber: 'INFO-I 490', courseTitle: 'Capstone Project II',
+        credits: 3, level: 400,
+        description: 'Completion of capstone with public presentation and dissemination.',
+        clos: [
+            { text: 'Present research and design work to public audiences', ploMappings: ['design-dissem-2','design-dissem-3'] },
+            { text: 'Create improved designs based on evaluation feedback', ploMappings: ['design-eval-4','design-eval-0'] },
+            { text: 'Judge and reflect on team contributions', ploMappings: ['design-collab-2','design-collab-0'] },
+            { text: 'Contribute to human well-being through responsible design', ploMappings: ['socio-ethics-4','socio-create-2','socio-create-4'] }
+        ]
+    }
+];
+
+const SAMPLE_TRANSCRIPT = `INDIANA UNIVERSITY — UNOFFICIAL TRANSCRIPT
+Student: Jordan A. Smith   ID: 2012345678
+School of Informatics, Computing, and Engineering
+B.S. Informatics
+
+─────────────────────────────────────────────
+FALL 2021
+INFO-I 101   Introduction to Informatics      3.0  A
+INFO-I 211   Introduction to Programming      4.0  B+
+
+─────────────────────────────────────────────
+SPRING 2022
+INFO-I 201   Social Informatics               3.0  A-
+INFO-I 230   Information Infrastructure       3.0  B
+
+─────────────────────────────────────────────
+FALL 2022
+INFO-I 303   Research in Informatics          3.0  A
+INFO-I 320   Interaction Design Methods       3.0  A-
+
+─────────────────────────────────────────────
+SPRING 2023
+INFO-I 340   Technology, Society and Culture  3.0  B+
+INFO-I 441   Intro to Human-Computer Int.     3.0  A
+
+─────────────────────────────────────────────
+FALL 2023
+INFO-I 355   Security for Networked Systems   3.0  B
+INFO-I 461   Data Visualization               3.0  A
+
+─────────────────────────────────────────────
+CUMULATIVE GPA: 3.62   Total Credits: 34
+`;
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+const selected = new Set();
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+function setTab(name) {
+    document.querySelectorAll('.panel-tab').forEach((t, i) => {
+        t.classList.toggle('active', (i === 0 && name === 'catalog') || (i === 1 && name === 'transcript'));
+    });
+    document.getElementById('tab-catalog').classList.toggle('active', name === 'catalog');
+    document.getElementById('tab-transcript').classList.toggle('active', name === 'transcript');
+}
+
+// ═══════════════════════════════════════════════
+// CATALOG
+// ═══════════════════════════════════════════════
+function renderCatalog() {
+    const q = document.getElementById('search-input').value.toLowerCase();
+    const grouped = {};
+    courseDB.forEach(c => {
+        if (q && !c.courseNumber.toLowerCase().includes(q) && !c.courseTitle.toLowerCase().includes(q)) return;
+        if (!grouped[c.level]) grouped[c.level] = [];
+        grouped[c.level].push(c);
+    });
+
+    const list = document.getElementById('course-list');
+    list.innerHTML = '';
+    const levels = Object.keys(grouped).sort();
+    if (levels.length === 0) {
+        list.innerHTML = '<div style="padding:16px; font-size:12px; color:rgba(245,240,232,0.25); text-align:center;">No courses match</div>';
+        return;
+    }
+    levels.forEach(lv => {
+        const grp = document.createElement('div');
+        grp.className = 'level-group';
+        grp.innerHTML = `<div class="level-label">${lv}-level</div>`;
+        grouped[lv].forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'course-item' + (selected.has(c.id) ? ' selected' : '');
+            item.innerHTML = `
+                <input type="checkbox" id="chk-${c.id}" ${selected.has(c.id) ? 'checked' : ''}>
+                <div class="course-item-info">
+                    <div class="course-item-num">${c.courseNumber}</div>
+                    <div class="course-item-title">${c.courseTitle}</div>
+                </div>
+                <div class="course-item-clo-count">${c.clos.length} CLO${c.clos.length !== 1 ? 's' : ''}</div>
+            `;
+            item.addEventListener('click', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+                toggleCourse(c.id);
+            });
+            item.querySelector('input').addEventListener('change', () => toggleCourse(c.id));
+            grp.appendChild(item);
+        });
+        list.appendChild(grp);
+    });
+}
+
+function toggleCourse(id) {
+    if (selected.has(id)) selected.delete(id);
+    else selected.add(id);
+    renderCatalog();
+    renderSelected();
+    renderCoverage();
+}
+
+// ═══════════════════════════════════════════════
+// TRANSCRIPT PARSER
+// ═══════════════════════════════════════════════
+function loadSample() {
+    document.getElementById('transcript-input').value = SAMPLE_TRANSCRIPT;
+}
+
+function parseTranscript() {
+    const text = document.getElementById('transcript-input').value;
+    // Match patterns: INFO-I 101, I 101, I101
+    const regex = /(?:INFO-)?I[-\s]?(\d{3})/gi;
+    const found = new Set();
+    let m;
+    while ((m = regex.exec(text)) !== null) {
+        found.add('I' + m[1]);
+    }
+
+    const hits = [], misses = [];
+    found.forEach(code => {
+        const course = courseDB.find(c => c.id === code);
+        if (course) hits.push(course);
+        else misses.push(code);
+    });
+
+    // Add found courses to selection
+    hits.forEach(c => selected.add(c.id));
+
+    // Render results
+    const el = document.getElementById('parse-results');
+    if (found.size === 0) {
+        el.innerHTML = '<div style="font-size:12px;color:rgba(245,240,232,0.3);margin-top:8px;">No course codes found. Try the sample transcript.</div>';
+        return;
+    }
+
+    let html = `<div class="parse-found"><div class="parse-found-label">Found ${found.size} code${found.size!==1?'s':''} — ${hits.length} matched in database:</div>`;
+    hits.forEach(c => {
+        html += `<span class="parse-match hit">✓ ${c.courseNumber}</span>`;
+    });
+    misses.forEach(code => {
+        html += `<span class="parse-match miss">I ${code.replace('I','')}</span>`;
+    });
+    html += '</div>';
+    el.innerHTML = html;
+
+    renderCatalog();
+    renderSelected();
+    renderCoverage();
+}
+
+// ═══════════════════════════════════════════════
+// SELECTED STRIP
+// ═══════════════════════════════════════════════
+function renderSelected() {
+    const chips = document.getElementById('selected-chips');
+    const count = document.getElementById('sel-count');
+    count.textContent = selected.size;
+
+    if (selected.size === 0) {
+        chips.innerHTML = '<span class="selected-empty">No courses selected</span>';
+        return;
+    }
+    const courses = courseDB.filter(c => selected.has(c.id));
+    chips.innerHTML = courses.map(c => `
+        <span class="selected-chip">
+            ${c.courseNumber.replace('INFO-','')}
+            <span class="remove-chip" onclick="toggleCourse('${c.id}')" title="Remove">×</span>
+        </span>
+    `).join('');
+}
+
+function clearAll() {
+    selected.clear();
+    document.getElementById('parse-results').innerHTML = '';
+    renderCatalog();
+    renderSelected();
+    renderCoverage();
+}
+
+// ═══════════════════════════════════════════════
+// COVERAGE
+// ═══════════════════════════════════════════════
+function computeCoverage() {
+    // Map: ploId → Set of course IDs that cover it
+    const coverage = {};
+    Object.keys(ploLookup).forEach(id => coverage[id] = new Set());
+
+    courseDB.filter(c => selected.has(c.id)).forEach(course => {
+        course.clos.forEach(clo => {
+            clo.ploMappings.forEach(ploId => {
+                if (coverage[ploId]) coverage[ploId].add(course.id);
+            });
+        });
+    });
+    return coverage;
+}
+
+function renderCoverage() {
+    const empty = document.getElementById('empty-state');
+    const content = document.getElementById('coverage-content');
+
+    if (selected.size === 0) {
+        empty.style.display = 'flex';
+        content.style.display = 'none';
+        return;
+    }
+    empty.style.display = 'none';
+    content.style.display = 'block';
+
+    const courses = courseDB.filter(c => selected.has(c.id));
+    const coverage = computeCoverage();
+
+    const allPloIds = Object.keys(coverage);
+    const coveredCount = allPloIds.filter(id => coverage[id].size > 0).length;
+    const totalClos = courses.reduce((s, c) => s + c.clos.length, 0);
+    const pct = Math.round(coveredCount / allPloIds.length * 100);
+
+    // Stats
+    document.getElementById('stats-bar').innerHTML = `
+        <div class="stat-card"><div class="stat-value">${courses.length}</div><div class="stat-label">Courses</div></div>
+        <div class="stat-card"><div class="stat-value">${totalClos}</div><div class="stat-label">CLOs</div></div>
+        <div class="stat-card"><div class="stat-value">${coveredCount}<span style="font-size:13px;color:rgba(245,240,232,0.3)">/${allPloIds.length}</span></div><div class="stat-label">PLOs Covered</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:${pct>=70?'#4ade80':pct>=40?'var(--amber)':'var(--rust)'}">${pct}%</div><div class="stat-label">Coverage</div></div>
+    `;
+
+    // Legend swatches – show all 3 pillar levels
+    setLegendCell('leg1', pillars[0].color, 0.45);
+    setLegendCell('leg2', pillars[0].color, 0.70);
+    setLegendCell('leg3', pillars[0].color, 1.0);
+
+    // Pillar sections
+    const grid = document.getElementById('coverage-grid');
+    grid.innerHTML = '';
+
+    pillars.forEach(pillar => {
+        const pillarPlos = pillar.categories.flatMap(cat =>
+            cat.plos.map((_, i) => `${cat.id}-${i}`)
+        );
+        const pillarCovered = pillarPlos.filter(id => coverage[id] && coverage[id].size > 0).length;
+        const pillarPct = Math.round(pillarCovered / pillarPlos.length * 100);
+
+        const section = document.createElement('div');
+        section.className = 'coverage-section';
+
+        const barFill = `<div class="section-bar-fill" style="width:${pillarPct}%;background:${pillar.color}"></div>`;
+        section.innerHTML = `
+            <div class="section-header">
+                <div class="section-dot" style="background:${pillar.color}"></div>
+                <div class="section-title">${pillar.name}</div>
+                <div class="section-bar-wrap">${barFill}</div>
+                <div class="section-coverage">${pillarCovered}/${pillarPlos.length}</div>
+            </div>
+        `;
+
+        pillar.categories.forEach(cat => {
+            const row = document.createElement('div');
+            row.className = 'category-row';
+            row.innerHTML = `<div class="cat-label">${cat.name}</div>`;
+
+            const cellsWrap = document.createElement('div');
+            cellsWrap.className = 'cat-plos';
+
+            cat.plos.forEach((ploText, i) => {
+                const ploId = `${cat.id}-${i}`;
+                const hits = coverage[ploId] ? coverage[ploId].size : 0;
+                const cell = document.createElement('div');
+                cell.className = 'plo-cell';
+
+                if (hits === 1) {
+                    cell.classList.add('covered-1');
+                    cell.style.background = hexToRgba(pillar.color, 0.45);
+                    cell.style.borderColor = hexToRgba(pillar.color, 0.6);
+                    cell.textContent = '1';
+                } else if (hits === 2) {
+                    cell.classList.add('covered-2');
+                    cell.style.background = hexToRgba(pillar.color, 0.70);
+                    cell.style.borderColor = hexToRgba(pillar.color, 0.8);
+                    cell.textContent = '2';
+                } else if (hits >= 3) {
+                    cell.classList.add('covered-3');
+                    cell.style.background = pillar.color;
+                    cell.style.borderColor = pillar.color;
+                    cell.textContent = hits;
+                }
+
+                // Tooltip
+                cell.addEventListener('mouseenter', (e) => showTooltip(e, ploId, ploText, coverage[ploId], courses));
+                cell.addEventListener('mousemove', (e) => moveTooltip(e));
+                cell.addEventListener('mouseleave', hideTooltip);
+
+                cellsWrap.appendChild(cell);
+            });
+
+            row.appendChild(cellsWrap);
+            section.appendChild(row);
+        });
+
+        grid.appendChild(section);
+    });
+}
+
+function setLegendCell(id, color, alpha) {
+    const el = document.getElementById(id);
+    if (el) el.style.background = hexToRgba(color, alpha);
+}
+
+function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ═══════════════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════════════
+const tooltip = document.getElementById('tooltip');
+
+function showTooltip(e, ploId, ploText, coverSet, courses) {
+    const hits = coverSet.size;
+    let html = `<div class="tooltip-ploname">${ploText}</div>`;
+
+    if (hits === 0) {
+        html += `<div class="tooltip-zero">Not covered by selected courses</div>`;
+    } else {
+        const covCourses = courses.filter(c => coverSet.has(c.id));
+        html += `<div class="tooltip-courses">Covered by ${hits} course${hits!==1?'s':''}:`;
+        covCourses.forEach(c => {
+            html += `<span>${c.courseNumber} — ${c.courseTitle}</span>`;
+        });
+        html += `</div>`;
+    }
+
+    tooltip.innerHTML = html;
+    tooltip.classList.add('visible');
+    moveTooltip(e);
+}
+
+function moveTooltip(e) {
+    const x = e.clientX + 14;
+    const y = e.clientY - 10;
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+    tooltip.style.left = (x + tw > window.innerWidth - 8 ? x - tw - 28 : x) + 'px';
+    tooltip.style.top  = (y + th > window.innerHeight - 8 ? y - th : y) + 'px';
+}
+
+function hideTooltip() {
+    tooltip.classList.remove('visible');
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+renderCatalog();
+renderSelected();
+renderCoverage();
+</script>
+</body>
+</html>

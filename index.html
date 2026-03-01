@@ -115,6 +115,19 @@
         .tool-icon.entry { background: rgba(196,84,26,0.2); color: var(--rust); }
         .tool-icon.viewer { background: rgba(45,90,39,0.2); color: #4ade80; }
         .tool-icon.gpt { background: rgba(217,119,6,0.2); color: var(--amber); }
+        .tool-icon.journey { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .tool-card.poc { border-style: dashed; }
+        .tool-card.poc:hover { border-color: #60a5fa; border-style: solid; }
+        .poc-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid rgba(59,130,246,0.4);
+            color: #60a5fa;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
         .tool-info { flex: 1; }
         .tool-info h3 {
             font-size: 16px;
@@ -272,6 +285,14 @@
                     <h3>GPT Prompt Guide</h3>
                     <p class="tool-desc">Set up a custom GPT that automatically extracts CLOs from your syllabus and maps them to PLOs. Just upload your syllabus and get JSON you can paste into the mapper.</p>
                     <span class="tool-badge">Automated extraction</span>
+                </div>
+            </a>
+            <a class="tool-card poc" href="student_journey.html">
+                <div class="tool-icon journey">&#9685;</div>
+                <div class="tool-info">
+                    <h3>Student Journey <span class="poc-tag">Proof of Concept</span></h3>
+                    <p class="tool-desc">Select courses from the catalog or paste your transcript to see which Program Learning Outcomes your coursework covers — and what gaps remain.</p>
+                    <span class="tool-badge">Student-facing view</span>
                 </div>
             </a>
         </div>
