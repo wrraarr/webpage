@@ -513,6 +513,7 @@
     <div style="display:flex; gap:8px; align-items:center;">
         <button class="btn btn-secondary btn-small" onclick="importJSON()">Import JSON</button>
         <button class="btn btn-primary btn-small" onclick="addCourse()">+ Add Course</button>
+        <button class="btn btn-small" id="clearAllBtn" style="display:none; background:transparent; color:#f87171; border-color:#3a1515;" onclick="clearAll()">Clear All</button>
         <span style="width:1px; height:24px; background:#3a3228; margin:0 4px;"></span>
         <button class="btn btn-small" style="background:var(--forest); color:white; border-color:var(--forest);" onclick="sendToViewer()">Send to Viewer &#x2192;</button>
     </div>
@@ -761,6 +762,7 @@ function saveFields() {
 function renderAll() {
     saveFields();
     updateJSON();
+    updateClearBtn();
 
     const panel = document.getElementById('mainPanel');
     const empty = document.getElementById('emptyState');
@@ -1073,7 +1075,46 @@ function confirmSend() {
     closePreview();
 }
 
+// ── CLEAR ALL ──
+function updateClearBtn() {
+    document.getElementById('clearAllBtn').style.display = courses.length > 0 ? 'inline-flex' : 'none';
+}
+
+function clearAll() {
+    if (!confirm('Clear all courses and CLOs? This cannot be undone.')) return;
+    courses = [];
+    nextCourseId = 1;
+    renderAll();
+}
+
+// ── POPULATE FROM MAPPER (URL hash #courses=...) ──
+function checkIncomingCourses() {
+    try {
+        const hash = window.location.hash;
+        if (!hash.startsWith('#courses=')) return;
+        const encoded = hash.substring('#courses='.length);
+        const data = JSON.parse(decodeURIComponent(encoded));
+        history.replaceState(null, '', window.location.pathname);
+        if (!data.courses || !Array.isArray(data.courses)) return;
+        courses = data.courses.map(c => ({
+            id: nextCourseId++,
+            courseNumber: c.courseNumber || '',
+            courseTitle: c.courseTitle || '',
+            description: c.description || '',
+            clos: (c.clos || []).map(clo => ({
+                id: Date.now() + Math.random() * 10000,
+                text: clo.text || '',
+                ploMappings: Array.isArray(clo.ploMappings) ? [...clo.ploMappings] : [],
+                activePillar: null
+            }))
+        }));
+    } catch (e) {
+        console.warn('Could not load incoming courses:', e);
+    }
+}
+
 // ── INIT ──
+checkIncomingCourses();
 renderAll();
 </script>
 </body>

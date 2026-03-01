@@ -456,7 +456,7 @@
         <div id="header">
             <h1>CLO–PLO Mapper</h1>
             <div id="subtitle">Map Course Learning Outcomes to Programmatic Learning Outcomes</div>
-            <a class="header-btn" href="CLO_data_entry.html" title="Open manual CLO data entry form">Data Entry ↗</a>
+            <button class="header-btn" onclick="goToDataEntry()" title="Open manual CLO data entry form">Data Entry ↗</button>
             <a class="header-btn" href="CLO_PLO_mapper_GPT_prompt.md" target="_blank" title="Open GPT setup guide in a new tab">GPT Prompt ↗</a>
             <button class="header-btn" id="sidebar-toggle" onclick="toggleSidebar()">+ Add Courses</button>
         </div>
@@ -494,7 +494,7 @@
         </div>
 
         <div class="legend" id="legend">
-            <div class="legend-item"><div class="legend-color" style="background: var(--amber);"></div><span>Core</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: #b91c1c;"></div><span>Core</span></div>
             <div class="legend-item"><div class="legend-color" style="background: var(--rust);"></div><span>Computational</span></div>
             <div class="legend-item"><div class="legend-color" style="background: var(--forest);"></div><span>Sociotechnical</span></div>
             <div class="legend-item"><div class="legend-color" style="background: #1d4ed8;"></div><span>Design</span></div>
@@ -566,7 +566,7 @@
         id: 'root',
         name: "Informatics Core",
         type: 'root',
-        color: "#d97706",
+        color: "#b91c1c",
         children: [
             {
                 id: 'comp',
@@ -795,7 +795,7 @@
         // Level 0: Root
         const rootNode = {
             id: 'root', name: "Informatics\nCore", type: 'root',
-            color: '#d97706', level: 0,
+            color: '#b91c1c', level: 0,
             expanded: expandedNodes.has('root')
         };
         addNode(rootNode);
@@ -849,7 +849,8 @@
 
                     const ploNode = {
                         id: ploId, name: ploText, type: 'plo',
-                        color: d3.color(cat.color).brighter(0.4).formatHex(),
+                        color: d3.interpolateRgb(cat.color, '#0d0b08')(0.6),
+                        strokeColor: d3.color(cat.color).brighter(0.6).formatHex(),
                         level: 3, parentId: cat.id,
                         expanded: expandedNodes.has(ploId),
                         hasChildren: hasCloLinks
@@ -1054,7 +1055,9 @@
             .append("circle")
             .attr("class", d => `node ${d.type === 'plo' ? 'plo-node' : ''}`)
             .attr("r", d => getNodeRadius(d))
-            .attr("fill", d => d.color);
+            .attr("fill", d => d.color)
+            .style("stroke", d => d.strokeColor || null)
+            .style("stroke-width", d => d.strokeColor ? '2.5px' : null);
 
         // CLO rectangles
         nodeEnter.filter(d => d.type === 'clo')
@@ -1281,8 +1284,9 @@
             }
         }
         recurse(ploData);
-        // Also expand CLOs and courses
+        // Also expand courses and CLOs
         courseData.forEach((c, ci) => {
+            expandedNodes.add(`course-${ci}`);
             c.clos.forEach((_, cli) => {
                 expandedNodes.add(`clo-${ci}-${cli}`);
             });
@@ -1613,7 +1617,7 @@
     function updateLegend() {
         const legend = document.getElementById('legend');
         let html = `
-            <div class="legend-item"><div class="legend-color" style="background: var(--amber);"></div><span>Core</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: #b91c1c;"></div><span>Core</span></div>
             <div class="legend-item"><div class="legend-color" style="background: var(--rust);"></div><span>Computational</span></div>
             <div class="legend-item"><div class="legend-color" style="background: var(--forest);"></div><span>Sociotechnical</span></div>
             <div class="legend-item"><div class="legend-color" style="background: #1d4ed8;"></div><span>Design</span></div>
@@ -1765,6 +1769,29 @@
         }
 
         body.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // GO TO DATA ENTRY (pass current courses back)
+    // ═══════════════════════════════════════════════════════════
+    function goToDataEntry() {
+        const url = new URL('CLO_data_entry.html', window.location.href).href;
+        if (courseData.length === 0) {
+            window.location.href = url;
+            return;
+        }
+        const payload = {
+            courses: courseData.map(c => ({
+                courseNumber: c.courseNumber,
+                courseTitle: c.courseTitle,
+                description: c.description,
+                clos: c.clos.map(clo => ({
+                    text: clo.text,
+                    ploMappings: [...clo.ploMappings]
+                }))
+            }))
+        };
+        window.location.href = url + '#courses=' + encodeURIComponent(JSON.stringify(payload));
     }
 
     // ═══════════════════════════════════════════════════════════
