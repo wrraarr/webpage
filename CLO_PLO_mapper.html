@@ -89,12 +89,15 @@
             pointer-events: none; text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
 
-        .plo-node { stroke-width: 1.5; }
+        .plo-node { stroke-width: 2px; }
         .plo-text {
             fill: var(--cream); font-family: 'Space Grotesk', sans-serif;
-            font-weight: 500; font-size: 9px;
+            font-weight: 600; font-size: 9px;
             text-anchor: middle; dominant-baseline: middle;
             pointer-events: none;
+            stroke: rgba(0,0,0,0.55);
+            stroke-width: 2.5px;
+            paint-order: stroke fill;
         }
 
         .clo-node {
@@ -850,7 +853,7 @@
                     const ploNode = {
                         id: ploId, name: ploText, type: 'plo',
                         color: d3.interpolateRgb(cat.color, '#0d0b08')(0.6),
-                        strokeColor: d3.color(cat.color).brighter(0.6).formatHex(),
+                        strokeColor: d3.color(cat.color).brighter(0.25).formatHex(),
                         level: 3, parentId: cat.id,
                         expanded: expandedNodes.has(ploId),
                         hasChildren: hasCloLinks
@@ -940,7 +943,7 @@
                     if (d.type === 'root') return -900;
                     if (d.type === 'pillar') return -650;
                     if (d.type === 'category') return -400;
-                    if (d.type === 'plo') return -200;
+                    if (d.type === 'plo') return -280;
                     if (d.type === 'clo') return -150;
                     return -120;
                 })
@@ -951,7 +954,7 @@
                     if (d.type === 'root') return 58;
                     if (d.type === 'pillar') return 48;
                     if (d.type === 'category') return 40;
-                    if (d.type === 'plo') return 32;
+                    if (d.type === 'plo') return 44;
                     if (d.type === 'clo') return 28;
                     return 35;
                 })
@@ -1017,6 +1020,24 @@
     function truncate(str, max) {
         if (!str) return '';
         return str.length > max ? str.substring(0, max - 2) + '…' : str;
+    }
+
+    // Word-wrap a string into lines of at most maxChars characters
+    function wrapText(text, maxChars) {
+        const words = (text || '').split(' ');
+        const lines = [];
+        let cur = '';
+        words.forEach(word => {
+            const test = cur ? cur + ' ' + word : word;
+            if (test.length <= maxChars) {
+                cur = test;
+            } else {
+                if (cur) lines.push(cur);
+                cur = word; // long single words go on their own line
+            }
+        });
+        if (cur) lines.push(cur);
+        return lines;
     }
 
     function renderVisualization() {
@@ -1095,10 +1116,17 @@
             });
 
         nodeEnter.filter(d => d.type === 'plo')
-            .append("text")
-            .attr("class", "plo-text")
-            .attr("dy", ".35em")
-            .text(d => truncate(d.name, 28));
+            .each(function(d) {
+                const lines = wrapText(d.name, 14);
+                const lineH = 9.5; // px between baselines
+                lines.forEach((line, i) => {
+                    d3.select(this).append("text")
+                        .attr("class", "plo-text")
+                        .attr("y", (i - (lines.length - 1) / 2) * lineH)
+                        .attr("dy", ".35em")
+                        .text(line);
+                });
+            });
 
         nodeEnter.filter(d => d.type === 'clo')
             .append("text")
