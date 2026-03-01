@@ -1772,32 +1772,44 @@
     // ═══════════════════════════════════════════════════════════
     function checkPendingImport() {
         try {
+            let jsonStr = null;
+
             // Check URL hash for data from data entry page
             const hash = window.location.hash;
             if (hash.startsWith('#import=')) {
-                const encoded = hash.substring('#import='.length);
-                const jsonStr = decodeURIComponent(encoded);
+                jsonStr = decodeURIComponent(hash.substring('#import='.length));
                 // Clean the hash so it doesn't re-import on refresh
                 history.replaceState(null, '', window.location.pathname);
-                validateAndLoad(jsonStr);
-                // Open sidebar to show loaded courses
-                const sb = document.getElementById('sidebar');
-                sb.classList.add('open');
-                document.getElementById('sidebar-toggle').classList.add('active');
-                document.getElementById('sidebar-toggle').textContent = 'Close';
-                switchTab('courses');
-                return;
+            } else {
+                // Fallback: check localStorage (works on http:// origins)
+                const pending = localStorage.getItem('clo_plo_pending');
+                if (pending) {
+                    localStorage.removeItem('clo_plo_pending');
+                    jsonStr = pending;
+                }
             }
-            // Fallback: check localStorage (works on http:// origins)
-            const pending = localStorage.getItem('clo_plo_pending');
-            if (pending) {
-                localStorage.removeItem('clo_plo_pending');
-                validateAndLoad(pending);
-                const sb = document.getElementById('sidebar');
-                sb.classList.add('open');
-                document.getElementById('sidebar-toggle').classList.add('active');
-                document.getElementById('sidebar-toggle').textContent = 'Close';
-                switchTab('courses');
+
+            if (jsonStr) {
+                validateAndLoad(jsonStr);
+                // Sidebar stays closed — viewer opens clean
+                // Immediately activate Show Linked Only mode
+                if (courseData.length > 0) {
+                    const linkedPlos = getLinkedPloIds();
+                    const linkedCats = getLinkedCategoryIds();
+                    expandedNodes.clear();
+                    expandedNodes.add('root');
+                    expandedNodes.add('comp');
+                    expandedNodes.add('socio');
+                    expandedNodes.add('design');
+                    linkedCats.forEach(catId => expandedNodes.add(catId));
+                    linkedPlos.forEach(ploId => expandedNodes.add(ploId));
+                    courseData.forEach((c, ci) => {
+                        c.clos.forEach((_, cli) => expandedNodes.add(`clo-${ci}-${cli}`));
+                    });
+                    unlinkedHidden = true;
+                    document.getElementById('hide-unlinked-btn').textContent = 'Show All PLOs';
+                    updateVisualization();
+                }
             }
         } catch (e) {
             console.warn('Auto-import failed:', e);
