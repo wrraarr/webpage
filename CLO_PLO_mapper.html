@@ -507,6 +507,12 @@
             <button class="control-btn" id="hide-unlinked-btn" onclick="toggleUnlinked()" style="display:none">Show Linked Only</button>
             <button class="control-btn" id="stats-btn" onclick="showStats()" style="display:none; background:rgba(45,90,39,0.5); border-color:rgba(45,90,39,0.7);">PLO Coverage</button>
             <button class="control-btn" id="banded-btn" onclick="toggleBandedMode()">Banded View</button>
+            <span id="band-spacing-wrap" style="display:none; align-items:center; gap:6px; margin-left:2px;">
+                <span style="font-size:10px; color:rgba(245,240,232,0.35); font-family:'Space Mono',monospace;">spacing</span>
+                <input type="range" id="band-spacing-slider" min="80" max="300" step="10" value="150"
+                    oninput="updateBandSpacing(this.value)"
+                    style="width:80px; accent-color:#3b82f6; cursor:pointer; vertical-align:middle;">
+            </span>
         </div>
 
         <!-- Stats Modal -->
@@ -790,6 +796,7 @@
     let highlightedNodes = new Set();
     let focusedCourseIndex = null; // null = show all; number = isolate that course
     let bandedMode = false;
+    let bandSpacingPx = 150; // pixels between adjacent band lanes
 
     const svg = d3.select("#svg");
     const width = window.innerWidth;
@@ -1698,8 +1705,11 @@
 
     // ── Banded Layout ─────────────────────────────────────────
     function getBandX(type) {
-        const bands = { root: 0.07, pillar: 0.18, category: 0.31, plo: 0.48, clo: 0.65, course: 0.82 };
-        return (bands[type] ?? 0.5) * width;
+        // Each of the 6 types sits at index 0–5; the whole group is centred on width/2
+        const idx = { root: 0, pillar: 1, category: 2, plo: 3, clo: 4, course: 5 };
+        const i = idx[type] ?? 2.5;
+        const startX = width / 2 - 2.5 * bandSpacingPx;
+        return startX + i * bandSpacingPx;
     }
 
     function updateBandGuides() {
@@ -1736,18 +1746,29 @@
         bandedMode = !bandedMode;
         const btn = document.getElementById('banded-btn');
         btn.textContent = bandedMode ? 'Free Layout' : 'Banded View';
+        const sliderWrap = document.getElementById('band-spacing-wrap');
         if (bandedMode) {
             btn.style.background = 'rgba(30,58,138,0.55)';
             btn.style.borderColor = 'rgba(59,130,246,0.7)';
+            sliderWrap.style.display = 'inline-flex';
             simulation.force('bandX', d3.forceX(d => getBandX(d.type)).strength(0.45));
             simulation.force('center', null);
         } else {
             btn.style.background = '';
             btn.style.borderColor = '';
+            sliderWrap.style.display = 'none';
             simulation.force('bandX', null);
             simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(0.04));
         }
         simulation.alpha(0.5).restart();
+        updateBandGuides();
+    }
+
+    function updateBandSpacing(value) {
+        bandSpacingPx = parseInt(value);
+        if (!bandedMode) return;
+        simulation.force('bandX', d3.forceX(d => getBandX(d.type)).strength(0.45));
+        simulation.alpha(0.4).restart();
         updateBandGuides();
     }
 
