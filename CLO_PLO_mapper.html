@@ -307,7 +307,16 @@
             padding: 10px 12px; margin-bottom: 6px;
             background: rgba(245,240,232,0.04);
             border: 1px solid rgba(245,240,232,0.08);
+            border-left: 3px solid transparent;
             border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .course-item:hover { background: rgba(245,240,232,0.07); border-color: rgba(245,240,232,0.18); }
+        .course-item.focused {
+            background: rgba(217,119,6,0.12);
+            border-color: rgba(217,119,6,0.4);
+            border-left-color: var(--amber);
         }
         .course-item-color {
             width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
@@ -330,6 +339,20 @@
             border-radius: 3px; transition: all 0.2s;
         }
         .course-remove:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+        .course-focus-pill {
+            font-size: 9px; font-family: 'Space Mono', monospace;
+            color: var(--amber); background: rgba(217,119,6,0.15);
+            border: 1px solid rgba(217,119,6,0.3); border-radius: 3px;
+            padding: 1px 5px; margin-left: 4px;
+        }
+        /* Band guides */
+        .band-guide-band { fill: rgba(245,240,232,0.012); }
+        .band-guide-line { stroke: rgba(245,240,232,0.07); stroke-dasharray: 3,7; stroke-width: 1; }
+        .band-guide-label {
+            fill: rgba(245,240,232,0.18); font-family: 'Space Mono', monospace;
+            font-size: 11px; text-anchor: middle; letter-spacing: 0.07em;
+            text-transform: uppercase; pointer-events: none;
+        }
         .no-courses { color: rgba(245,240,232,0.3); font-size: 12px; text-align: center; padding: 30px 0; }
         .course-count {
             font-size: 10px; color: rgba(245,240,232,0.35);
@@ -483,6 +506,7 @@
             <button class="control-btn" onclick="collapseAll()">Collapse All</button>
             <button class="control-btn" id="hide-unlinked-btn" onclick="toggleUnlinked()" style="display:none">Show Linked Only</button>
             <button class="control-btn" id="stats-btn" onclick="showStats()" style="display:none; background:rgba(45,90,39,0.5); border-color:rgba(45,90,39,0.7);">PLO Coverage</button>
+            <button class="control-btn" id="banded-btn" onclick="toggleBandedMode()">Banded View</button>
         </div>
 
         <!-- Stats Modal -->
@@ -764,6 +788,8 @@
     let pinnedNodes = new Set();
     let highlightedLinks = new Set();
     let highlightedNodes = new Set();
+    let focusedCourseIndex = null; // null = show all; number = isolate that course
+    let bandedMode = false;
 
     const svg = d3.select("#svg");
     const width = window.innerWidth;
@@ -771,6 +797,7 @@
     const tooltip = d3.select("#tooltip");
 
     const zoomGroup = svg.append("g");
+    const bandGuideGroup = zoomGroup.append("g").attr("class", "band-guides");
     const linkGroup = zoomGroup.append("g").attr("class", "links");
     const nodeGroup = zoomGroup.append("g").attr("class", "nodes");
 
@@ -842,13 +869,14 @@
                 // Level 3: Individual PLOs
                 cat.plos.forEach((ploText, i) => {
                     const ploId = `${cat.id}-${i}`;
-                    // Check if any CLO maps to this PLO
-                    const hasCloLinks = courseData.some(c =>
+                    // Check if any CLO maps to this PLO (respecting course focus)
+                    const hasCloLinks = courseData.some((c, ci) =>
+                        (focusedCourseIndex === null || ci === focusedCourseIndex) &&
                         c.clos.some(clo => clo.ploMappings.includes(ploId))
                     );
 
-                    // Skip unlinked PLOs when in "linked only" mode
-                    if (unlinkedHidden && !hasCloLinks) return;
+                    // Skip unlinked PLOs in "linked only" mode or when a course is focused
+                    if ((unlinkedHidden || focusedCourseIndex !== null) && !hasCloLinks) return;
 
                     const ploNode = {
                         id: ploId, name: ploText, type: 'plo',
@@ -864,6 +892,7 @@
                     // If PLO is expanded, show linked CLOs
                     if (expandedNodes.has(ploId) && hasCloLinks) {
                         courseData.forEach((course, ci) => {
+                            if (focusedCourseIndex !== null && ci !== focusedCourseIndex) return;
                             course.clos.forEach((clo, cli) => {
                                 if (clo.ploMappings.includes(ploId)) {
                                     const cloId = `clo-${ci}-${cli}`;
@@ -995,8 +1024,10 @@
 
         simulation.nodes(nodes);
         simulation.force("link").links(links);
+        if (bandedMode) simulation.force('bandX', d3.forceX(d => getBandX(d.type)).strength(0.45));
         simulation.alpha(0.35).restart();
         renderVisualization();
+        updateBandGuides();
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -1571,6 +1602,8 @@
     }
 
     function removeCourse(index) {
+        if (focusedCourseIndex === index) focusedCourseIndex = null;
+        else if (focusedCourseIndex !== null && focusedCourseIndex > index) focusedCourseIndex--;
         courseData.splice(index, 1);
         // Reassign colors
         courseData.forEach((c, i) => { c._color = coursePalette[i % coursePalette.length]; });
@@ -1628,18 +1661,94 @@
 
         courseData.forEach((course, i) => {
             const li = document.createElement('li');
-            li.className = 'course-item';
+            const isFocused = focusedCourseIndex === i;
+            li.className = 'course-item' + (isFocused ? ' focused' : '');
+            li.title = isFocused ? 'Click to show all courses' : 'Click to isolate this course';
             li.innerHTML = `
                 <div class="course-item-color" style="background:${course._color}"></div>
                 <div class="course-item-info">
-                    <div class="course-item-num">${course.courseNumber}</div>
+                    <div class="course-item-num">${course.courseNumber}${isFocused ? '<span class="course-focus-pill">isolated</span>' : ''}</div>
                     <div class="course-item-title">${course.courseTitle}</div>
                     <div class="course-item-clos">${course.clos.length} CLO(s)</div>
                 </div>
-                <button class="course-remove" onclick="removeCourse(${i})" title="Remove">&times;</button>
+                <button class="course-remove" title="Remove">&times;</button>
             `;
+            li.querySelector('.course-remove').addEventListener('click', e => { e.stopPropagation(); removeCourse(i); });
+            li.addEventListener('click', () => toggleCourseFocus(i));
             list.appendChild(li);
         });
+    }
+
+    // ── Course Focus ──────────────────────────────────────────
+    function toggleCourseFocus(i) {
+        if (focusedCourseIndex === i) {
+            focusedCourseIndex = null;
+        } else {
+            focusedCourseIndex = i;
+            // Auto-expand all PLOs mapped by this course so CLOs appear immediately
+            if (courseData[i]) {
+                courseData[i].clos.forEach(clo => {
+                    clo.ploMappings.forEach(ploId => expandedNodes.add(ploId));
+                });
+            }
+        }
+        updateVisualization();
+        updateCourseList();
+    }
+
+    // ── Banded Layout ─────────────────────────────────────────
+    function getBandX(type) {
+        const bands = { root: 0.07, pillar: 0.18, category: 0.31, plo: 0.48, clo: 0.65, course: 0.82 };
+        return (bands[type] ?? 0.5) * width;
+    }
+
+    function updateBandGuides() {
+        bandGuideGroup.selectAll('*').remove();
+        if (!bandedMode) return;
+
+        const bands = [
+            { type: 'root',     label: 'Core' },
+            { type: 'pillar',   label: 'Pillars' },
+            { type: 'category', label: 'Categories' },
+            { type: 'plo',      label: 'PLOs' },
+            { type: 'clo',      label: 'CLOs' },
+            { type: 'course',   label: 'Courses' }
+        ];
+        const bandW = width * 0.10;
+
+        bands.forEach(b => {
+            const cx = getBandX(b.type);
+            bandGuideGroup.append('rect')
+                .attr('class', 'band-guide-band')
+                .attr('x', cx - bandW / 2).attr('y', 0)
+                .attr('width', bandW).attr('height', height);
+            bandGuideGroup.append('line')
+                .attr('class', 'band-guide-line')
+                .attr('x1', cx).attr('y1', 0).attr('x2', cx).attr('y2', height);
+            bandGuideGroup.append('text')
+                .attr('class', 'band-guide-label')
+                .attr('x', cx).attr('y', 22)
+                .text(b.label);
+        });
+    }
+
+    function toggleBandedMode() {
+        bandedMode = !bandedMode;
+        const btn = document.getElementById('banded-btn');
+        btn.textContent = bandedMode ? 'Free Layout' : 'Banded View';
+        if (bandedMode) {
+            btn.style.background = 'rgba(30,58,138,0.55)';
+            btn.style.borderColor = 'rgba(59,130,246,0.7)';
+            simulation.force('bandX', d3.forceX(d => getBandX(d.type)).strength(0.45));
+            simulation.force('center', null);
+        } else {
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            simulation.force('bandX', null);
+            simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(0.04));
+        }
+        simulation.alpha(0.5).restart();
+        updateBandGuides();
     }
 
     function updateLegend() {
