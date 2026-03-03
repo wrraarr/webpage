@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLO Data Entry v2 — 2025 Framework</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1612;
+            --cream: #f5f0e8;
+            --warm: #e8dcc8;
+            --rust: #c4541a;
+            --amber: #d97706;
+            --forest: #2d5a27;
+            --slate: #64748b;
+            --border: #d1c4aa;
+            --card-bg: #252018;
+            --input-bg: #1e1a14;
+            --hover: #2a2520;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--ink);
+            min-height: 100vh;
+            color: var(--cream);
+        }
+
+        /* Header */
+        header {
+            background: var(--ink);
+            border-bottom: 3px solid var(--rust);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px;
+            color: var(--amber);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+        .v-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px; padding: 2px 7px;
+            border-radius: 3px;
+            border: 1px solid rgba(109,40,217,0.5);
+            color: #a78bfa;
+            background: rgba(109,40,217,0.12);
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        header .subtitle {
+            font-size: 12px;
+            color: var(--slate);
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            height: calc(100vh - 51px);
+        }
+        .main-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        .json-panel {
+            width: 420px;
+            background: #0d0b08;
+            border-left: 2px solid var(--rust);
+            display: flex;
+            flex-direction: column;
+        }
+        .json-panel-header {
+            padding: 16px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .json-panel-header h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            color: var(--amber);
+        }
+        .json-output {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        .json-output pre {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: #a8a090;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        /* Course Card */
+        .course-card {
+            background: var(--card-bg);
+            border: 1px solid #3a3228;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .course-header {
+            background: #2a2418;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #3a3228;
+        }
+        .course-header h2 {
+            font-size: 15px;
+            color: var(--amber);
+            font-family: 'Space Mono', monospace;
+        }
+        .course-body { padding: 20px; }
+
+        /* Form Elements */
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        .form-group.small { flex: 0 0 200px; }
+        label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--slate);
+            font-weight: 600;
+        }
+        input[type="text"], textarea {
+            background: var(--input-bg);
+            border: 1px solid #3a3228;
+            border-radius: 4px;
+            padding: 10px 12px;
+            color: var(--cream);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus { border-color: var(--amber); }
+        textarea { resize: vertical; min-height: 60px; }
+
+        /* CLO Entry */
+        .clo-section {
+            margin-top: 20px;
+            border-top: 1px solid #3a3228;
+            padding-top: 16px;
+        }
+        .clo-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .clo-section-header h3 { font-size: 13px; color: var(--cream); font-weight: 600; }
+        .clo-item {
+            background: var(--input-bg);
+            border: 1px solid #3a3228;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .clo-item:hover { border-color: #4a4238; }
+        .clo-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--rust);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .clo-text-input { width: 100%; margin-bottom: 12px; }
+
+        /* PLO Picker */
+        .plo-picker { margin-top: 8px; }
+        .plo-picker-label {
+            font-size: 11px;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Category filter buttons — compact row */
+        .cat-filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+        .cat-filter-btn {
+            padding: 4px 9px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.15s;
+            opacity: 0.65;
+        }
+        .cat-filter-btn:hover { opacity: 1; }
+        .cat-filter-btn.active { opacity: 1; color: white; }
+        .cat-filter-btn.all-btn {
+            background: #2a2418;
+            border-color: #3a3228;
+            color: var(--cream);
+            opacity: 1;
+        }
+        .cat-filter-btn.all-btn.active { background: var(--rust); border-color: var(--rust); }
+
+        /* Category sections in picker */
+        .category-section { margin-bottom: 8px; }
+        .category-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            padding: 3px 0;
+        }
+        .plo-options { display: flex; flex-wrap: wrap; gap: 4px; }
+
+        .plo-chip {
+            padding: 4px 10px;
+            background: #2a2418;
+            border: 1px solid #3a3228;
+            border-radius: 3px;
+            font-size: 10px;
+            color: #a8a090;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Space Mono', monospace;
+            position: relative;
+        }
+        .plo-chip:hover { color: var(--cream); }
+        .plo-chip.selected { color: white; }
+        .plo-chip .tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1612;
+            border: 1px solid var(--amber);
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: var(--cream);
+            white-space: normal;
+            z-index: 50;
+            font-family: 'Space Grotesk', sans-serif;
+            pointer-events: none;
+            max-width: 280px;
+            text-align: left;
+            width: max-content;
+        }
+        .plo-chip:hover .tooltip { display: block; }
+
+        /* Selected PLO tags */
+        .selected-plos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+            min-height: 24px;
+        }
+        .selected-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: 'Space Mono', monospace;
+            color: white;
+        }
+        .selected-tag .remove-tag {
+            cursor: pointer;
+            opacity: 0.7;
+            font-size: 12px;
+            line-height: 1;
+        }
+        .selected-tag .remove-tag:hover { opacity: 1; }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s;
+        }
+        .btn-primary { background: var(--rust); color: white; border-color: var(--rust); }
+        .btn-primary:hover { background: #d65a20; }
+        .btn-secondary { background: transparent; color: var(--cream); border-color: #3a3228; }
+        .btn-secondary:hover { background: var(--hover); border-color: var(--amber); }
+        .btn-danger { background: transparent; color: #ef4444; border-color: #3a1515; }
+        .btn-danger:hover { background: #3a1515; }
+        .btn-small { padding: 5px 10px; font-size: 11px; }
+        .btn-copy { background: var(--amber); color: var(--ink); border: none; font-weight: 700; }
+        .btn-copy:hover { background: #e8a007; }
+
+        .add-course-area { text-align: center; padding: 20px; }
+
+        .empty-state { text-align: center; padding: 40px; color: var(--slate); }
+        .empty-state p { font-size: 13px; margin-top: 8px; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3a3228; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4a4238; }
+
+        .toast {
+            position: fixed; bottom: 24px; right: 24px;
+            background: var(--forest); color: white;
+            padding: 12px 20px; border-radius: 6px;
+            font-size: 13px; font-weight: 600;
+            z-index: 1000;
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.3s;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        .import-area {
+            padding: 16px;
+            border-top: 1px solid #333;
+        }
+        .import-area textarea {
+            width: 100%; min-height: 80px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px; margin-bottom: 8px;
+        }
+
+        /* Preview Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 500;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: #1e1a14;
+            border: 1px solid rgba(245,240,232,0.15);
+            border-radius: 10px;
+            width: 640px; max-width: 90vw;
+            max-height: 80vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+        }
+        .modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(245,240,232,0.1);
+        }
+        .modal-header h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px; color: var(--amber); font-weight: 700;
+        }
+        .modal-close {
+            background: none; border: none; color: rgba(245,240,232,0.4);
+            font-size: 20px; cursor: pointer; padding: 4px 8px;
+            border-radius: 4px; transition: all 0.2s;
+        }
+        .modal-close:hover { color: #f87171; background: rgba(248,113,113,0.1); }
+        .modal-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .preview-course {
+            background: rgba(245,240,232,0.04);
+            border: 1px solid rgba(245,240,232,0.08);
+            border-radius: 6px; padding: 14px; margin-bottom: 12px;
+        }
+        .preview-course-header {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+        }
+        .preview-course-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 13px; color: var(--amber); font-weight: 700;
+        }
+        .preview-course-title { font-size: 12px; color: rgba(245,240,232,0.6); }
+        .preview-clo {
+            margin: 6px 0 6px 12px; padding: 8px 12px;
+            background: rgba(245,240,232,0.03);
+            border-left: 3px solid var(--rust);
+            border-radius: 0 4px 4px 0;
+            font-size: 12px; color: var(--cream);
+        }
+        .preview-plo-tags {
+            margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px;
+        }
+        .preview-plo-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px; padding: 2px 6px;
+            border-radius: 3px; color: white;
+        }
+        .modal-footer {
+            padding: 14px 20px;
+            border-top: 1px solid rgba(245,240,232,0.1);
+            display: flex; justify-content: flex-end; gap: 8px;
+        }
+        .preview-warn {
+            font-size: 11px; color: #f87171;
+            margin-bottom: 12px; padding: 8px 12px;
+            background: rgba(248,113,113,0.08);
+            border: 1px solid rgba(248,113,113,0.15);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>CLO Data Entry<span class="v-badge">2025 Framework</span></h1>
+        <span class="subtitle">manual CLO → PLO mapper</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn btn-secondary btn-small" onclick="importJSON()">Import JSON</button>
+        <button class="btn btn-primary btn-small" onclick="addCourse()">+ Add Course</button>
+        <button class="btn btn-small" id="clearAllBtn" style="display:none; background:transparent; color:#f87171; border-color:#3a1515;" onclick="clearAll()">Clear All</button>
+        <span style="width:1px; height:24px; background:#3a3228; margin:0 4px;"></span>
+        <button class="btn btn-small" style="background:var(--forest); color:white; border-color:var(--forest);" onclick="sendToViewer()">Send to Viewer &#x2192;</button>
+    </div>
+</header>
+
+<div class="app">
+    <div class="main-panel" id="mainPanel">
+        <div class="empty-state" id="emptyState">
+            <h3 style="color:var(--amber);">No courses yet</h3>
+            <p>Click <strong>+ Add Course</strong> to start entering CLOs and linking them to the 2025 PLOs.</p>
+        </div>
+    </div>
+    <div class="json-panel">
+        <div class="json-panel-header">
+            <h3>JSON Output</h3>
+            <div style="display:flex; gap:6px;">
+                <button class="btn btn-copy btn-small" onclick="copyJSON()">Copy</button>
+                <button class="btn btn-secondary btn-small" onclick="downloadJSON()">Download</button>
+            </div>
+        </div>
+        <div class="json-output">
+            <pre id="jsonOutput">{ "courses": [] }</pre>
+        </div>
+        <div class="import-area">
+            <label style="margin-bottom:8px; display:block;">Paste JSON to Import</label>
+            <textarea id="importInput" placeholder='Paste JSON here and click "Import JSON" above...'></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Preview Modal -->
+<div class="modal-overlay" id="previewModal" onclick="if(event.target===this)closePreview()">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Review Before Sending</h2>
+            <button class="modal-close" onclick="closePreview()">&times;</button>
+        </div>
+        <div class="modal-body" id="previewBody"></div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closePreview()">Cancel</button>
+            <button class="btn" id="confirmSendBtn" style="background:var(--forest); color:white; border-color:var(--forest);" onclick="confirmSend()">Send to Viewer &rarr;</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── PLO DATA — 2025 Framework (8 flat categories) ──
+const PLO_CATEGORIES = [
+    {
+        id: 'knowledge',
+        name: 'Core Knowledge',
+        color: '#6d28d9',
+        plos: [
+            { id: 'knowledge-0', text: 'Information systems architecture and development' },
+            { id: 'knowledge-1', text: 'Data structures, algorithms, and databases' },
+            { id: 'knowledge-2', text: 'Human-computer interaction and user experience design' },
+            { id: 'knowledge-3', text: 'Sociotechnical systems analysis' },
+            { id: 'knowledge-4', text: 'Ethics in technology design and deployment' },
+            { id: 'knowledge-5', text: 'Information policy, privacy, and security' }
+        ]
+    },
+    {
+        id: 'technical',
+        name: 'Technical Practice',
+        color: '#c2410c',
+        plos: [
+            { id: 'technical-0', text: 'Multiple programming languages and paradigms (OOP, functional, procedural)' },
+            { id: 'technical-1', text: 'Modern development frameworks and APIs' },
+            { id: 'technical-2', text: 'Version control and collaborative development tools' },
+            { id: 'technical-3', text: 'Prototyping and design tools (low-fidelity to high-fidelity)' },
+            { id: 'technical-4', text: 'Database design and query languages' },
+            { id: 'technical-5', text: 'Cloud platforms and deployment pipelines' },
+            { id: 'technical-6', text: 'Accessibility standards (WCAG) and responsive design principles' }
+        ]
+    },
+    {
+        id: 'data',
+        name: 'Data & Analysis',
+        color: '#0e7490',
+        plos: [
+            { id: 'data-0', text: 'Applying statistical methods and computational analysis' },
+            { id: 'data-1', text: 'Conducting qualitative research (interviews, observations, usability testing)' },
+            { id: 'data-2', text: 'Evaluating information quality, bias, and limitations' },
+            { id: 'data-3', text: 'Creating data visualizations appropriate to audience and context' },
+            { id: 'data-4', text: 'Using analytical tools (R, Python, SQL, Tableau, etc.)' }
+        ]
+    },
+    {
+        id: 'problem',
+        name: 'Problem Solving',
+        color: '#15803d',
+        plos: [
+            { id: 'problem-0', text: 'Address real-world needs through human-centered design' },
+            { id: 'problem-1', text: 'Consider technical feasibility, social impact, and sustainability' },
+            { id: 'problem-2', text: 'Balance stakeholder requirements and constraints' },
+            { id: 'problem-3', text: 'Iterate based on testing, feedback, and evaluation' },
+            { id: 'problem-4', text: 'Scale solutions appropriately to context (individual, organizational, societal)' }
+        ]
+    },
+    {
+        id: 'communication',
+        name: 'Communication',
+        color: '#b45309',
+        plos: [
+            { id: 'communication-0', text: 'Written documentation (technical specifications, user guides, reports, proposals)' },
+            { id: 'communication-1', text: 'Oral presentations to technical and non-technical audiences' },
+            { id: 'communication-2', text: 'Visual communication (wireframes, diagrams, posters, demos)' },
+            { id: 'communication-3', text: 'Adaptation to diverse audiences, contexts, and cultural perspectives' }
+        ]
+    },
+    {
+        id: 'collaboration',
+        name: 'Collaboration',
+        color: '#be185d',
+        plos: [
+            { id: 'collaboration-0', text: 'Coordinating work using project management tools and methodologies' },
+            { id: 'collaboration-1', text: 'Negotiating roles, responsibilities, and decision-making processes' },
+            { id: 'collaboration-2', text: 'Integrating diverse perspectives and expertise' },
+            { id: 'collaboration-3', text: 'Giving and receiving constructive feedback' },
+            { id: 'collaboration-4', text: 'Resolving conflicts productively' }
+        ]
+    },
+    {
+        id: 'ethics',
+        name: 'Ethics & Responsibility',
+        color: '#991b1b',
+        plos: [
+            { id: 'ethics-0', text: 'Privacy, surveillance, and data protection' },
+            { id: 'ethics-1', text: 'Algorithmic bias, fairness, and transparency' },
+            { id: 'ethics-2', text: 'Accessibility and inclusive design' },
+            { id: 'ethics-3', text: 'Environmental sustainability' },
+            { id: 'ethics-4', text: 'Power dynamics and equity in technology access and design' },
+            { id: 'ethics-5', text: 'Professional codes of conduct' }
+        ]
+    },
+    {
+        id: 'lifelong',
+        name: 'Lifelong Learning',
+        color: '#1e40af',
+        plos: [
+            { id: 'lifelong-0', text: 'Learning new programming languages, tools, and frameworks independently' },
+            { id: 'lifelong-1', text: 'Evaluating emerging technologies critically' },
+            { id: 'lifelong-2', text: 'Engaging with professional communities and resources' },
+            { id: 'lifelong-3', text: 'Reflecting on own practice and growth' },
+            { id: 'lifelong-4', text: 'Recognizing limits of knowledge and seeking appropriate expertise' }
+        ]
+    }
+];
+
+// Quick lookup: ploId → { text, color, catName }
+const PLO_LOOKUP = {};
+PLO_CATEGORIES.forEach(cat => {
+    cat.plos.forEach(plo => {
+        PLO_LOOKUP[plo.id] = { text: plo.text, color: cat.color, catName: cat.name };
+    });
+});
+
+// ── STATE ──
+let courses = [];
+let nextCourseId = 1;
+
+// ── COURSE MANAGEMENT ──
+function addCourse() {
+    courses.push({
+        id: nextCourseId++,
+        courseNumber: '', courseTitle: '', description: '',
+        clos: []
+    });
+    renderAll();
+}
+
+function removeCourse(courseId) {
+    courses = courses.filter(c => c.id !== courseId);
+    renderAll();
+}
+
+function addCLO(courseId) {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+    course.clos.push({ id: Date.now(), text: '', ploMappings: [], activeCategory: null });
+    renderAll();
+}
+
+function removeCLO(courseId, cloId) {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+    course.clos = course.clos.filter(c => c.id !== cloId);
+    renderAll();
+}
+
+function togglePLO(courseId, cloId, ploId) {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+    const clo = course.clos.find(c => c.id === cloId);
+    if (!clo) return;
+    const idx = clo.ploMappings.indexOf(ploId);
+    if (idx === -1) clo.ploMappings.push(ploId);
+    else clo.ploMappings.splice(idx, 1);
+    renderAll();
+}
+
+function setCategory(courseId, cloId, catId) {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+    const clo = course.clos.find(c => c.id === cloId);
+    if (!clo) return;
+    // Toggle: clicking active category clears it (show all)
+    clo.activeCategory = clo.activeCategory === catId ? null : catId;
+    renderAll();
+}
+
+// ── SAVE FIELD VALUES ──
+function saveFields() {
+    document.querySelectorAll('[data-field]').forEach(el => {
+        const courseId = parseInt(el.dataset.courseId);
+        const field = el.dataset.field;
+        const course = courses.find(c => c.id === courseId);
+        if (course) course[field] = el.value;
+    });
+    document.querySelectorAll('[data-clo-field]').forEach(el => {
+        const courseId = parseInt(el.dataset.courseId);
+        const cloId = parseInt(el.dataset.cloId);
+        const course = courses.find(c => c.id === courseId);
+        if (!course) return;
+        const clo = course.clos.find(c => c.id === cloId);
+        if (clo) clo.text = el.value;
+    });
+}
+
+// ── RENDER ──
+function renderAll() {
+    saveFields();
+    updateJSON();
+    updateClearBtn();
+
+    const panel = document.getElementById('mainPanel');
+    panel.querySelectorAll('.course-card, .add-course-area').forEach(el => el.remove());
+
+    if (courses.length === 0) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+    }
+    document.getElementById('emptyState').style.display = 'none';
+
+    courses.forEach((course, ci) => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.innerHTML = `
+            <div class="course-header">
+                <h2>Course ${ci + 1}</h2>
+                <button class="btn btn-danger btn-small" onclick="removeCourse(${course.id})">Remove Course</button>
+            </div>
+            <div class="course-body">
+                <div class="form-row">
+                    <div class="form-group small">
+                        <label>Course Number</label>
+                        <input type="text" data-field="courseNumber" data-course-id="${course.id}" value="${esc(course.courseNumber)}" placeholder="e.g. INFO-I 101" oninput="debouncedUpdate()">
+                    </div>
+                    <div class="form-group">
+                        <label>Course Title</label>
+                        <input type="text" data-field="courseTitle" data-course-id="${course.id}" value="${esc(course.courseTitle)}" placeholder="e.g. Introduction to Informatics" oninput="debouncedUpdate()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description (~50 words)</label>
+                    <textarea data-field="description" data-course-id="${course.id}" placeholder="Brief course description..." oninput="debouncedUpdate()">${esc(course.description)}</textarea>
+                </div>
+                <div class="clo-section">
+                    <div class="clo-section-header">
+                        <h3>Course Learning Outcomes</h3>
+                        <button class="btn btn-primary btn-small" onclick="addCLO(${course.id})">+ Add CLO</button>
+                    </div>
+                    <div id="clos-${course.id}">
+                        ${course.clos.length === 0 ? '<p style="color:var(--slate); font-size:12px; padding:12px 0;">No CLOs yet. Click &quot;+ Add CLO&quot; to begin.</p>' : ''}
+                        ${course.clos.map((clo, idx) => renderCLO(course, clo, idx)).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        panel.appendChild(card);
+    });
+
+    const addArea = document.createElement('div');
+    addArea.className = 'add-course-area';
+    addArea.innerHTML = '<button class="btn btn-secondary" onclick="addCourse()">+ Add Another Course</button>';
+    panel.appendChild(addArea);
+}
+
+function renderCLO(course, clo, idx) {
+    // Selected tags
+    const selectedTags = clo.ploMappings.map(ploId => {
+        const info = PLO_LOOKUP[ploId];
+        const color = info ? info.color : '#666';
+        return `<span class="selected-tag" style="background:${color};">${ploId}<span class="remove-tag" onclick="togglePLO(${course.id}, ${clo.id}, '${ploId}')">&times;</span></span>`;
+    }).join('');
+
+    // Category filter buttons
+    const catBtns = PLO_CATEGORIES.map(cat => {
+        const isActive = clo.activeCategory === cat.id;
+        const style = `background:${cat.color}; border-color:${cat.color};`;
+        return `<button class="cat-filter-btn ${isActive ? 'active' : ''}" style="${isActive ? style : `border-color:${cat.color}; color:${cat.color};`}" onclick="setCategory(${course.id}, ${clo.id}, '${cat.id}')">${cat.name}</button>`;
+    }).join('');
+
+    // PLO options: show all categories or filtered
+    const categoriesToShow = clo.activeCategory
+        ? PLO_CATEGORIES.filter(c => c.id === clo.activeCategory)
+        : PLO_CATEGORIES;
+
+    const pickerHTML = categoriesToShow.map(cat => `
+        <div class="category-section">
+            <div class="category-name" style="color:${cat.color};">${cat.name}</div>
+            <div class="plo-options">
+                ${cat.plos.map(plo => {
+                    const selected = clo.ploMappings.includes(plo.id);
+                    const selStyle = selected ? `background:${cat.color}; border-color:${cat.color};` : `border-color:${cat.color}30;`;
+                    return `<span class="plo-chip ${selected ? 'selected' : ''}" style="${selStyle}${selected ? '' : ` color:#a8a090;`}" onclick="togglePLO(${course.id}, ${clo.id}, '${plo.id}')">
+                        ${plo.id}
+                        <span class="tooltip">${esc(plo.text)}</span>
+                    </span>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    return `
+        <div class="clo-item">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="clo-number">CLO ${idx + 1}</div>
+                <button class="btn btn-danger btn-small" style="padding:2px 8px; font-size:10px;" onclick="removeCLO(${course.id}, ${clo.id})">&times;</button>
+            </div>
+            <input type="text" class="clo-text-input" data-clo-field="text" data-course-id="${course.id}" data-clo-id="${clo.id}" value="${esc(clo.text)}" placeholder="Enter CLO text (start with action verb)..." oninput="debouncedUpdate()">
+
+            <div class="selected-plos">${selectedTags || '<span style="color:var(--slate); font-size:11px;">No PLOs linked yet</span>'}</div>
+
+            <div class="plo-picker">
+                <div class="plo-picker-label">Link to PLOs — filter by category:</div>
+                <div class="cat-filter-row">${catBtns}</div>
+                ${pickerHTML}
+            </div>
+        </div>
+    `;
+}
+
+function esc(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── JSON OUTPUT ──
+function updateJSON() {
+    saveFields();
+    const output = {
+        courses: courses.map(c => ({
+            courseNumber: c.courseNumber || '',
+            courseTitle: c.courseTitle || '',
+            description: c.description || '',
+            clos: c.clos.map(clo => ({
+                text: clo.text || '',
+                ploMappings: [...clo.ploMappings]
+            }))
+        }))
+    };
+    document.getElementById('jsonOutput').textContent = JSON.stringify(output, null, 2);
+}
+
+let debounceTimer;
+function debouncedUpdate() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(updateJSON, 200);
+}
+
+// ── COPY / DOWNLOAD ──
+function copyJSON() {
+    navigator.clipboard.writeText(document.getElementById('jsonOutput').textContent)
+        .then(() => showToast('JSON copied to clipboard!'));
+}
+
+function downloadJSON() {
+    const text = document.getElementById('jsonOutput').textContent;
+    const blob = new Blob([text], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'clo_plo_v2_mappings.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('JSON downloaded!');
+}
+
+// ── IMPORT ──
+function importJSON() {
+    const input = document.getElementById('importInput').value.trim();
+    if (!input) { showToast('Paste JSON into the import area first'); return; }
+    try {
+        const data = JSON.parse(input);
+        if (!data.courses || !Array.isArray(data.courses)) {
+            showToast('Invalid format: expected { "courses": [...] }');
+            return;
+        }
+        courses = data.courses.map(c => ({
+            id: nextCourseId++,
+            courseNumber: c.courseNumber || '',
+            courseTitle: c.courseTitle || '',
+            description: c.description || '',
+            clos: (c.clos || []).map(clo => ({
+                id: Date.now() + Math.random() * 1000,
+                text: clo.text || '',
+                ploMappings: clo.ploMappings || [],
+                activeCategory: null
+            }))
+        }));
+        document.getElementById('importInput').value = '';
+        renderAll();
+        showToast(`Imported ${data.courses.length} course(s)!`);
+    } catch (e) {
+        showToast('Invalid JSON: ' + e.message);
+    }
+}
+
+// ── TOAST ──
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ── SEND TO VIEWER (with preview) ──
+let pendingOutput = null;
+
+function buildOutput() {
+    saveFields();
+    return {
+        courses: courses.filter(c => c.courseNumber && c.clos.length > 0).map(c => ({
+            courseNumber: c.courseNumber || '',
+            courseTitle: c.courseTitle || '',
+            description: c.description || '',
+            clos: c.clos.filter(clo => clo.text && clo.ploMappings.length > 0).map(clo => ({
+                text: clo.text,
+                ploMappings: [...clo.ploMappings]
+            }))
+        }))
+    };
+}
+
+function sendToViewer() {
+    const output = buildOutput();
+    if (output.courses.length === 0) {
+        showToast('No complete courses to send (need course number + at least one CLO with PLO mappings)');
+        return;
+    }
+    pendingOutput = output;
+    renderPreview(output);
+    document.getElementById('previewModal').classList.add('show');
+}
+
+function closePreview() {
+    document.getElementById('previewModal').classList.remove('show');
+    pendingOutput = null;
+}
+
+function renderPreview(output) {
+    const body = document.getElementById('previewBody');
+    let html = '';
+
+    const warnings = [];
+    courses.forEach(c => {
+        if (!c.courseNumber) return;
+        const emptyCLOs = c.clos.filter(clo => clo.text && clo.ploMappings.length === 0);
+        if (emptyCLOs.length > 0) warnings.push(`${c.courseNumber}: ${emptyCLOs.length} CLO(s) have no PLO mappings and will be excluded`);
+        const noTextCLOs = c.clos.filter(clo => !clo.text);
+        if (noTextCLOs.length > 0) warnings.push(`${c.courseNumber}: ${noTextCLOs.length} CLO(s) have no text and will be excluded`);
+    });
+    const skipped = courses.filter(c => !c.courseNumber && c.clos.length > 0);
+    if (skipped.length > 0) warnings.push(`${skipped.length} course(s) missing course number — excluded`);
+
+    if (warnings.length > 0) {
+        html += '<div class="preview-warn">' + warnings.join('<br>') + '</div>';
+    }
+
+    const totalCLOs = output.courses.reduce((s, c) => s + c.clos.length, 0);
+    const allPLOs = new Set();
+    output.courses.forEach(c => c.clos.forEach(clo => clo.ploMappings.forEach(id => allPLOs.add(id))));
+
+    html += `<div style="font-size:12px; color:rgba(245,240,232,0.5); margin-bottom:14px;">
+        Sending <strong style="color:var(--amber)">${output.courses.length}</strong> course(s),
+        <strong style="color:var(--amber)">${totalCLOs}</strong> CLO(s),
+        touching <strong style="color:var(--amber)">${allPLOs.size}</strong> unique PLO(s)
+    </div>`;
+
+    output.courses.forEach(c => {
+        html += `<div class="preview-course">
+            <div class="preview-course-header">
+                <span class="preview-course-num">${esc(c.courseNumber)}</span>
+                <span class="preview-course-title">${esc(c.courseTitle)}</span>
+            </div>`;
+        c.clos.forEach((clo, i) => {
+            html += `<div class="preview-clo">
+                <strong style="color:var(--rust); font-size:10px;">CLO ${i + 1}:</strong> ${esc(clo.text)}
+                <div class="preview-plo-tags">`;
+            clo.ploMappings.forEach(id => {
+                const info = PLO_LOOKUP[id];
+                const color = info ? info.color : '#666';
+                html += `<span class="preview-plo-tag" style="background:${color};">${id}</span>`;
+            });
+            html += `</div></div>`;
+        });
+        html += `</div>`;
+    });
+
+    body.innerHTML = html;
+}
+
+function confirmSend() {
+    if (!pendingOutput) return;
+    const jsonStr = JSON.stringify(pendingOutput);
+    const encoded = encodeURIComponent(jsonStr);
+    const viewerUrl = new URL('CLO_PLO_mapper_v2.html', window.location.href).href;
+    window.open(viewerUrl + '#import=' + encoded, '_blank');
+    showToast(`Sent ${pendingOutput.courses.length} course(s) to v2 viewer!`);
+    closePreview();
+}
+
+// ── CLEAR ALL ──
+function updateClearBtn() {
+    document.getElementById('clearAllBtn').style.display = courses.length > 0 ? 'inline-flex' : 'none';
+}
+
+function clearAll() {
+    if (!confirm('Clear all courses and CLOs? This cannot be undone.')) return;
+    courses = []; nextCourseId = 1;
+    renderAll();
+}
+
+// ── POPULATE FROM MAPPER (URL hash #courses=...) ──
+function checkIncomingCourses() {
+    try {
+        const hash = window.location.hash;
+        if (!hash.startsWith('#courses=')) return;
+        const encoded = hash.substring('#courses='.length);
+        const data = JSON.parse(decodeURIComponent(encoded));
+        history.replaceState(null, '', window.location.pathname);
+        if (!data.courses || !Array.isArray(data.courses)) return;
+        courses = data.courses.map(c => ({
+            id: nextCourseId++,
+            courseNumber: c.courseNumber || '',
+            courseTitle: c.courseTitle || '',
+            description: c.description || '',
+            clos: (c.clos || []).map(clo => ({
+                id: Date.now() + Math.random() * 10000,
+                text: clo.text || '',
+                ploMappings: Array.isArray(clo.ploMappings) ? [...clo.ploMappings] : [],
+                activeCategory: null
+            }))
+        }));
+    } catch (e) {
+        console.warn('Could not load incoming courses:', e);
+    }
+}
+
+// ── INIT ──
+checkIncomingCourses();
+renderAll();
+</script>
+</body>
+</html>

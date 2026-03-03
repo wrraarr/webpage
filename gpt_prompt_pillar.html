@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Prompt Guide — Pillar-Based Mapper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1612;
+            --cream: #f5f0e8;
+            --accent: #c4541a;
+            --accent-light: #f97316;
+            --accent-glow: rgba(196,84,26,0.10);
+            --border: rgba(245,240,232,0.08);
+            --muted: rgba(245,240,232,0.55);
+            --dim: rgba(245,240,232,0.3);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--ink); color: var(--cream); min-height: 100vh; }
+
+        /* Header */
+        header {
+            background: var(--ink);
+            border-bottom: 3px solid var(--accent);
+            padding: 14px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-left { display: flex; flex-direction: column; gap: 3px; }
+        header h1 { font-family: 'Space Mono', monospace; font-size: 16px; color: var(--accent-light); font-weight: 700; letter-spacing: -0.02em; }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
+            padding: 2px 9px; border-radius: 3px;
+            background: var(--accent-glow); color: var(--accent-light);
+            border: 1px solid rgba(196,84,26,0.35); width: fit-content;
+        }
+        .header-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .nav-btn {
+            padding: 5px 14px; border: 1px solid var(--border);
+            background: transparent; color: var(--cream);
+            border-radius: 5px; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 500;
+            letter-spacing: 0.03em; text-transform: uppercase;
+            transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center;
+        }
+        .nav-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        /* Page */
+        .page { max-width: 860px; margin: 0 auto; padding: 48px 32px 100px; }
+
+        /* Intro */
+        .intro {
+            margin-bottom: 48px; padding: 28px 32px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(196,84,26,0.25); border-radius: 10px;
+        }
+        .intro p { font-size: 15px; color: rgba(245,240,232,0.75); line-height: 1.65; }
+        .intro p + p { margin-top: 10px; }
+
+        /* Notice box */
+        .notice {
+            margin-bottom: 40px; padding: 16px 20px;
+            background: rgba(245,240,232,0.03);
+            border: 1px solid rgba(245,240,232,0.1);
+            border-left: 3px solid rgba(167,139,250,0.6);
+            border-radius: 6px;
+        }
+        .notice p { font-size: 13px; color: rgba(245,240,232,0.6); line-height: 1.6; }
+
+        /* Sections */
+        .section { margin-bottom: 52px; }
+        .section-label {
+            font-family: 'Space Mono', monospace; font-size: 11px;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--accent-light); margin-bottom: 6px; display: block;
+        }
+        h2 { font-family: 'Space Mono', monospace; font-size: 20px; color: var(--cream); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+        h3 { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--cream); font-weight: 700; letter-spacing: 0.02em; margin-bottom: 10px; }
+        p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+        p + p { margin-top: 10px; }
+
+        /* Steps */
+        .steps { display: flex; flex-direction: column; gap: 36px; }
+        .step-item { display: flex; gap: 20px; align-items: flex-start; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px;
+            flex-shrink: 0;
+        }
+        .step-content { flex: 1; padding-top: 6px; }
+        .step-content h3 { font-size: 16px; margin-bottom: 8px; }
+
+        /* Prompt block */
+        .prompt-wrapper { position: relative; margin-top: 16px; }
+        .prompt-block {
+            background: #0e0b09;
+            border: 1px solid rgba(196,84,26,0.3); border-radius: 8px;
+            padding: 20px 24px 20px 20px;
+            font-family: 'Space Mono', monospace; font-size: 11.5px;
+            color: rgba(245,240,232,0.65); line-height: 1.7;
+            overflow-x: auto; white-space: pre;
+            max-height: 520px; overflow-y: auto;
+        }
+        .copy-btn {
+            position: absolute; top: 12px; right: 12px;
+            padding: 6px 14px; background: var(--accent); color: #fff;
+            border: none; border-radius: 5px; cursor: pointer;
+            font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.04em; transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #a3400f; }
+        .copy-btn.copied { background: #059669; }
+
+        /* JSON block */
+        .json-block {
+            background: #0e0b09; border: 1px solid var(--border); border-radius: 8px;
+            padding: 20px 24px; font-family: 'Space Mono', monospace;
+            font-size: 11.5px; line-height: 1.7;
+            overflow-x: auto; white-space: pre; margin-top: 12px;
+        }
+        .json-block .key { color: var(--accent-light); }
+        .json-block .str { color: #4ade80; }
+        .json-block .punc { color: var(--dim); }
+
+        /* PLO grid */
+        .plo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+        .plo-category {
+            background: rgba(245,240,232,0.02);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 14px; border-top: 3px solid;
+        }
+        .plo-category h4 {
+            font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .plo-category .pillar-label {
+            font-size: 10px; color: var(--dim); font-family: 'Space Mono', monospace;
+            text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; display: block;
+        }
+        .plo-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .plo-list li { font-size: 11px; color: var(--muted); line-height: 1.4; display: flex; gap: 6px; align-items: flex-start; }
+        .plo-id {
+            font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700;
+            padding: 1px 5px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 2px;
+        }
+
+        /* Troubleshooting */
+        .trouble-list { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+        .trouble-item {
+            background: rgba(245,240,232,0.02); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px;
+        }
+        .trouble-q { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+        .trouble-a { font-size: 13px; color: var(--muted); line-height: 1.6; }
+        code { font-family: 'Space Mono', monospace; font-size: 11px; background: rgba(196,84,26,0.12); color: var(--accent-light); padding: 1px 5px; border-radius: 3px; }
+        a { color: var(--accent-light); }
+
+        @media (max-width: 640px) {
+            header { padding: 12px 16px; }
+            .page { padding: 32px 16px 80px; }
+            .plo-grid { grid-template-columns: 1fr; }
+            .step-item { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>GPT Prompt Guide — Pillar-Based Mapper</h1>
+        <span class="header-badge">3 Pillars &middot; 10 Categories &middot; 62 Sub-outcomes</span>
+    </div>
+    <div class="header-nav">
+        <a class="nav-btn" href="index.html">&#8592; Home</a>
+        <a class="nav-btn" href="CLO_data_entry.html">Data Entry ↗</a>
+        <a class="nav-btn" href="CLO_PLO_mapper.html">Mapper ↗</a>
+    </div>
+</header>
+
+<div class="page">
+
+    <!-- Intro -->
+    <div class="intro">
+        <p>This guide configures a <strong style="color:var(--cream);">Custom GPT</strong> for the <strong style="color:var(--accent-light);">pillar-based mapper</strong>, which uses a three-pillar organizational structure (Computational, Sociotechnical, Design) with PLO IDs like <code>comp-reason-3</code>, <code>socio-ethics-1</code>, <code>design-eval-2</code>.</p>
+        <p>The JSON output is designed to paste directly into the <a href="CLO_PLO_mapper.html">Pillar-Based Mapper</a> tool.</p>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice">
+        <p>&#9997; <strong style="color:rgba(167,139,250,0.9);">Looking for the faculty-approved framework?</strong> This prompt uses the pillar-based organizational structure, which was LLM-generated and is not the official faculty PLO framework. If you want to map to the official 8-category framework, use the <a href="gpt_prompt_official.html" style="color:#a78bfa;">Official PLO GPT guide</a> instead.</p>
+    </div>
+
+    <!-- Steps -->
+    <div class="section">
+        <span class="section-label">Setup</span>
+        <h2>Three Steps to Get Started</h2>
+        <div class="steps">
+
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create a Custom GPT</h3>
+                    <p>In ChatGPT, go to <strong style="color:var(--cream);">Explore GPTs → Create</strong> (or visit <a href="https://chat.openai.com/gpts/editor">chat.openai.com/gpts/editor</a>). Give it a name like <em>"Informatics CLO Mapper — Pillar Framework"</em>. You can also use Claude, Gemini, or any LLM with a system prompt field.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Paste This System Prompt</h3>
+                    <p>Copy the entire block below into the GPT's <strong style="color:var(--cream);">Instructions</strong> field. Click the button to copy it to your clipboard.</p>
+                    <div class="prompt-wrapper">
+                        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+                        <pre class="prompt-block" id="promptBlock">You are an expert in curriculum alignment for an Informatics program. Your job is to analyze course syllabi and extract Course Learning Outcomes (CLOs), then map each CLO to one or more Programmatic Learning Outcomes (PLOs) from the program's official PLO framework.
+
+## YOUR TASK
+
+When a faculty member uploads or pastes their course syllabus:
+
+1. Extract the course number, title, and write a concise ~50-word course description
+2. Identify all Course Learning Outcomes (CLOs) from the syllabus. If the syllabus doesn't list explicit CLOs, infer them from the course objectives, assignments, and topics
+3. For each CLO, determine which PLO(s) it aligns with from the reference list below
+4. Output the result as valid JSON in the exact schema specified
+
+## OUTPUT JSON SCHEMA
+
+{
+  "courses": [
+    {
+      "courseNumber": "INFO-I 101",
+      "courseTitle": "Introduction to Informatics",
+      "description": "A concise ~50-word description of the course covering its main topics, approach, and learning goals.",
+      "clos": [
+        {
+          "text": "The full text of the course learning outcome",
+          "ploMappings": ["comp-reason-0", "comp-data-3"]
+        }
+      ]
+    }
+  ]
+}
+
+IMPORTANT RULES:
+- courseNumber: Use the exact course number from the syllabus (e.g., "INFO-I 101")
+- courseTitle: Use the exact course title from the syllabus
+- description: Write exactly ~50 words summarizing the course
+- clos.text: Write clear, concise CLO statements starting with an action verb
+- clos.ploMappings: Use ONLY valid PLO IDs from the reference list below. Each CLO should map to 1-4 PLOs
+- Output ONLY the JSON — no explanations, no markdown formatting, no code fences
+- If the faculty uploads multiple syllabi, include all courses in the "courses" array
+
+## COMPLETE PLO REFERENCE (use these exact IDs)
+
+### PILLAR 1: COMPUTATIONAL THINKING
+
+Category: Reason Logically
+- comp-reason-0: Translate arguments into formal language
+- comp-reason-1: Manipulate mathematical objects
+- comp-reason-2: Recognize equivalence between structures
+- comp-reason-3: Decompose problems into simpler structures
+- comp-reason-4: Apply data-driven approaches
+
+Category: Curate Data
+- comp-data-0: Apply visual methods for complex structures
+- comp-data-1: Recognize and use basic data structures
+- comp-data-2: Construct data models of systems
+- comp-data-3: Evaluate data quality
+- comp-data-4: Convert data into knowledge
+- comp-data-5: Manage data securely
+
+Category: Apply Algorithms
+- comp-algo-0: Translate strategies into algorithms
+- comp-algo-1: Apply graph theory to solve problems
+- comp-algo-2: Integrate algorithms into complex ones
+- comp-algo-3: Research new problem-solving strategies
+- comp-algo-4: Address security concerns
+
+Category: Effectively Implement
+- comp-impl-0: Apply basic programming structures
+- comp-impl-1: Translate algorithms into code
+- comp-impl-2: Construct distributed systems
+- comp-impl-3: Research new software tools
+- comp-impl-4: Implement security solutions
+- comp-impl-5: Evaluate solution effectiveness
+
+### PILLAR 2: SOCIOTECHNICAL THINKING
+
+Category: Ethical Sensibility
+- socio-ethics-0: Formulate and articulate ideas
+- socio-ethics-1: Recognize assumptions and biases
+- socio-ethics-2: Weigh connections between actors
+- socio-ethics-3: Consider diversity and responsibility
+- socio-ethics-4: Contribute to human well-being
+
+Category: Analyze Solutions
+- socio-analyze-0: Identify stakeholders
+- socio-analyze-1: Identify values at stake
+- socio-analyze-2: Discuss diverse perspectives
+- socio-analyze-3: Explain technical and social processes
+- socio-analyze-4: Assess technological affordances
+- socio-analyze-5: Evaluate power dynamics
+
+Category: Create Solutions
+- socio-create-0: Engage imagination for possibilities
+- socio-create-1: Collaborate with diverse teams
+- socio-create-2: Propose harm-reducing solutions
+- socio-create-3: Communicate with stakeholders
+- socio-create-4: Make values-based decisions
+- socio-create-5: Assess policy and governance
+
+### PILLAR 3: DESIGN THINKING
+
+Category: Research
+- design-research-0: Classify HCI research methods
+- design-research-1: Execute ethical research
+- design-research-2: Deconstruct and reframe problems
+- design-research-3: Identify design opportunities
+- design-research-4: Use design thinking process
+- design-research-5: Translate research to prototypes
+
+Category: Design
+- design-design-0: Select appropriate methods
+- design-design-1: Design with HCI techniques
+- design-design-2: Generate user personas
+- design-design-3: Develop proof-of-concept
+- design-design-4: Produce interactive prototypes
+
+Category: Evaluate
+- design-eval-0: Evaluate with feedback
+- design-eval-1: Critique designs
+- design-eval-2: Summarize research insights
+- design-eval-3: Generate recommendations
+- design-eval-4: Create improved designs
+
+Category: Disseminate
+- design-dissem-0: Create design portfolio
+- design-dissem-1: Generate documentation
+- design-dissem-2: Design presentations
+- design-dissem-3: Present research posters
+
+Category: Collaborate
+- design-collab-0: Work in peer teams
+- design-collab-1: Understand project roles
+- design-collab-2: Judge contributions</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Upload a Syllabus and Test</h3>
+                    <p>Upload a course syllabus (PDF, DOCX, or paste the text) and the GPT should return clean JSON. Copy the entire JSON output and paste it into the <a href="CLO_PLO_mapper.html">Pillar-Based Mapper</a> tool's import sidebar.</p>
+                    <p>For multiple courses, upload several syllabi and tell the GPT: <em style="color:var(--cream);">"Here are three syllabi. Please output a single JSON with all courses in the courses array."</em></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Example Output -->
+    <div class="section">
+        <span class="section-label">Reference</span>
+        <h2>Example JSON Output</h2>
+        <p>This is what the GPT should produce for a single course syllabus (INFO-I 101 Introduction to Informatics):</p>
+        <pre class="json-block"><span class="punc">{</span>
+  <span class="key">"courses"</span><span class="punc">: [{</span>
+    <span class="key">"courseNumber"</span><span class="punc">:</span> <span class="str">"INFO-I 101"</span><span class="punc">,</span>
+    <span class="key">"courseTitle"</span><span class="punc">:</span> <span class="str">"Introduction to Informatics"</span><span class="punc">,</span>
+    <span class="key">"description"</span><span class="punc">:</span> <span class="str">"Surveys the landscape of information technology and its societal impacts.
+  Students explore computational thinking, data representation, algorithmic
+  problem-solving, and ethical dimensions of technology through collaborative
+  team-based activities."</span><span class="punc">,</span>
+    <span class="key">"clos"</span><span class="punc">: [</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Decompose real-world problems into computational sub-problems"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"comp-reason-3"</span><span class="punc">,</span> <span class="str">"comp-reason-4"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Represent and manipulate data using fundamental structures"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"comp-data-1"</span><span class="punc">,</span> <span class="str">"comp-data-2"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Write basic programs to automate data processing tasks"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"comp-impl-0"</span><span class="punc">,</span> <span class="str">"comp-impl-1"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Evaluate the ethical implications of information technologies"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"socio-ethics-1"</span><span class="punc">,</span> <span class="str">"socio-ethics-3"</span><span class="punc">,</span> <span class="str">"socio-ethics-4"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Collaborate in teams to design and present a technology solution"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"design-collab-0"</span><span class="punc">,</span> <span class="str">"design-collab-1"</span><span class="punc">,</span> <span class="str">"socio-create-1"</span><span class="punc">] }</span>
+    <span class="punc">]</span>
+  <span class="punc">}]</span>
+<span class="punc">}</span></pre>
+    </div>
+
+    <!-- PLO Reference -->
+    <div class="section">
+        <span class="section-label">Quick Reference</span>
+        <h2>All PLO IDs at a Glance</h2>
+        <p>IDs follow <code>{pillar}-{category}-{index}</code>, zero-indexed. The GPT must use these exact IDs in <code>ploMappings</code>.</p>
+        <div class="plo-grid">
+
+            <!-- Computational -->
+            <div class="plo-category" style="border-top-color:#c4541a;">
+                <span class="pillar-label">Computational</span>
+                <h4 style="color:#f97316;">Reason Logically</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-reason-0</span>Formal language</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-reason-1</span>Math objects</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-reason-2</span>Equivalence</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-reason-3</span>Decompose problems</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-reason-4</span>Data-driven</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#c4541a;">
+                <span class="pillar-label">Computational</span>
+                <h4 style="color:#f97316;">Curate Data</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-0</span>Visual methods</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-1</span>Data structures</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-2</span>Data models</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-3</span>Data quality</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-4</span>Data to knowledge</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-data-5</span>Secure management</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#c4541a;">
+                <span class="pillar-label">Computational</span>
+                <h4 style="color:#f97316;">Apply Algorithms</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-algo-0</span>Translate strategies</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-algo-1</span>Graph theory</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-algo-2</span>Integrate algorithms</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-algo-3</span>Research strategies</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-algo-4</span>Security concerns</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#c4541a;">
+                <span class="pillar-label">Computational</span>
+                <h4 style="color:#f97316;">Effectively Implement</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-0</span>Programming basics</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-1</span>Algorithms to code</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-2</span>Distributed systems</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-3</span>Research tools</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-4</span>Security solutions</li>
+                    <li><span class="plo-id" style="background:rgba(196,84,26,0.2);color:#f97316;">comp-impl-5</span>Evaluate solutions</li>
+                </ul>
+            </div>
+
+            <!-- Sociotechnical -->
+            <div class="plo-category" style="border-top-color:#2d5a27;">
+                <span class="pillar-label">Sociotechnical</span>
+                <h4 style="color:#4ade80;">Ethical Sensibility</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-ethics-0</span>Formulate ideas</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-ethics-1</span>Recognize bias</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-ethics-2</span>Weigh connections</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-ethics-3</span>Diversity &amp; responsibility</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-ethics-4</span>Human well-being</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#2d5a27;">
+                <span class="pillar-label">Sociotechnical</span>
+                <h4 style="color:#4ade80;">Analyze Solutions</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-0</span>Stakeholders</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-1</span>Values at stake</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-2</span>Diverse perspectives</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-3</span>Tech &amp; social processes</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-4</span>Tech affordances</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-analyze-5</span>Power dynamics</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#2d5a27;">
+                <span class="pillar-label">Sociotechnical</span>
+                <h4 style="color:#4ade80;">Create Solutions</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-0</span>Engage imagination</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-1</span>Diverse teams</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-2</span>Harm reduction</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-3</span>Stakeholder comms</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-4</span>Values-based decisions</li>
+                    <li><span class="plo-id" style="background:rgba(45,90,39,0.2);color:#4ade80;">socio-create-5</span>Policy &amp; governance</li>
+                </ul>
+            </div>
+
+            <!-- Design -->
+            <div class="plo-category" style="border-top-color:#1d4ed8;">
+                <span class="pillar-label">Design</span>
+                <h4 style="color:#93c5fd;">Research</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-0</span>HCI methods</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-1</span>Ethical research</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-2</span>Reframe problems</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-3</span>Design opportunities</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-4</span>Design thinking</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-research-5</span>Research to prototype</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#1d4ed8;">
+                <span class="pillar-label">Design</span>
+                <h4 style="color:#93c5fd;">Design &amp; Evaluate</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-design-0</span>Select methods</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-design-1</span>HCI techniques</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-design-2</span>User personas</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-design-3</span>Proof-of-concept</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-design-4</span>Interactive prototypes</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-eval-0&ndash;4</span>Evaluate &amp; iterate</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-top-color:#1d4ed8;">
+                <span class="pillar-label">Design</span>
+                <h4 style="color:#93c5fd;">Disseminate &amp; Collaborate</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-dissem-0</span>Design portfolio</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-dissem-1</span>Documentation</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-dissem-2</span>Presentations</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-dissem-3</span>Research posters</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-collab-0</span>Peer teams</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-collab-1</span>Project roles</li>
+                    <li><span class="plo-id" style="background:rgba(29,78,216,0.2);color:#93c5fd;">design-collab-2</span>Judge contributions</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="section">
+        <span class="section-label">Help</span>
+        <h2>Troubleshooting</h2>
+        <div class="trouble-list">
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; "Unknown PLO ID" warning in the mapper</div>
+                <div class="trouble-a">The GPT used an ID that doesn't match the reference list. Valid IDs follow <code>{pillar}-{category}-{number}</code> (e.g., <code>comp-reason-0</code>, <code>socio-ethics-4</code>, <code>design-eval-2</code>). Check for typos in pillar or category names.</div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; Getting 8-category IDs like knowledge-0</div>
+                <div class="trouble-a">The GPT may have a cached system prompt from the official framework guide. Paste the current prompt from Step 2 — it should reference the pillar structure with IDs like <code>comp-reason-0</code>. To use the official framework instead, switch to the <a href="gpt_prompt_official.html">Official PLO GPT guide</a>.</div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; No CLOs extracted from the syllabus</div>
+                <div class="trouble-a">The syllabus may not list explicit outcomes. Ask: <em>"Please infer course learning outcomes from the assignments, topics, and objectives listed in this syllabus."</em></div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; Mapping multiple courses at once</div>
+                <div class="trouble-a">Upload several syllabi and say: <em>"Here are three syllabi. Output a single JSON with all courses in the courses array."</em> The mapper accepts any number of courses per import.</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div style="text-align:center; padding:24px; border-top:1px solid rgba(245,240,232,0.06); font-size:11px; color:rgba(245,240,232,0.2); font-family:'Space Mono',monospace;">
+    Informatics CLO–PLO Mapping Toolkit &mdash; <a href="index.html" style="color:rgba(245,240,232,0.3);">Home</a>
+</div>
+
+<script>
+function copyPrompt() {
+    const block = document.getElementById('promptBlock');
+    const text = block.innerText || block.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+</script>
+</body>
+</html>

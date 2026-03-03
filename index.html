@@ -259,9 +259,48 @@
 
 <div class="content">
 
-    <!-- Tools -->
-    <div class="section">
-        <h2>Tools</h2>
+    <!-- Tools — Official Framework -->
+    <div class="section" style="border-left: 3px solid rgba(109,40,217,0.5); padding-left: 18px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+            <h2 style="margin-bottom:0;">Tools</h2>
+            <span style="font-family:'Space Mono',monospace; font-size:10px; font-weight:700; padding:3px 10px; border-radius:4px; background:rgba(109,40,217,0.15); color:#a78bfa; border:1px solid rgba(109,40,217,0.4);">Official PLOs — 8 Categories</span>
+        </div>
+        <p style="font-size:13px; color:rgba(245,240,232,0.5); margin-bottom:16px;">Faculty-approved framework · 8 categories · 43 PLOs · IDs like <code style="color:#a78bfa; font-family:'Space Mono',monospace; font-size:11px;">knowledge-0</code>, <code style="color:#a78bfa; font-family:'Space Mono',monospace; font-size:11px;">ethics-3</code></p>
+        <div class="tools">
+            <a class="tool-card" href="CLO_data_entry_v2.html">
+                <div class="tool-icon entry">&#9998;</div>
+                <div class="tool-info">
+                    <h3>CLO Data Entry</h3>
+                    <p class="tool-desc">Enter course learning outcomes and link them to the 8 categories of the 2025 PLO framework. Color-coded category browser with full PLO descriptions on hover.</p>
+                    <span class="tool-badge">Start here</span>
+                </div>
+            </a>
+            <a class="tool-card" href="CLO_PLO_mapper_v2.html">
+                <div class="tool-icon viewer">&#9673;</div>
+                <div class="tool-info">
+                    <h3>Interactive Mapper</h3>
+                    <p class="tool-desc">Visualize CLO–PLO relationships using the 2025 framework. Root → 8 categories → PLO sub-outcomes → CLOs → Courses. Banded view, course isolation, and PLO coverage histogram included.</p>
+                    <span class="tool-badge">Visualize &amp; analyze</span>
+                </div>
+            </a>
+            <a class="tool-card" href="gpt_prompt_official.html">
+                <div class="tool-icon gpt">&#9881;</div>
+                <div class="tool-info">
+                    <h3>GPT Prompt Guide</h3>
+                    <p class="tool-desc">Configure a custom GPT to extract CLOs from syllabi and map them to the official PLO IDs automatically. Upload a syllabus, get ready-to-paste JSON.</p>
+                    <span class="tool-badge">Automated extraction</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Tools — Pillar-Based Mapper -->
+    <div class="section" style="border-left: 3px solid rgba(196,84,26,0.5); padding-left: 18px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+            <h2 style="margin-bottom:0;">Tools</h2>
+            <span style="font-family:'Space Mono',monospace; font-size:10px; font-weight:700; padding:3px 10px; border-radius:4px; background:rgba(196,84,26,0.12); color:#f97316; border:1px solid rgba(196,84,26,0.4);">Pillar-Based Mapper</span>
+        </div>
+        <p style="font-size:13px; color:rgba(245,240,232,0.5); margin-bottom:16px;">Alternative LLM-generated organization · 3 pillars · 62 sub-outcomes · IDs like <code style="color:#f97316; font-family:'Space Mono',monospace; font-size:11px;">comp-reason-3</code>, <code style="color:#f97316; font-family:'Space Mono',monospace; font-size:11px;">design-eval-1</code></p>
         <div class="tools">
             <a class="tool-card" href="CLO_data_entry.html">
                 <div class="tool-icon entry">&#9998;</div>
@@ -279,11 +318,11 @@
                     <span class="tool-badge">Visualize &amp; analyze</span>
                 </div>
             </a>
-            <a class="tool-card" href="CLO_PLO_mapper_GPT_prompt.md" target="_blank">
+            <a class="tool-card" href="gpt_prompt_pillar.html">
                 <div class="tool-icon gpt">&#9881;</div>
                 <div class="tool-info">
                     <h3>GPT Prompt Guide</h3>
-                    <p class="tool-desc">Set up a custom GPT that automatically extracts CLOs from your syllabus and maps them to PLOs. Just upload your syllabus and get JSON you can paste into the mapper.</p>
+                    <p class="tool-desc">Set up a custom GPT that automatically extracts CLOs from your syllabus and maps them to the pillar-based PLO IDs. Upload a syllabus, get JSON to paste into the mapper.</p>
                     <span class="tool-badge">Automated extraction</span>
                 </div>
             </a>
@@ -293,6 +332,21 @@
                     <h3>Student Journey <span class="poc-tag">Proof of Concept</span></h3>
                     <p class="tool-desc">Select courses from the catalog or paste your transcript to see which Program Learning Outcomes your coursework covers — and what gaps remain.</p>
                     <span class="tool-badge">Student-facing view</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Reference -->
+    <div class="section">
+        <h2>Reference</h2>
+        <div class="tools">
+            <a class="tool-card" href="plo_framework.html">
+                <div class="tool-icon" style="background:rgba(14,116,144,0.2); color:#22d3ee; width:48px; height:48px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:20px;">&#9780;</div>
+                <div class="tool-info">
+                    <h3>PLO Framework Reference</h3>
+                    <p class="tool-desc">Compare the 2023 three-pillar and 2025 eight-category frameworks side by side. Browse the complete PLO list for each version and explore the conceptual crosswalk between them.</p>
+                    <span class="tool-badge">2023 · 2025 · Crosswalk</span>
                 </div>
             </a>
         </div>
@@ -323,8 +377,48 @@
 
     <!-- PLO Framework -->
     <div class="section">
-        <h2>The Three Pillars</h2>
-        <p>Our program's PLOs are organized into three pillars, each containing categories of specific learning outcomes.</p>
+        <h2>Official PLO Framework — 8 Categories</h2>
+        <p>The Informatics BS Program Learning Outcomes, as approved by faculty, are organized into 8 categories with a total of 43 specific, assessable sub-outcomes.</p>
+        <div class="pillar-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="pillar-card" style="border-top-color:#6d28d9;">
+                <h4>Core Knowledge</h4>
+                <p>Info systems, data structures, HCI, sociotechnical analysis, ethics, policy. 6 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#c2410c;">
+                <h4>Technical Practice</h4>
+                <p>Programming, frameworks, version control, prototyping, databases, cloud, accessibility. 7 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#0e7490;">
+                <h4>Data &amp; Analysis</h4>
+                <p>Statistical methods, qualitative research, data quality, visualization, analytical tools. 5 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#15803d;">
+                <h4>Problem Solving</h4>
+                <p>Human-centered design, feasibility, stakeholder balance, iteration, scale. 5 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#b45309;">
+                <h4>Communication</h4>
+                <p>Written docs, oral presentations, visual communication, diverse audiences. 4 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#be185d;">
+                <h4>Collaboration</h4>
+                <p>Project management, roles, integrating expertise, feedback, conflict resolution. 5 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#991b1b;">
+                <h4>Ethics &amp; Responsibility</h4>
+                <p>Privacy, algorithmic bias, accessibility, sustainability, equity, professional codes. 6 PLOs.</p>
+            </div>
+            <div class="pillar-card" style="border-top-color:#1e40af;">
+                <h4>Lifelong Learning</h4>
+                <p>Independent learning, critical evaluation of tech, professional community, reflection. 5 PLOs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pillar-Based Mapper -->
+    <div class="section">
+        <h2>Pillar-Based Mapper — How It's Organized</h2>
+        <p>The pillar-based mapper uses an LLM-generated organizational structure that groups the Informatics PLOs into three broad thinking modes. This structure was not part of the official faculty framework — it was a generative interpretation created when the mapper was first built.</p>
         <div class="pillar-grid">
             <div class="pillar-card comp">
                 <h4>Computational Thinking</h4>
@@ -344,7 +438,8 @@
     <!-- JSON format -->
     <div class="section">
         <h2>JSON Format Reference</h2>
-        <p>If you prefer to write JSON directly (or use the GPT to generate it), here's the expected format. PLO IDs follow the pattern <code style="color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">pillar-category-number</code>.</p>
+        <p style="margin-bottom:8px;">PLO IDs in the <strong style="color:var(--amber);">2025 framework</strong> follow <code style="color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">category-index</code> (e.g. <code style="color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">knowledge-0</code>, <code style="color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">ethics-3</code>). In the <strong style="color:var(--rust);">original framework</strong>, IDs follow <code style="color:var(--rust); background:rgba(196,84,26,0.1); padding:1px 5px; border-radius:3px;">pillar-category-number</code>.</p>
+        <p>The JSON structure is identical for both frameworks — only the PLO ID values differ.</p>
         <div class="code-block">{
   <span class="key">"courses"</span>: [
     {

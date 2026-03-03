@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Prompt Guide — Official PLO Framework</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1612;
+            --cream: #f5f0e8;
+            --accent: #7c3aed;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124,58,237,0.12);
+            --border: rgba(245,240,232,0.08);
+            --muted: rgba(245,240,232,0.55);
+            --dim: rgba(245,240,232,0.3);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Space Grotesk', sans-serif; background: var(--ink); color: var(--cream); min-height: 100vh; }
+
+        /* Header */
+        header {
+            background: var(--ink);
+            border-bottom: 3px solid var(--accent);
+            padding: 14px 32px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-left { display: flex; flex-direction: column; gap: 3px; }
+        header h1 { font-family: 'Space Mono', monospace; font-size: 16px; color: var(--accent-light); font-weight: 700; letter-spacing: -0.02em; }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
+            padding: 2px 9px; border-radius: 3px;
+            background: var(--accent-glow); color: var(--accent-light);
+            border: 1px solid rgba(124,58,237,0.35); width: fit-content;
+        }
+        .header-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .nav-btn {
+            padding: 5px 14px; border: 1px solid var(--border);
+            background: transparent; color: var(--cream);
+            border-radius: 5px; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 500;
+            letter-spacing: 0.03em; text-transform: uppercase;
+            transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center;
+        }
+        .nav-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        /* Page */
+        .page { max-width: 860px; margin: 0 auto; padding: 48px 32px 100px; }
+
+        /* Intro */
+        .intro {
+            margin-bottom: 48px; padding: 28px 32px;
+            background: var(--accent-glow);
+            border: 1px solid rgba(124,58,237,0.25); border-radius: 10px;
+        }
+        .intro p { font-size: 15px; color: rgba(245,240,232,0.75); line-height: 1.65; }
+        .intro p + p { margin-top: 10px; }
+
+        /* Sections */
+        .section { margin-bottom: 52px; }
+        .section-label {
+            font-family: 'Space Mono', monospace; font-size: 11px;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--accent-light); margin-bottom: 6px; display: block;
+        }
+        h2 { font-family: 'Space Mono', monospace; font-size: 20px; color: var(--cream); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+        h3 { font-family: 'Space Mono', monospace; font-size: 14px; color: var(--cream); font-weight: 700; letter-spacing: 0.02em; margin-bottom: 10px; }
+        p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+        p + p { margin-top: 10px; }
+
+        /* Steps */
+        .steps { display: flex; flex-direction: column; gap: 36px; }
+        .step-item { display: flex; gap: 20px; align-items: flex-start; }
+        .step-number {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Mono', monospace; font-weight: 700; font-size: 14px;
+            flex-shrink: 0;
+        }
+        .step-content { flex: 1; padding-top: 6px; }
+        .step-content h3 { font-size: 16px; margin-bottom: 8px; }
+
+        /* Prompt block */
+        .prompt-wrapper { position: relative; margin-top: 16px; }
+        .prompt-block {
+            background: #0e0b09;
+            border: 1px solid rgba(124,58,237,0.3); border-radius: 8px;
+            padding: 20px 24px 20px 20px;
+            font-family: 'Space Mono', monospace; font-size: 11.5px;
+            color: rgba(245,240,232,0.65); line-height: 1.7;
+            overflow-x: auto; white-space: pre;
+            max-height: 520px; overflow-y: auto;
+        }
+        .copy-btn {
+            position: absolute; top: 12px; right: 12px;
+            padding: 6px 14px; background: var(--accent); color: #fff;
+            border: none; border-radius: 5px; cursor: pointer;
+            font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.04em; transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #6d28d9; }
+        .copy-btn.copied { background: #059669; }
+
+        /* JSON block */
+        .json-block {
+            background: #0e0b09; border: 1px solid var(--border); border-radius: 8px;
+            padding: 20px 24px; font-family: 'Space Mono', monospace;
+            font-size: 11.5px; line-height: 1.7;
+            overflow-x: auto; white-space: pre; margin-top: 12px;
+        }
+        .json-block .key { color: var(--accent-light); }
+        .json-block .str { color: #4ade80; }
+        .json-block .punc { color: var(--dim); }
+
+        /* PLO grid */
+        .plo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+        .plo-category {
+            background: rgba(245,240,232,0.02);
+            border: 1px solid var(--border); border-radius: 8px;
+            padding: 16px; border-left: 3px solid;
+        }
+        .plo-category h4 {
+            font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px;
+        }
+        .plo-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+        .plo-list li { font-size: 12px; color: var(--muted); line-height: 1.4; display: flex; gap: 8px; align-items: flex-start; }
+        .plo-id {
+            font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700;
+            padding: 1px 6px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; margin-top: 1px;
+        }
+
+        /* Troubleshooting */
+        .trouble-list { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+        .trouble-item {
+            background: rgba(245,240,232,0.02); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px;
+        }
+        .trouble-q { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+        .trouble-a { font-size: 13px; color: var(--muted); line-height: 1.6; }
+        code { font-family: 'Space Mono', monospace; font-size: 11px; background: rgba(124,58,237,0.12); color: var(--accent-light); padding: 1px 5px; border-radius: 3px; }
+        a { color: var(--accent-light); }
+
+        @media (max-width: 640px) {
+            header { padding: 12px 16px; }
+            .page { padding: 32px 16px 80px; }
+            .plo-grid { grid-template-columns: 1fr; }
+            .step-item { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>GPT Prompt Guide — Official PLO Framework</h1>
+        <span class="header-badge">Official PLOs &middot; 8 Categories &middot; 43 Sub-outcomes</span>
+    </div>
+    <div class="header-nav">
+        <a class="nav-btn" href="index.html">&#8592; Home</a>
+        <a class="nav-btn" href="CLO_data_entry_v2.html">Data Entry ↗</a>
+        <a class="nav-btn" href="CLO_PLO_mapper_v2.html">Mapper ↗</a>
+    </div>
+</header>
+
+<div class="page">
+
+    <!-- Intro -->
+    <div class="intro">
+        <p>This guide shows you how to configure a <strong style="color:var(--cream);">Custom GPT</strong> (in ChatGPT or any LLM platform) that reads course syllabi and outputs structured JSON mapping Course Learning Outcomes (CLOs) to the <strong style="color:var(--accent-light);">official Informatics PLO framework</strong>. The JSON is designed to paste directly into the Official Mapper.</p>
+        <p>The prompt uses the faculty-approved 8-category framework — IDs like <code>knowledge-0</code>, <code>ethics-3</code>, <code>technical-6</code>. If you're using the pillar-based mapper, use the <a href="gpt_prompt_pillar.html">Pillar Mapper GPT guide</a> instead.</p>
+    </div>
+
+    <!-- Steps -->
+    <div class="section">
+        <span class="section-label">Setup</span>
+        <h2>Three Steps to Get Started</h2>
+        <div class="steps">
+
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Create a Custom GPT</h3>
+                    <p>In ChatGPT, go to <strong style="color:var(--cream);">Explore GPTs → Create</strong> (or visit <a href="https://chat.openai.com/gpts/editor">chat.openai.com/gpts/editor</a>). Give it a name like <em>"Informatics CLO Mapper — Official PLOs"</em>. You can also use Claude, Gemini, or any LLM with a system prompt field.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Paste This System Prompt</h3>
+                    <p>Copy the entire block below into the GPT's <strong style="color:var(--cream);">Instructions</strong> field. Click the button to copy it to your clipboard.</p>
+                    <div class="prompt-wrapper">
+                        <button class="copy-btn" onclick="copyPrompt()">Copy</button>
+                        <pre class="prompt-block" id="promptBlock">You are an expert in curriculum alignment for an Informatics program. Your job is to analyze course syllabi and extract Course Learning Outcomes (CLOs), then map each CLO to one or more Programmatic Learning Outcomes (PLOs) from the program's official PLO framework.
+
+## YOUR TASK
+
+When a faculty member uploads or pastes their course syllabus:
+
+1. Extract the course number, title, and write a concise ~50-word course description
+2. Identify all Course Learning Outcomes (CLOs) from the syllabus. If the syllabus doesn't list explicit CLOs, infer them from the course objectives, assignments, and topics
+3. For each CLO, determine which PLO(s) it aligns with from the reference list below
+4. Output the result as valid JSON in the exact schema specified
+
+## OUTPUT JSON SCHEMA
+
+{
+  "courses": [
+    {
+      "courseNumber": "INFO-I 101",
+      "courseTitle": "Introduction to Informatics",
+      "description": "A concise ~50-word description of the course covering its main topics, approach, and learning goals.",
+      "clos": [
+        {
+          "text": "The full text of the course learning outcome",
+          "ploMappings": ["knowledge-0", "problem-0"]
+        }
+      ]
+    }
+  ]
+}
+
+IMPORTANT RULES:
+- courseNumber: Use the exact course number from the syllabus (e.g., "INFO-I 101")
+- courseTitle: Use the exact course title from the syllabus
+- description: Write exactly ~50 words summarizing the course
+- clos.text: Write clear, concise CLO statements starting with an action verb
+- clos.ploMappings: Use ONLY valid PLO IDs from the reference list below. Each CLO should map to 1-4 PLOs
+- PLO IDs follow the pattern: {category}-{index} where index starts at 0 (e.g., knowledge-0, ethics-3, technical-6)
+- Output ONLY the JSON — no explanations, no markdown formatting, no code fences
+- If the faculty uploads multiple syllabi, include all courses in the "courses" array
+
+## COMPLETE PLO REFERENCE — OFFICIAL FRAMEWORK (use these exact IDs)
+
+### CATEGORY 1: CORE KNOWLEDGE
+- knowledge-0: Information systems architecture and development
+- knowledge-1: Data structures, algorithms, and databases
+- knowledge-2: Human-computer interaction and user experience design
+- knowledge-3: Sociotechnical systems analysis
+- knowledge-4: Ethics in technology design and deployment
+- knowledge-5: Information policy, privacy, and security
+
+### CATEGORY 2: TECHNICAL PRACTICE
+- technical-0: Multiple programming languages and paradigms (object-oriented, functional, procedural)
+- technical-1: Modern development frameworks and APIs
+- technical-2: Version control and collaborative development tools
+- technical-3: Prototyping and design tools (low-fidelity to high-fidelity)
+- technical-4: Database design and query languages
+- technical-5: Cloud platforms and deployment pipelines
+- technical-6: Accessibility standards (WCAG) and responsive design principles
+
+### CATEGORY 3: DATA & ANALYSIS
+- data-0: Applying statistical methods and computational analysis
+- data-1: Conducting qualitative research (interviews, observations, usability testing)
+- data-2: Evaluating information quality, bias, and limitations
+- data-3: Creating data visualizations appropriate to audience and context
+- data-4: Using analytical tools (R, Python, SQL, Tableau, etc.)
+
+### CATEGORY 4: PROBLEM SOLVING
+- problem-0: Address real-world needs through human-centered design
+- problem-1: Consider technical feasibility, social impact, and sustainability
+- problem-2: Balance stakeholder requirements and constraints
+- problem-3: Iterate based on testing, feedback, and evaluation
+- problem-4: Scale solutions appropriately to context (individual, organizational, societal)
+
+### CATEGORY 5: COMMUNICATION
+- communication-0: Written documentation (technical specifications, user guides, reports, proposals)
+- communication-1: Oral presentations to technical and non-technical audiences
+- communication-2: Visual communication (wireframes, diagrams, posters, demos)
+- communication-3: Adaptation to diverse audiences, contexts, and cultural perspectives
+
+### CATEGORY 6: COLLABORATION
+- collaboration-0: Coordinating work using project management tools and methodologies
+- collaboration-1: Negotiating roles, responsibilities, and decision-making processes
+- collaboration-2: Integrating diverse perspectives and expertise
+- collaboration-3: Giving and receiving constructive feedback
+- collaboration-4: Resolving conflicts productively
+
+### CATEGORY 7: ETHICS & RESPONSIBILITY
+- ethics-0: Privacy, surveillance, and data protection
+- ethics-1: Algorithmic bias, fairness, and transparency
+- ethics-2: Accessibility and inclusive design
+- ethics-3: Environmental sustainability
+- ethics-4: Power dynamics and equity in technology access and design
+- ethics-5: Professional codes of conduct
+
+### CATEGORY 8: LIFELONG LEARNING
+- lifelong-0: Learning new programming languages, tools, and frameworks independently
+- lifelong-1: Evaluating emerging technologies critically
+- lifelong-2: Engaging with professional communities and resources
+- lifelong-3: Reflecting on own practice and growth
+- lifelong-4: Recognizing limits of knowledge and seeking appropriate expertise</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Upload a Syllabus and Test</h3>
+                    <p>Upload a course syllabus (PDF, DOCX, or paste the text) and the GPT should return clean JSON. Copy the entire JSON output and paste it into the <a href="CLO_PLO_mapper_v2.html">Official Mapper</a> tool's import sidebar.</p>
+                    <p>For multiple courses, upload several syllabi in one conversation and tell the GPT: <em style="color:var(--cream);">"Here are three syllabi. Please output a single JSON with all courses in the courses array."</em></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Example Output -->
+    <div class="section">
+        <span class="section-label">Reference</span>
+        <h2>Example JSON Output</h2>
+        <p>This is what the GPT should produce for a single course syllabus (INFO-I 210 Information Infrastructure):</p>
+        <pre class="json-block"><span class="punc">{</span>
+  <span class="key">"courses"</span><span class="punc">: [{</span>
+    <span class="key">"courseNumber"</span><span class="punc">:</span> <span class="str">"INFO-I 210"</span><span class="punc">,</span>
+    <span class="key">"courseTitle"</span><span class="punc">:</span> <span class="str">"Information Infrastructure"</span><span class="punc">,</span>
+    <span class="key">"description"</span><span class="punc">:</span> <span class="str">"Introduces the architecture of modern information systems including
+  networking, cloud services, databases, and APIs. Students gain hands-on
+  experience with infrastructure tools, deploy small-scale applications, and
+  examine the social and ethical dimensions of data handling."</span><span class="punc">,</span>
+    <span class="key">"clos"</span><span class="punc">: [</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Design and deploy a database-backed web application using cloud infrastructure"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"technical-4"</span><span class="punc">,</span> <span class="str">"technical-5"</span><span class="punc">,</span> <span class="str">"knowledge-0"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Apply version control workflows in collaborative software development"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"technical-2"</span><span class="punc">,</span> <span class="str">"collaboration-0"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Evaluate the privacy and security implications of data storage architectures"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"ethics-0"</span><span class="punc">,</span> <span class="str">"knowledge-5"</span><span class="punc">,</span> <span class="str">"data-2"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Produce technical documentation describing system architecture and APIs"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"communication-0"</span><span class="punc">,</span> <span class="str">"technical-1"</span><span class="punc">] },</span>
+      <span class="punc">{</span> <span class="key">"text"</span><span class="punc">:</span> <span class="str">"Assess emerging cloud platforms and identify their appropriate use cases"</span><span class="punc">,</span>
+        <span class="key">"ploMappings"</span><span class="punc">: [</span><span class="str">"lifelong-1"</span><span class="punc">,</span> <span class="str">"problem-1"</span><span class="punc">,</span> <span class="str">"technical-5"</span><span class="punc">] }</span>
+    <span class="punc">]</span>
+  <span class="punc">}]</span>
+<span class="punc">}</span></pre>
+    </div>
+
+    <!-- PLO Reference -->
+    <div class="section">
+        <span class="section-label">Quick Reference</span>
+        <h2>All PLO IDs at a Glance</h2>
+        <p>The GPT must use these exact IDs in <code>ploMappings</code>. Each ID is <code>{category}-{index}</code>, zero-indexed within each category.</p>
+        <div class="plo-grid">
+
+            <div class="plo-category" style="border-left-color:#6d28d9;">
+                <h4 style="color:#a78bfa;">Core Knowledge</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-0</span>Info systems architecture</li>
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-1</span>Data structures &amp; databases</li>
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-2</span>HCI &amp; UX design</li>
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-3</span>Sociotechnical systems</li>
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-4</span>Ethics in tech design</li>
+                    <li><span class="plo-id" style="background:rgba(109,40,217,0.2);color:#a78bfa;">knowledge-5</span>Policy, privacy &amp; security</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#c2410c;">
+                <h4 style="color:#fb923c;">Technical Practice</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-0</span>Programming languages</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-1</span>Frameworks &amp; APIs</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-2</span>Version control</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-3</span>Prototyping tools</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-4</span>Database design</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-5</span>Cloud &amp; deployment</li>
+                    <li><span class="plo-id" style="background:rgba(194,65,12,0.2);color:#fb923c;">technical-6</span>Accessibility (WCAG)</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#0e7490;">
+                <h4 style="color:#22d3ee;">Data &amp; Analysis</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(14,116,144,0.2);color:#22d3ee;">data-0</span>Statistical methods</li>
+                    <li><span class="plo-id" style="background:rgba(14,116,144,0.2);color:#22d3ee;">data-1</span>Qualitative research</li>
+                    <li><span class="plo-id" style="background:rgba(14,116,144,0.2);color:#22d3ee;">data-2</span>Info quality &amp; bias</li>
+                    <li><span class="plo-id" style="background:rgba(14,116,144,0.2);color:#22d3ee;">data-3</span>Data visualization</li>
+                    <li><span class="plo-id" style="background:rgba(14,116,144,0.2);color:#22d3ee;">data-4</span>Analytical tools</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#15803d;">
+                <h4 style="color:#4ade80;">Problem Solving</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(21,128,61,0.2);color:#4ade80;">problem-0</span>Human-centered design</li>
+                    <li><span class="plo-id" style="background:rgba(21,128,61,0.2);color:#4ade80;">problem-1</span>Feasibility &amp; sustainability</li>
+                    <li><span class="plo-id" style="background:rgba(21,128,61,0.2);color:#4ade80;">problem-2</span>Stakeholder balance</li>
+                    <li><span class="plo-id" style="background:rgba(21,128,61,0.2);color:#4ade80;">problem-3</span>Iterate &amp; evaluate</li>
+                    <li><span class="plo-id" style="background:rgba(21,128,61,0.2);color:#4ade80;">problem-4</span>Scale to context</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#b45309;">
+                <h4 style="color:#fbbf24;">Communication</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(180,83,9,0.2);color:#fbbf24;">communication-0</span>Written docs</li>
+                    <li><span class="plo-id" style="background:rgba(180,83,9,0.2);color:#fbbf24;">communication-1</span>Oral presentations</li>
+                    <li><span class="plo-id" style="background:rgba(180,83,9,0.2);color:#fbbf24;">communication-2</span>Visual communication</li>
+                    <li><span class="plo-id" style="background:rgba(180,83,9,0.2);color:#fbbf24;">communication-3</span>Diverse audiences</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#be185d;">
+                <h4 style="color:#f472b6;">Collaboration</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(190,24,93,0.2);color:#f472b6;">collaboration-0</span>Project management</li>
+                    <li><span class="plo-id" style="background:rgba(190,24,93,0.2);color:#f472b6;">collaboration-1</span>Roles &amp; decisions</li>
+                    <li><span class="plo-id" style="background:rgba(190,24,93,0.2);color:#f472b6;">collaboration-2</span>Diverse perspectives</li>
+                    <li><span class="plo-id" style="background:rgba(190,24,93,0.2);color:#f472b6;">collaboration-3</span>Constructive feedback</li>
+                    <li><span class="plo-id" style="background:rgba(190,24,93,0.2);color:#f472b6;">collaboration-4</span>Conflict resolution</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#991b1b;">
+                <h4 style="color:#fca5a5;">Ethics &amp; Responsibility</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-0</span>Privacy &amp; data protection</li>
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-1</span>Algorithmic bias</li>
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-2</span>Accessibility &amp; inclusion</li>
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-3</span>Environmental sustainability</li>
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-4</span>Power &amp; equity</li>
+                    <li><span class="plo-id" style="background:rgba(153,27,27,0.2);color:#fca5a5;">ethics-5</span>Professional codes</li>
+                </ul>
+            </div>
+
+            <div class="plo-category" style="border-left-color:#1e40af;">
+                <h4 style="color:#93c5fd;">Lifelong Learning</h4>
+                <ul class="plo-list">
+                    <li><span class="plo-id" style="background:rgba(30,64,175,0.2);color:#93c5fd;">lifelong-0</span>Self-directed learning</li>
+                    <li><span class="plo-id" style="background:rgba(30,64,175,0.2);color:#93c5fd;">lifelong-1</span>Evaluate emerging tech</li>
+                    <li><span class="plo-id" style="background:rgba(30,64,175,0.2);color:#93c5fd;">lifelong-2</span>Professional communities</li>
+                    <li><span class="plo-id" style="background:rgba(30,64,175,0.2);color:#93c5fd;">lifelong-3</span>Reflect on practice</li>
+                    <li><span class="plo-id" style="background:rgba(30,64,175,0.2);color:#93c5fd;">lifelong-4</span>Recognize knowledge limits</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="section">
+        <span class="section-label">Help</span>
+        <h2>Troubleshooting</h2>
+        <div class="trouble-list">
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; "Unknown PLO ID" warning in the mapper</div>
+                <div class="trouble-a">The GPT used a PLO ID that doesn't match the reference list. Valid IDs follow <code>{category}-{index}</code> (e.g., <code>knowledge-0</code>, <code>ethics-4</code>, <code>technical-6</code>). The index starts at 0 within each category.</div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; Getting pillar-based IDs like comp-reason-0</div>
+                <div class="trouble-a">The GPT may have a cached or older system prompt. Paste the current prompt from Step 2 into the Instructions field — it should reference the Official Framework and produce IDs like <code>knowledge-0</code>, not <code>comp-reason-0</code>. If you want the pillar-based mapper, use the <a href="gpt_prompt_pillar.html">Pillar Mapper GPT guide</a>.</div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; No CLOs extracted from the syllabus</div>
+                <div class="trouble-a">The syllabus may not list explicit outcomes. Ask: <em>"Please infer course learning outcomes from the assignments, topics, and objectives listed in this syllabus."</em></div>
+            </div>
+            <div class="trouble-item">
+                <div class="trouble-q">&#9888; Mapping multiple courses at once</div>
+                <div class="trouble-a">Upload several syllabi in one conversation, then say: <em>"Here are three syllabi. Output a single JSON with all courses in the courses array."</em> The mapper accepts any number of courses per import.</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div style="text-align:center; padding:24px; border-top:1px solid rgba(245,240,232,0.06); font-size:11px; color:rgba(245,240,232,0.2); font-family:'Space Mono',monospace;">
+    Informatics CLO–PLO Mapping Toolkit &mdash; <a href="index.html" style="color:rgba(245,240,232,0.3);">Home</a>
+</div>
+
+<script>
+function copyPrompt() {
+    const block = document.getElementById('promptBlock');
+    const text = block.innerText || block.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+</script>
+</body>
+</html>
