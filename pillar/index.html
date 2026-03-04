@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pillar-Based Mapper — Informatics CLO–PLO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ink:#1a1612; --cream:#f5f0e8; --rust:#c4541a; --amber:#d97706; }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Space Grotesk',sans-serif; background:var(--ink); color:var(--cream); min-height:100vh; }
+        .hero { border-bottom:3px solid var(--rust); padding:48px 24px 36px; text-align:center; max-width:640px; margin:0 auto; }
+        .hero h1 { font-family:'Space Mono',monospace; font-size:24px; color:var(--amber); font-weight:700; letter-spacing:-0.03em; margin-bottom:8px; }
+        .hero p { font-size:14px; color:rgba(245,240,232,0.5); line-height:1.6; max-width:480px; margin:0 auto 12px; }
+        .notice { display:inline-block; font-size:12px; padding:6px 14px; border-radius:4px; background:rgba(196,84,26,0.12); border:1px solid rgba(196,84,26,0.3); color:#f97316; font-family:'Space Mono',monospace; }
+        .content { max-width:640px; margin:0 auto; padding:40px 24px 80px; }
+        .tools { display:flex; flex-direction:column; gap:14px; }
+        .tool-card { display:flex; gap:18px; align-items:flex-start; background:rgba(245,240,232,0.03); border:1px solid rgba(245,240,232,0.08); border-radius:8px; padding:20px; text-decoration:none; transition:all 0.2s; }
+        .tool-card:hover { border-color:var(--rust); background:rgba(245,240,232,0.05); }
+        .tool-icon { width:44px; height:44px; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; }
+        .tool-info h3 { font-size:15px; color:var(--cream); font-weight:600; margin-bottom:3px; }
+        .tool-info p { font-size:13px; color:rgba(245,240,232,0.45); line-height:1.5; }
+        .tool-badge { font-family:'Space Mono',monospace; font-size:10px; padding:2px 7px; border-radius:3px; background:rgba(245,240,232,0.06); color:rgba(245,240,232,0.35); margin-top:7px; display:inline-block; }
+        .back-link { font-family:'Space Mono',monospace; font-size:12px; color:rgba(245,240,232,0.35); text-decoration:none; display:inline-flex; align-items:center; gap:6px; margin-bottom:28px; }
+        .back-link:hover { color:var(--amber); }
+        h2 { font-family:'Space Mono',monospace; font-size:13px; color:var(--amber); font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid rgba(245,240,232,0.08); }
+    </style>
+</head>
+<body>
+<div class="hero">
+    <h1>Pillar-Based Mapper</h1>
+    <p>An earlier organizational structure for CLO–PLO mapping using three thinking pillars. This was generated when the mapper was first built and is preserved here for reference.</p>
+    <span class="notice">LLM-generated structure &mdash; not the official faculty PLO framework</span>
+</div>
+<div class="content">
+    <a class="back-link" href="../index.html">&#8592; Back to main toolkit</a>
+    <h2>Tools</h2>
+    <div class="tools">
+        <a class="tool-card" href="CLO_data_entry.html">
+            <div class="tool-icon" style="background:rgba(196,84,26,0.2);color:#f97316;">&#9998;</div>
+            <div class="tool-info">
+                <h3>CLO Data Entry</h3>
+                <p>Enter CLOs and link them to the three-pillar PLO structure (Computational, Sociotechnical, Design).</p>
+                <span class="tool-badge">Start here</span>
+            </div>
+        </a>
+        <a class="tool-card" href="CLO_PLO_mapper.html">
+            <div class="tool-icon" style="background:rgba(45,90,39,0.2);color:#4ade80;">&#9673;</div>
+            <div class="tool-info">
+                <h3>Interactive Mapper</h3>
+                <p>Force-directed graph showing CLO–PLO relationships across the three-pillar structure.</p>
+                <span class="tool-badge">Visualize &amp; analyze</span>
+            </div>
+        </a>
+        <a class="tool-card" href="gpt_prompt_pillar.html">
+            <div class="tool-icon" style="background:rgba(217,119,6,0.2);color:#d97706;">&#9881;</div>
+            <div class="tool-info">
+                <h3>GPT Prompt Guide</h3>
+                <p>Configure a custom GPT to extract CLOs from syllabi using the pillar-based ID structure.</p>
+                <span class="tool-badge">Automated extraction</span>
+            </div>
+        </a>
+        <a class="tool-card" href="plo_framework.html">
+            <div class="tool-icon" style="background:rgba(14,116,144,0.2);color:#22d3ee;">&#9780;</div>
+            <div class="tool-info">
+                <h3>Framework Comparison</h3>
+                <p>Side-by-side view of the pillar-based and official 8-category frameworks with crosswalk.</p>
+                <span class="tool-badge">Reference</span>
+            </div>
+        </a>
+    </div>
+</div>
+</body>
+</html>

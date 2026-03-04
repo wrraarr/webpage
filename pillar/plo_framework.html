@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLO Framework — Informatics Program Learning Outcomes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink:    #1a1612;
+            --cream:  #f5f0e8;
+            --warm:   #e8dcc8;
+            --rust:   #c4541a;
+            --amber:  #d97706;
+            --forest: #2d5a27;
+            --slate:  #64748b;
+            --border: rgba(245,240,232,0.1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--ink);
+            color: var(--cream);
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: var(--ink);
+            border-bottom: 3px solid var(--rust);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-left { display: flex; flex-direction: column; gap: 2px; }
+        header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 17px; color: var(--amber);
+            font-weight: 700; letter-spacing: -0.03em;
+        }
+        header .subtitle {
+            font-size: 12px; color: rgba(245,240,232,0.4);
+            font-family: 'Space Mono', monospace;
+        }
+        .header-nav { display: flex; gap: 8px; }
+        .nav-btn {
+            padding: 5px 14px;
+            border: 1px solid rgba(245,240,232,0.18);
+            background: transparent; color: var(--cream);
+            border-radius: 5px; cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px; font-weight: 500;
+            letter-spacing: 0.03em; text-transform: uppercase;
+            transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center;
+        }
+        .nav-btn:hover { background: var(--rust); border-color: var(--rust); color: #fff; }
+
+        /* ── LAYOUT ── */
+        .page { max-width: 1400px; margin: 0 auto; padding: 40px 32px 80px; }
+
+        /* ── INTRO ── */
+        .intro {
+            margin-bottom: 48px;
+        }
+        .intro h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 22px; color: var(--cream);
+            font-weight: 700; letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+        .intro p {
+            font-size: 14px; color: rgba(245,240,232,0.6);
+            max-width: 720px; line-height: 1.65;
+            margin-bottom: 8px;
+        }
+        .version-pills {
+            display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap;
+        }
+        .version-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border-radius: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px; font-weight: 700;
+            border: 1px solid;
+        }
+        .pill-2023 {
+            background: rgba(196,84,26,0.12);
+            border-color: rgba(196,84,26,0.35);
+            color: #f97316;
+        }
+        .pill-2025 {
+            background: rgba(109,40,217,0.12);
+            border-color: rgba(109,40,217,0.35);
+            color: #a78bfa;
+        }
+        .pill-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+        .pill-2023 .pill-dot { background: #f97316; }
+        .pill-2025 .pill-dot { background: #a78bfa; }
+
+        /* ── TOGGLE TABS ── */
+        .view-tabs {
+            display: flex; gap: 4px;
+            background: rgba(245,240,232,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px; padding: 4px;
+            width: fit-content; margin-bottom: 32px;
+        }
+        .view-tab {
+            padding: 7px 18px; border-radius: 5px;
+            font-size: 12px; font-weight: 600;
+            cursor: pointer; border: none;
+            background: transparent; color: rgba(245,240,232,0.45);
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.2s;
+        }
+        .view-tab:hover { color: var(--cream); }
+        .view-tab.active { background: var(--rust); color: white; }
+
+        /* ── SIDE-BY-SIDE VIEW ── */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .framework-col {
+            background: rgba(245,240,232,0.03);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .framework-col-header {
+            padding: 18px 22px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .framework-col-header h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px; font-weight: 700;
+        }
+        .framework-col-header .year-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px; padding: 3px 9px;
+            border-radius: 4px; font-weight: 700;
+        }
+        .framework-col-header .plo-total {
+            font-size: 11px; color: rgba(245,240,232,0.4);
+            margin-left: auto;
+        }
+        .col-2023 .framework-col-header { border-bottom: 2px solid rgba(196,84,26,0.4); background: rgba(196,84,26,0.06); }
+        .col-2023 .year-badge { background: rgba(196,84,26,0.2); color: #f97316; border: 1px solid rgba(196,84,26,0.35); }
+        .col-2025 .framework-col-header { border-bottom: 2px solid rgba(109,40,217,0.4); background: rgba(109,40,217,0.06); }
+        .col-2025 .year-badge { background: rgba(109,40,217,0.2); color: #a78bfa; border: 1px solid rgba(109,40,217,0.35); }
+
+        .col-body { padding: 18px 22px; }
+
+        /* Pillar (2023) */
+        .pillar-block { margin-bottom: 22px; }
+        .pillar-block:last-child { margin-bottom: 0; }
+        .pillar-header {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 10px;
+        }
+        .pillar-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .pillar-label {
+            font-size: 13px; font-weight: 700; color: var(--cream);
+        }
+        .pillar-count {
+            font-size: 10px; color: rgba(245,240,232,0.35);
+            font-family: 'Space Mono', monospace; margin-left: auto;
+        }
+
+        .category-block { margin-bottom: 8px; margin-left: 18px; }
+        .category-label {
+            font-size: 11px; font-weight: 600;
+            color: rgba(245,240,232,0.5);
+            text-transform: uppercase; letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+        .plo-list { list-style: none; }
+        .plo-row {
+            display: flex; align-items: flex-start; gap: 8px;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(245,240,232,0.04);
+        }
+        .plo-row:last-child { border-bottom: none; }
+        .plo-id {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px; padding: 2px 5px;
+            border-radius: 3px; flex-shrink: 0;
+            margin-top: 1px;
+            color: white;
+        }
+        .plo-text {
+            font-size: 11px; color: rgba(245,240,232,0.7);
+            line-height: 1.4;
+        }
+
+        /* Category (2025) */
+        .cat-block { margin-bottom: 18px; }
+        .cat-block:last-child { margin-bottom: 0; }
+        .cat-header {
+            display: flex; align-items: center; gap: 8px;
+            margin-bottom: 6px; padding-bottom: 4px;
+            border-bottom: 1px solid rgba(245,240,232,0.07);
+        }
+        .cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .cat-label { font-size: 13px; font-weight: 700; }
+        .cat-count { font-size: 10px; color: rgba(245,240,232,0.35); font-family: 'Space Mono', monospace; margin-left: auto; }
+
+        /* ── SINGLE VIEW (full page) ── */
+        .single-view { display: none; }
+        .single-view.active { display: block; }
+        .compare-view.hidden { display: none; }
+
+        .single-framework-section { margin-bottom: 48px; }
+        .single-framework-section h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px; font-weight: 700;
+            margin-bottom: 6px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+        .single-framework-section.v2023 h2 { color: #f97316; border-color: rgba(196,84,26,0.3); }
+        .single-framework-section.v2025 h2 { color: #a78bfa; border-color: rgba(109,40,217,0.3); }
+        .section-meta {
+            font-size: 13px; color: rgba(245,240,232,0.5);
+            margin-bottom: 20px; line-height: 1.5;
+        }
+
+        .full-pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .full-cat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .full-pillar-card {
+            background: rgba(245,240,232,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .full-pillar-card-header {
+            padding: 12px 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .full-pillar-card-header span {
+            font-size: 13px; font-weight: 700;
+        }
+        .full-pillar-card-body { padding: 0 16px 14px; }
+        .full-cat-sub { margin-bottom: 10px; }
+        .full-cat-sub-label {
+            font-size: 10px; font-weight: 600; color: rgba(245,240,232,0.4);
+            text-transform: uppercase; letter-spacing: 0.07em;
+            margin-bottom: 4px;
+        }
+        .full-plo-item {
+            display: flex; gap: 7px; align-items: flex-start;
+            padding: 2px 0;
+        }
+        .full-plo-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 8px; padding: 2px 4px; border-radius: 2px;
+            flex-shrink: 0; color: white; margin-top: 2px;
+        }
+        .full-plo-text { font-size: 11px; color: rgba(245,240,232,0.65); line-height: 1.4; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3a3228; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4a4238; }
+
+        /* Crosswalk section */
+        .crosswalk-section { margin-top: 48px; }
+        .crosswalk-section h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 16px; font-weight: 700;
+            color: var(--amber); margin-bottom: 6px;
+        }
+        .crosswalk-section .meta {
+            font-size: 13px; color: rgba(245,240,232,0.5); margin-bottom: 20px;
+        }
+        .crosswalk-table {
+            width: 100%; border-collapse: collapse;
+            font-size: 12px;
+        }
+        .crosswalk-table th {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px; text-transform: uppercase;
+            letter-spacing: 0.07em; padding: 8px 14px;
+            text-align: left;
+            background: rgba(245,240,232,0.05);
+            border-bottom: 1px solid rgba(245,240,232,0.12);
+            color: rgba(245,240,232,0.5);
+        }
+        .crosswalk-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid rgba(245,240,232,0.05);
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .crosswalk-table tr:hover td { background: rgba(245,240,232,0.025); }
+        .cw-cat-2023 { color: #f97316; font-weight: 600; }
+        .cw-cat-2025 { color: var(--cream); }
+        .cw-arrow { color: rgba(245,240,232,0.25); padding: 0 4px; }
+        .cw-note { color: rgba(245,240,232,0.45); font-style: italic; }
+
+        @media (max-width: 900px) {
+            .compare-grid { grid-template-columns: 1fr; }
+            .full-pillar-grid { grid-template-columns: 1fr; }
+            .full-cat-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <h1>PLO Framework Reference</h1>
+        <span class="subtitle">Informatics BS · Official 8-Category PLO Framework &amp; Pillar-Based Mapper</span>
+    </div>
+    <div class="header-nav">
+        <a class="nav-btn" href="index.html">&#8592; Home</a>
+        <a class="nav-btn" href="CLO_PLO_mapper_v2.html">Official Mapper ↗</a>
+        <a class="nav-btn" href="CLO_PLO_mapper.html">Pillar Mapper ↗</a>
+    </div>
+</header>
+
+<div class="page">
+
+    <!-- Intro -->
+    <div class="intro">
+        <h2>Program Learning Outcomes</h2>
+        <p>The <strong style="color:#a78bfa;">Official PLO Framework</strong> organizes the Informatics BS program learning outcomes into eight independent competency categories — this is the faculty-approved structure. The <strong style="color:#f97316;">Pillar-Based Mapper</strong> is an alternative visualization that uses a three-pillar organization (Computational, Sociotechnical, Design) generated when the original mapping tool was first built; it was not part of the faculty-approved framework.</p>
+        <p>Use this page to explore both organizational structures, see how they compare, and choose the right tool for your course.</p>
+        <div class="version-pills">
+            <div class="version-pill pill-2025">
+                <span class="pill-dot"></span>
+                Official PLOs — 8 categories, 43 sub-outcomes (faculty-approved)
+            </div>
+            <div class="version-pill pill-2023">
+                <span class="pill-dot"></span>
+                Pillar-Based Mapper — 3 pillars, 10 categories, 62 sub-outcomes (LLM-generated structure)
+            </div>
+        </div>
+    </div>
+
+    <!-- View Tabs -->
+    <div class="view-tabs">
+        <button class="view-tab active" onclick="setView('compare')">Side-by-Side</button>
+        <button class="view-tab" onclick="setView('v2025')">Official PLOs (8 Categories)</button>
+        <button class="view-tab" onclick="setView('v2023')">Pillar Mapper (3 Pillars)</button>
+        <button class="view-tab" onclick="setView('crosswalk')">Crosswalk</button>
+    </div>
+
+    <!-- ═══════ COMPARE VIEW ═══════ -->
+    <div id="compare-view" class="compare-view">
+        <div class="compare-grid">
+
+            <!-- Pillar column -->
+            <div class="framework-col col-2023">
+                <div class="framework-col-header">
+                    <span class="year-badge">Pillar Mapper</span>
+                    <h3>3-Pillar Organization</h3>
+                    <span class="plo-total">62 sub-outcomes · LLM-generated structure</span>
+                </div>
+                <div class="col-body">
+
+                    <!-- Computational Thinking -->
+                    <div class="pillar-block">
+                        <div class="pillar-header">
+                            <span class="pillar-dot" style="background:#c4541a;"></span>
+                            <span class="pillar-label">Computational Thinking</span>
+                            <span class="pillar-count">22 PLOs</span>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Reason Logically</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-reason-0</span><span class="plo-text">Translate arguments into formal language</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-reason-1</span><span class="plo-text">Manipulate mathematical objects</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-reason-2</span><span class="plo-text">Recognize equivalence between structures</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-reason-3</span><span class="plo-text">Decompose problems into simpler structures</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-reason-4</span><span class="plo-text">Apply data-driven approaches</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Curate Data</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-0</span><span class="plo-text">Apply visual methods for complex structures</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-1</span><span class="plo-text">Recognize and use basic data structures</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-2</span><span class="plo-text">Construct data models of systems</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-3</span><span class="plo-text">Evaluate data quality</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-4</span><span class="plo-text">Convert data into knowledge</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-data-5</span><span class="plo-text">Manage data securely</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Apply Algorithms</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-algo-0</span><span class="plo-text">Translate strategies into algorithms</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-algo-1</span><span class="plo-text">Apply graph theory to solve problems</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-algo-2</span><span class="plo-text">Integrate algorithms into complex ones</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-algo-3</span><span class="plo-text">Research new problem-solving strategies</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-algo-4</span><span class="plo-text">Address security concerns</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Effectively Implement</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-0</span><span class="plo-text">Apply basic programming structures</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-1</span><span class="plo-text">Translate algorithms into code</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-2</span><span class="plo-text">Construct distributed systems</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-3</span><span class="plo-text">Research new software tools</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-4</span><span class="plo-text">Implement security solutions</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#c4541a;">comp-impl-5</span><span class="plo-text">Evaluate solution effectiveness</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Sociotechnical Thinking -->
+                    <div class="pillar-block">
+                        <div class="pillar-header">
+                            <span class="pillar-dot" style="background:#2d5a27;"></span>
+                            <span class="pillar-label">Sociotechnical Thinking</span>
+                            <span class="pillar-count">17 PLOs</span>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Ethical Sensibility</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-ethics-0</span><span class="plo-text">Formulate and articulate ideas</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-ethics-1</span><span class="plo-text">Recognize assumptions and biases</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-ethics-2</span><span class="plo-text">Weigh connections between actors</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-ethics-3</span><span class="plo-text">Consider diversity and responsibility</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-ethics-4</span><span class="plo-text">Contribute to human well-being</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Analyze Solutions</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-0</span><span class="plo-text">Identify stakeholders</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-1</span><span class="plo-text">Identify values at stake</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-2</span><span class="plo-text">Discuss diverse perspectives</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-3</span><span class="plo-text">Explain technical and social processes</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-4</span><span class="plo-text">Assess technological affordances</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-analyze-5</span><span class="plo-text">Evaluate power dynamics</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Create Solutions</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-0</span><span class="plo-text">Engage imagination for possibilities</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-1</span><span class="plo-text">Collaborate with diverse teams</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-2</span><span class="plo-text">Propose harm-reducing solutions</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-3</span><span class="plo-text">Communicate with stakeholders</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-4</span><span class="plo-text">Make values-based decisions</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#2d5a27;">socio-create-5</span><span class="plo-text">Assess policy and governance</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Design Thinking -->
+                    <div class="pillar-block">
+                        <div class="pillar-header">
+                            <span class="pillar-dot" style="background:#1d4ed8;"></span>
+                            <span class="pillar-label">Design Thinking</span>
+                            <span class="pillar-count">23 PLOs</span>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Research</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-0</span><span class="plo-text">Classify HCI research methods</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-1</span><span class="plo-text">Execute ethical research</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-2</span><span class="plo-text">Deconstruct and reframe problems</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-3</span><span class="plo-text">Identify design opportunities</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-4</span><span class="plo-text">Use design thinking process</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-research-5</span><span class="plo-text">Translate research to prototypes</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Design</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-design-0</span><span class="plo-text">Select appropriate methods</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-design-1</span><span class="plo-text">Design with HCI techniques</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-design-2</span><span class="plo-text">Generate user personas</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-design-3</span><span class="plo-text">Develop proof-of-concept</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-design-4</span><span class="plo-text">Produce interactive prototypes</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Evaluate</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-eval-0</span><span class="plo-text">Evaluate with feedback</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-eval-1</span><span class="plo-text">Critique designs</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-eval-2</span><span class="plo-text">Summarize research insights</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-eval-3</span><span class="plo-text">Generate recommendations</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-eval-4</span><span class="plo-text">Create improved designs</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Disseminate</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-dissem-0</span><span class="plo-text">Create design portfolio</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-dissem-1</span><span class="plo-text">Generate documentation</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-dissem-2</span><span class="plo-text">Design presentations</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-dissem-3</span><span class="plo-text">Present research posters</span></li>
+                            </ul>
+                        </div>
+                        <div class="category-block">
+                            <div class="category-label">Collaborate</div>
+                            <ul class="plo-list">
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-collab-0</span><span class="plo-text">Work in peer teams</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-collab-1</span><span class="plo-text">Understand project roles</span></li>
+                                <li class="plo-row"><span class="plo-id" style="background:#1d4ed8;">design-collab-2</span><span class="plo-text">Judge contributions</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Official column -->
+            <div class="framework-col col-2025">
+                <div class="framework-col-header">
+                    <span class="year-badge">Official</span>
+                    <h3>8-Category Framework</h3>
+                    <span class="plo-total">43 PLOs · Faculty-approved</span>
+                </div>
+                <div class="col-body" id="col2025body">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+
+        </div><!-- end compare-grid -->
+
+    </div><!-- end compare-view -->
+
+    <!-- ═══════ PILLAR DETAIL VIEW ═══════ -->
+    <div id="v2023-view" class="single-view">
+        <div class="single-framework-section v2023">
+            <h2>Pillar-Based Mapper — Three Pillars</h2>
+            <p class="section-meta">62 sub-outcomes organized into 3 pillars and 10 categories using an LLM-generated structure. This is not the faculty-approved PLO framework — it is an alternative organizational scheme created when the original mapper tool was built. PLO IDs follow the pattern <code style="color:#f97316; background:rgba(196,84,26,0.1); padding:1px 5px; border-radius:3px; font-family:'Space Mono',monospace;">pillar-category-index</code>. Use with the <a href="CLO_PLO_mapper.html" style="color:#f97316;">Pillar-Based Mapper</a> and <a href="CLO_data_entry.html" style="color:#f97316;">Pillar Data Entry</a>.</p>
+            <div class="full-pillar-grid" id="v2023-detail"></div>
+        </div>
+    </div>
+
+    <!-- ═══════ OFFICIAL PLO DETAIL VIEW ═══════ -->
+    <div id="v2025-view" class="single-view">
+        <div class="single-framework-section v2025">
+            <h2>Official PLO Framework — Eight Categories</h2>
+            <p class="section-meta">43 programmatic learning outcomes organized into 8 independent competency categories — the faculty-approved framework for the Informatics BS program. PLO IDs follow the pattern <code style="color:#a78bfa; background:rgba(109,40,217,0.1); padding:1px 5px; border-radius:3px; font-family:'Space Mono',monospace;">category-index</code>. Use with the <a href="CLO_PLO_mapper_v2.html" style="color:#a78bfa;">Official Mapper</a> and <a href="CLO_data_entry_v2.html" style="color:#a78bfa;">Official Data Entry</a>.</p>
+            <div class="full-cat-grid" id="v2025-detail"></div>
+        </div>
+    </div>
+
+    <!-- ═══════ CROSSWALK VIEW ═══════ -->
+    <div id="crosswalk-view" class="single-view">
+        <div class="crosswalk-section">
+            <h2>Framework Crosswalk</h2>
+            <p class="meta">How the pillar-based mapper's three-pillar structure maps conceptually to the official 8-category PLO framework. The official framework expands the PLOs into eight independent competency domains — some map closely to a single pillar, while others (Ethics, Collaboration, Communication) draw from multiple pillars. Note: this is a conceptual mapping between two organizational schemes, not between two different sets of program outcomes.</p>
+
+            <br>
+            <table class="crosswalk-table">
+                <thead>
+                    <tr>
+                        <th>2025 Category</th>
+                        <th>Closest 2023 Pillar(s)</th>
+                        <th>Conceptual Relationship</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span style="color:#6d28d9; font-weight:700;">Core Knowledge</span></td>
+                        <td><span class="cw-cat-2023">Computational Thinking</span> <span class="cw-arrow">+</span> <span class="cw-cat-2023">Sociotechnical Thinking</span></td>
+                        <td class="cw-note">Foundation content across all three pillars; explicitly names domains of knowledge (systems, HCI, ethics, policy) that were implicit in the 2023 framework.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#c2410c; font-weight:700;">Technical Practice</span></td>
+                        <td><span class="cw-cat-2023">Computational Thinking</span></td>
+                        <td class="cw-note">Closely mirrors the "Effectively Implement" and "Apply Algorithms" categories. Expands to include cloud, APIs, accessibility, and prototyping tools.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#0e7490; font-weight:700;">Data & Analysis</span></td>
+                        <td><span class="cw-cat-2023">Computational Thinking</span></td>
+                        <td class="cw-note">Expands "Curate Data" and "Reason Logically" into a broader analytical competency that includes both quantitative and qualitative methods.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#15803d; font-weight:700;">Problem Solving</span></td>
+                        <td><span class="cw-cat-2023">Computational Thinking</span> <span class="cw-arrow">+</span> <span class="cw-cat-2023">Design Thinking</span></td>
+                        <td class="cw-note">Bridges the computational and design pillars. Adds explicit emphasis on sustainability, scale, and stakeholder constraints absent from the 2023 framework.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#b45309; font-weight:700;">Communication</span></td>
+                        <td><span class="cw-cat-2023">Sociotechnical Thinking</span> <span class="cw-arrow">+</span> <span class="cw-cat-2023">Design Thinking</span></td>
+                        <td class="cw-note">Was distributed across "Create Solutions" and "Disseminate" in 2023. The 2025 framework elevates communication to a standalone competency with written, oral, visual, and cross-cultural dimensions.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#be185d; font-weight:700;">Collaboration</span></td>
+                        <td><span class="cw-cat-2023">Sociotechnical Thinking</span> <span class="cw-arrow">+</span> <span class="cw-cat-2023">Design Thinking</span></td>
+                        <td class="cw-note">Was split across "Create Solutions" and "Collaborate" categories. The 2025 framework is more explicit about conflict resolution, role negotiation, and project management.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#991b1b; font-weight:700;">Ethics & Responsibility</span></td>
+                        <td><span class="cw-cat-2023">Sociotechnical Thinking</span></td>
+                        <td class="cw-note">Directly maps to "Ethical Sensibility" and "Analyze Solutions." The 2025 version is more concrete, naming algorithmic bias, environmental sustainability, and professional codes as distinct outcomes.</td>
+                    </tr>
+                    <tr>
+                        <td><span style="color:#1e40af; font-weight:700;">Lifelong Learning</span></td>
+                        <td><span style="font-style:italic; color:rgba(245,240,232,0.3);">New in 2025</span></td>
+                        <td class="cw-note">Entirely new category with no direct equivalent in 2023. Captures metacognitive competencies — self-directed learning, critical evaluation of technology, and professional development — previously not addressed.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!-- end page -->
+
+<script>
+// ── 2025 PLO data ──
+const PLO_2025 = [
+    { id: 'knowledge', name: 'Core Knowledge', color: '#6d28d9', plos: [
+        { id: 'knowledge-0', text: 'Information systems architecture and development' },
+        { id: 'knowledge-1', text: 'Data structures, algorithms, and databases' },
+        { id: 'knowledge-2', text: 'Human-computer interaction and user experience design' },
+        { id: 'knowledge-3', text: 'Sociotechnical systems analysis' },
+        { id: 'knowledge-4', text: 'Ethics in technology design and deployment' },
+        { id: 'knowledge-5', text: 'Information policy, privacy, and security' }
+    ]},
+    { id: 'technical', name: 'Technical Practice', color: '#c2410c', plos: [
+        { id: 'technical-0', text: 'Multiple programming languages and paradigms (OOP, functional, procedural)' },
+        { id: 'technical-1', text: 'Modern development frameworks and APIs' },
+        { id: 'technical-2', text: 'Version control and collaborative development tools' },
+        { id: 'technical-3', text: 'Prototyping and design tools (low-fidelity to high-fidelity)' },
+        { id: 'technical-4', text: 'Database design and query languages' },
+        { id: 'technical-5', text: 'Cloud platforms and deployment pipelines' },
+        { id: 'technical-6', text: 'Accessibility standards (WCAG) and responsive design principles' }
+    ]},
+    { id: 'data', name: 'Data & Analysis', color: '#0e7490', plos: [
+        { id: 'data-0', text: 'Applying statistical methods and computational analysis' },
+        { id: 'data-1', text: 'Conducting qualitative research (interviews, observations, usability testing)' },
+        { id: 'data-2', text: 'Evaluating information quality, bias, and limitations' },
+        { id: 'data-3', text: 'Creating data visualizations appropriate to audience and context' },
+        { id: 'data-4', text: 'Using analytical tools (R, Python, SQL, Tableau, etc.)' }
+    ]},
+    { id: 'problem', name: 'Problem Solving', color: '#15803d', plos: [
+        { id: 'problem-0', text: 'Address real-world needs through human-centered design' },
+        { id: 'problem-1', text: 'Consider technical feasibility, social impact, and sustainability' },
+        { id: 'problem-2', text: 'Balance stakeholder requirements and constraints' },
+        { id: 'problem-3', text: 'Iterate based on testing, feedback, and evaluation' },
+        { id: 'problem-4', text: 'Scale solutions appropriately to context (individual, organizational, societal)' }
+    ]},
+    { id: 'communication', name: 'Communication', color: '#b45309', plos: [
+        { id: 'communication-0', text: 'Written documentation (technical specifications, user guides, reports, proposals)' },
+        { id: 'communication-1', text: 'Oral presentations to technical and non-technical audiences' },
+        { id: 'communication-2', text: 'Visual communication (wireframes, diagrams, posters, demos)' },
+        { id: 'communication-3', text: 'Adaptation to diverse audiences, contexts, and cultural perspectives' }
+    ]},
+    { id: 'collaboration', name: 'Collaboration', color: '#be185d', plos: [
+        { id: 'collaboration-0', text: 'Coordinating work using project management tools and methodologies' },
+        { id: 'collaboration-1', text: 'Negotiating roles, responsibilities, and decision-making processes' },
+        { id: 'collaboration-2', text: 'Integrating diverse perspectives and expertise' },
+        { id: 'collaboration-3', text: 'Giving and receiving constructive feedback' },
+        { id: 'collaboration-4', text: 'Resolving conflicts productively' }
+    ]},
+    { id: 'ethics', name: 'Ethics & Responsibility', color: '#991b1b', plos: [
+        { id: 'ethics-0', text: 'Privacy, surveillance, and data protection' },
+        { id: 'ethics-1', text: 'Algorithmic bias, fairness, and transparency' },
+        { id: 'ethics-2', text: 'Accessibility and inclusive design' },
+        { id: 'ethics-3', text: 'Environmental sustainability' },
+        { id: 'ethics-4', text: 'Power dynamics and equity in technology access and design' },
+        { id: 'ethics-5', text: 'Professional codes of conduct' }
+    ]},
+    { id: 'lifelong', name: 'Lifelong Learning', color: '#1e40af', plos: [
+        { id: 'lifelong-0', text: 'Learning new programming languages, tools, and frameworks independently' },
+        { id: 'lifelong-1', text: 'Evaluating emerging technologies critically' },
+        { id: 'lifelong-2', text: 'Engaging with professional communities and resources' },
+        { id: 'lifelong-3', text: 'Reflecting on own practice and growth' },
+        { id: 'lifelong-4', text: 'Recognizing limits of knowledge and seeking appropriate expertise' }
+    ]}
+];
+
+// Render 2025 column in compare view
+function render2025Column() {
+    const body = document.getElementById('col2025body');
+    body.innerHTML = PLO_2025.map(cat => `
+        <div class="cat-block">
+            <div class="cat-header">
+                <span class="cat-dot" style="background:${cat.color};"></span>
+                <span class="cat-label" style="color:${cat.color};">${cat.name}</span>
+                <span class="cat-count">${cat.plos.length} PLOs</span>
+            </div>
+            <ul class="plo-list">
+                ${cat.plos.map(p => `
+                    <li class="plo-row">
+                        <span class="plo-id" style="background:${cat.color};">${p.id}</span>
+                        <span class="plo-text">${p.text}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `).join('');
+}
+
+// Render 2025 full detail view
+function render2025Detail() {
+    const container = document.getElementById('v2025-detail');
+    container.innerHTML = PLO_2025.map(cat => `
+        <div class="full-pillar-card">
+            <div class="full-pillar-card-header" style="background:${cat.color}18; border-bottom: 2px solid ${cat.color}55;">
+                <span class="cat-dot" style="background:${cat.color};"></span>
+                <span style="color:${cat.color}; font-size:13px; font-weight:700;">${cat.name}</span>
+                <span style="font-size:10px; color:rgba(245,240,232,0.35); margin-left:auto; font-family:'Space Mono',monospace;">${cat.plos.length} PLOs</span>
+            </div>
+            <div class="full-pillar-card-body" style="padding:12px 14px;">
+                ${cat.plos.map(p => `
+                    <div class="full-plo-item">
+                        <span class="full-plo-badge" style="background:${cat.color};">${p.id}</span>
+                        <span class="full-plo-text">${p.text}</span>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Render 2023 detail view
+function render2023Detail() {
+    const container = document.getElementById('v2023-detail');
+    const pillars = [
+        {
+            name: 'Computational Thinking', color: '#c4541a',
+            categories: [
+                { name: 'Reason Logically', plos: [
+                    { id: 'comp-reason-0', text: 'Translate arguments into formal language' },
+                    { id: 'comp-reason-1', text: 'Manipulate mathematical objects' },
+                    { id: 'comp-reason-2', text: 'Recognize equivalence between structures' },
+                    { id: 'comp-reason-3', text: 'Decompose problems into simpler structures' },
+                    { id: 'comp-reason-4', text: 'Apply data-driven approaches' }
+                ]},
+                { name: 'Curate Data', plos: [
+                    { id: 'comp-data-0', text: 'Apply visual methods for complex structures' },
+                    { id: 'comp-data-1', text: 'Recognize and use basic data structures' },
+                    { id: 'comp-data-2', text: 'Construct data models of systems' },
+                    { id: 'comp-data-3', text: 'Evaluate data quality' },
+                    { id: 'comp-data-4', text: 'Convert data into knowledge' },
+                    { id: 'comp-data-5', text: 'Manage data securely' }
+                ]},
+                { name: 'Apply Algorithms', plos: [
+                    { id: 'comp-algo-0', text: 'Translate strategies into algorithms' },
+                    { id: 'comp-algo-1', text: 'Apply graph theory to solve problems' },
+                    { id: 'comp-algo-2', text: 'Integrate algorithms into complex ones' },
+                    { id: 'comp-algo-3', text: 'Research new problem-solving strategies' },
+                    { id: 'comp-algo-4', text: 'Address security concerns' }
+                ]},
+                { name: 'Effectively Implement', plos: [
+                    { id: 'comp-impl-0', text: 'Apply basic programming structures' },
+                    { id: 'comp-impl-1', text: 'Translate algorithms into code' },
+                    { id: 'comp-impl-2', text: 'Construct distributed systems' },
+                    { id: 'comp-impl-3', text: 'Research new software tools' },
+                    { id: 'comp-impl-4', text: 'Implement security solutions' },
+                    { id: 'comp-impl-5', text: 'Evaluate solution effectiveness' }
+                ]}
+            ]
+        },
+        {
+            name: 'Sociotechnical Thinking', color: '#2d5a27',
+            categories: [
+                { name: 'Ethical Sensibility', plos: [
+                    { id: 'socio-ethics-0', text: 'Formulate and articulate ideas' },
+                    { id: 'socio-ethics-1', text: 'Recognize assumptions and biases' },
+                    { id: 'socio-ethics-2', text: 'Weigh connections between actors' },
+                    { id: 'socio-ethics-3', text: 'Consider diversity and responsibility' },
+                    { id: 'socio-ethics-4', text: 'Contribute to human well-being' }
+                ]},
+                { name: 'Analyze Solutions', plos: [
+                    { id: 'socio-analyze-0', text: 'Identify stakeholders' },
+                    { id: 'socio-analyze-1', text: 'Identify values at stake' },
+                    { id: 'socio-analyze-2', text: 'Discuss diverse perspectives' },
+                    { id: 'socio-analyze-3', text: 'Explain technical and social processes' },
+                    { id: 'socio-analyze-4', text: 'Assess technological affordances' },
+                    { id: 'socio-analyze-5', text: 'Evaluate power dynamics' }
+                ]},
+                { name: 'Create Solutions', plos: [
+                    { id: 'socio-create-0', text: 'Engage imagination for possibilities' },
+                    { id: 'socio-create-1', text: 'Collaborate with diverse teams' },
+                    { id: 'socio-create-2', text: 'Propose harm-reducing solutions' },
+                    { id: 'socio-create-3', text: 'Communicate with stakeholders' },
+                    { id: 'socio-create-4', text: 'Make values-based decisions' },
+                    { id: 'socio-create-5', text: 'Assess policy and governance' }
+                ]}
+            ]
+        },
+        {
+            name: 'Design Thinking', color: '#1d4ed8',
+            categories: [
+                { name: 'Research', plos: [
+                    { id: 'design-research-0', text: 'Classify HCI research methods' },
+                    { id: 'design-research-1', text: 'Execute ethical research' },
+                    { id: 'design-research-2', text: 'Deconstruct and reframe problems' },
+                    { id: 'design-research-3', text: 'Identify design opportunities' },
+                    { id: 'design-research-4', text: 'Use design thinking process' },
+                    { id: 'design-research-5', text: 'Translate research to prototypes' }
+                ]},
+                { name: 'Design', plos: [
+                    { id: 'design-design-0', text: 'Select appropriate methods' },
+                    { id: 'design-design-1', text: 'Design with HCI techniques' },
+                    { id: 'design-design-2', text: 'Generate user personas' },
+                    { id: 'design-design-3', text: 'Develop proof-of-concept' },
+                    { id: 'design-design-4', text: 'Produce interactive prototypes' }
+                ]},
+                { name: 'Evaluate', plos: [
+                    { id: 'design-eval-0', text: 'Evaluate with feedback' },
+                    { id: 'design-eval-1', text: 'Critique designs' },
+                    { id: 'design-eval-2', text: 'Summarize research insights' },
+                    { id: 'design-eval-3', text: 'Generate recommendations' },
+                    { id: 'design-eval-4', text: 'Create improved designs' }
+                ]},
+                { name: 'Disseminate', plos: [
+                    { id: 'design-dissem-0', text: 'Create design portfolio' },
+                    { id: 'design-dissem-1', text: 'Generate documentation' },
+                    { id: 'design-dissem-2', text: 'Design presentations' },
+                    { id: 'design-dissem-3', text: 'Present research posters' }
+                ]},
+                { name: 'Collaborate', plos: [
+                    { id: 'design-collab-0', text: 'Work in peer teams' },
+                    { id: 'design-collab-1', text: 'Understand project roles' },
+                    { id: 'design-collab-2', text: 'Judge contributions' }
+                ]}
+            ]
+        }
+    ];
+
+    container.innerHTML = pillars.map(pillar => `
+        <div class="full-pillar-card">
+            <div class="full-pillar-card-header" style="background:${pillar.color}18; border-bottom:2px solid ${pillar.color}55;">
+                <span class="cat-dot" style="background:${pillar.color};"></span>
+                <span style="color:${pillar.color}; font-size:13px; font-weight:700;">${pillar.name}</span>
+            </div>
+            <div class="full-pillar-card-body">
+                ${pillar.categories.map(cat => `
+                    <div class="full-cat-sub">
+                        <div class="full-cat-sub-label">${cat.name}</div>
+                        ${cat.plos.map(p => `
+                            <div class="full-plo-item">
+                                <span class="full-plo-badge" style="background:${pillar.color};">${p.id}</span>
+                                <span class="full-plo-text">${p.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ── VIEW SWITCHING ──
+function setView(view) {
+    document.querySelectorAll('.view-tab').forEach((t, i) => {
+        const views = ['compare', 'v2023', 'v2025', 'crosswalk'];
+        t.classList.toggle('active', views[i] === view);
+    });
+    document.getElementById('compare-view').style.display = view === 'compare' ? 'block' : 'none';
+    document.getElementById('v2023-view').style.display = view === 'v2023' ? 'block' : 'none';
+    document.getElementById('v2025-view').style.display = view === 'v2025' ? 'block' : 'none';
+    document.getElementById('crosswalk-view').style.display = view === 'crosswalk' ? 'block' : 'none';
+}
+
+// ── INIT ──
+render2025Column();
+render2025Detail();
+render2023Detail();
+</script>
+</body>
+</html>

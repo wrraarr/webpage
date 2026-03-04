@@ -10,15 +10,9 @@
         :root {
             --ink: #1a1612;
             --cream: #f5f0e8;
-            --warm: #e8dcc8;
             --rust: #c4541a;
             --amber: #d97706;
-            --forest: #2d5a27;
-            --slate: #64748b;
             --border: rgba(245,240,232,0.1);
-            --comp-color: #d97706;
-            --socio-color: #4a9e3f;
-            --design-color: #3b82f6;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* ── Nav bar ── */
+        /* ── Nav ── */
         .page-nav {
             display: flex;
             align-items: center;
@@ -88,7 +82,6 @@
             display: flex;
             max-width: 1120px;
             margin: 0 auto;
-            padding: 0;
             min-height: calc(100vh - 130px);
         }
 
@@ -159,7 +152,6 @@
 
         .course-list { flex: 1; overflow-y: auto; padding: 8px 0; }
 
-        .level-group { }
         .level-label {
             font-family: 'Space Mono', monospace;
             font-size: 10px;
@@ -175,7 +167,6 @@
             padding: 8px 16px;
             cursor: pointer;
             transition: background 0.15s;
-            border-radius: 0;
         }
         .course-item:hover { background: rgba(245,240,232,0.04); }
         .course-item.selected { background: rgba(217,119,6,0.08); }
@@ -242,21 +233,12 @@
             border: 1px solid;
             transition: all 0.15s;
         }
-        .btn-primary {
-            background: var(--amber);
-            border-color: var(--amber);
-            color: var(--ink);
-        }
+        .btn-primary { background: var(--amber); border-color: var(--amber); color: var(--ink); }
         .btn-primary:hover { background: #b45309; border-color: #b45309; }
-        .btn-secondary {
-            background: transparent;
-            border-color: rgba(245,240,232,0.15);
-            color: rgba(245,240,232,0.6);
-        }
+        .btn-secondary { background: transparent; border-color: rgba(245,240,232,0.15); color: rgba(245,240,232,0.6); }
         .btn-secondary:hover { border-color: var(--amber); color: var(--amber); }
 
         .parse-results { font-size: 12px; }
-        .parse-found { margin-bottom: 8px; }
         .parse-found-label { color: rgba(245,240,232,0.4); margin-bottom: 4px; font-size: 11px; }
         .parse-match {
             display: inline-flex;
@@ -268,19 +250,10 @@
             margin: 2px;
             font-family: 'Space Mono', monospace;
         }
-        .parse-match.hit {
-            background: rgba(74,158,63,0.2);
-            color: #4ade80;
-            border: 1px solid rgba(74,158,63,0.3);
-        }
-        .parse-match.miss {
-            background: rgba(245,240,232,0.04);
-            color: rgba(245,240,232,0.3);
-            border: 1px solid rgba(245,240,232,0.08);
-            text-decoration: line-through;
-        }
+        .parse-match.hit { background: rgba(74,158,63,0.2); color: #4ade80; border: 1px solid rgba(74,158,63,0.3); }
+        .parse-match.miss { background: rgba(245,240,232,0.04); color: rgba(245,240,232,0.3); border: 1px solid rgba(245,240,232,0.08); text-decoration: line-through; }
 
-        /* Selected summary strip */
+        /* Selected strip */
         .selected-strip {
             border-top: 1px solid var(--border);
             padding: 12px 16px;
@@ -298,227 +271,83 @@
             font-size: 10px;
             color: rgba(245,240,232,0.4);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
         }
         .clear-btn {
+            font-family: 'Space Mono', monospace;
             font-size: 10px;
             color: rgba(245,240,232,0.3);
             background: none;
             border: none;
             cursor: pointer;
-            font-family: 'Space Grotesk', sans-serif;
             transition: color 0.15s;
         }
         .clear-btn:hover { color: var(--rust); }
-        .selected-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            min-height: 22px;
-        }
+        .selected-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+        .selected-empty { font-size: 11px; color: rgba(245,240,232,0.2); }
         .selected-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 7px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            padding: 3px 8px;
             border-radius: 3px;
             background: rgba(217,119,6,0.15);
             border: 1px solid rgba(217,119,6,0.3);
-            font-size: 10px;
-            font-family: 'Space Mono', monospace;
             color: var(--amber);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
-        .selected-chip .remove-chip {
-            cursor: pointer;
-            color: rgba(217,119,6,0.5);
-            font-size: 12px;
-            line-height: 1;
-            transition: color 0.15s;
-        }
-        .selected-chip .remove-chip:hover { color: var(--rust); }
-        .selected-empty {
-            font-size: 11px;
-            color: rgba(245,240,232,0.2);
-            font-style: italic;
-        }
+        .remove-chip { cursor: pointer; opacity: 0.6; }
+        .remove-chip:hover { opacity: 1; color: var(--rust); }
 
-        /* ── Right panel ── */
+        /* ── Right: Coverage ── */
         .coverage-panel {
             flex: 1;
-            padding: 24px 28px 48px;
             overflow-y: auto;
-            min-width: 0;
+            padding: 24px 28px;
         }
-
-        /* Empty state */
         .empty-state {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 400px;
+            height: 100%;
+            min-height: 300px;
             gap: 12px;
-            opacity: 0.35;
+            color: rgba(245,240,232,0.3);
             text-align: center;
         }
-        .empty-state-icon { font-size: 48px; }
-        .empty-state h3 {
-            font-family: 'Space Mono', monospace;
-            font-size: 14px;
-            color: var(--cream);
-        }
-        .empty-state p { font-size: 13px; color: rgba(245,240,232,0.6); }
+        .empty-state-icon { font-size: 40px; }
+        .empty-state h3 { font-size: 16px; font-weight: 600; }
+        .empty-state p { font-size: 13px; line-height: 1.6; }
 
         /* Stats bar */
         .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
             gap: 12px;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .stat-card {
-            background: rgba(245,240,232,0.03);
+            background: rgba(245,240,232,0.04);
             border: 1px solid var(--border);
             border-radius: 6px;
-            padding: 14px 16px;
-            text-align: center;
+            padding: 10px 16px;
+            min-width: 80px;
         }
         .stat-value {
             font-family: 'Space Mono', monospace;
             font-size: 22px;
             font-weight: 700;
-            color: var(--amber);
+            color: var(--cream);
             line-height: 1;
-            margin-bottom: 4px;
         }
         .stat-label {
-            font-size: 11px;
-            color: rgba(245,240,232,0.4);
-        }
-
-        /* Coverage section header */
-        .coverage-section {
-            margin-bottom: 28px;
-        }
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        .section-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .section-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--cream);
-        }
-        .section-coverage {
-            margin-left: auto;
-            font-family: 'Space Mono', monospace;
-            font-size: 12px;
-            color: rgba(245,240,232,0.5);
-        }
-        .section-bar-wrap {
-            flex-basis: 120px;
-            flex-shrink: 0;
-            height: 5px;
-            background: rgba(245,240,232,0.06);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .section-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.4s ease;
-        }
-
-        /* Category rows */
-        .category-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-        .cat-label {
-            width: 120px;
-            flex-shrink: 0;
-            font-size: 11px;
-            color: rgba(245,240,232,0.45);
-            padding-top: 3px;
-            text-align: right;
-            line-height: 1.3;
-        }
-        .cat-plos {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            flex: 1;
-        }
-        .plo-cell {
-            width: 22px;
-            height: 22px;
-            border-radius: 3px;
-            background: rgba(245,240,232,0.05);
-            border: 1px solid rgba(245,240,232,0.08);
-            cursor: default;
-            transition: transform 0.1s, border-color 0.2s;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            font-family: 'Space Mono', monospace;
-            color: transparent;
-        }
-        .plo-cell.covered-1 { border-color: transparent; }
-        .plo-cell.covered-2 { border-color: transparent; }
-        .plo-cell.covered-3 { border-color: transparent; }
-        .plo-cell:hover { transform: scale(1.3); z-index: 10; }
-        .plo-cell.covered-1:hover,
-        .plo-cell.covered-2:hover,
-        .plo-cell.covered-3:hover { color: white; }
-
-        /* Tooltip */
-        .tooltip {
-            position: fixed;
-            background: #0f0d0a;
-            border: 1px solid rgba(245,240,232,0.15);
-            border-radius: 6px;
-            padding: 10px 13px;
-            font-size: 12px;
-            color: var(--cream);
-            pointer-events: none;
-            z-index: 1000;
-            max-width: 260px;
-            line-height: 1.5;
-            opacity: 0;
-            transition: opacity 0.1s;
-        }
-        .tooltip.visible { opacity: 1; }
-        .tooltip-ploname {
-            font-weight: 600;
-            color: var(--cream);
-            margin-bottom: 4px;
-        }
-        .tooltip-courses {
-            font-size: 11px;
-            color: rgba(245,240,232,0.5);
-        }
-        .tooltip-courses span {
-            display: block;
-            color: var(--amber);
-            font-family: 'Space Mono', monospace;
             font-size: 10px;
+            color: rgba(245,240,232,0.35);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .tooltip-zero { color: rgba(245,240,232,0.3); font-style: italic; }
 
         /* Legend */
         .legend {
@@ -526,57 +355,137 @@
             align-items: center;
             gap: 16px;
             margin-bottom: 20px;
-            padding: 10px 14px;
-            background: rgba(245,240,232,0.02);
-            border: 1px solid var(--border);
-            border-radius: 5px;
+            flex-wrap: wrap;
         }
         .legend-label {
             font-size: 11px;
-            color: rgba(245,240,232,0.3);
-            margin-right: 4px;
+            color: rgba(245,240,232,0.35);
+            font-family: 'Space Mono', monospace;
         }
-        .legend-item {
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(245,240,232,0.5); }
+        .legend-cell { width: 20px; height: 20px; border-radius: 3px; }
+
+        /* Coverage grid */
+        .coverage-section {
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 11px;
-            color: rgba(245,240,232,0.5);
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(245,240,232,0.03);
+            border-bottom: 1px solid var(--border);
         }
-        .legend-cell {
-            width: 14px;
-            height: 14px;
+        .section-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            flex: 1;
+        }
+        .section-bar-wrap {
+            width: 80px;
+            height: 4px;
+            background: rgba(245,240,232,0.08);
             border-radius: 2px;
+            overflow: hidden;
+        }
+        .section-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+        .section-coverage {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(245,240,232,0.4);
+            min-width: 32px;
+            text-align: right;
         }
 
-        @media (max-width: 800px) {
-            .main-layout { flex-direction: column; }
-            .selector-panel { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border); }
-            .stats-bar { grid-template-columns: repeat(2, 1fr); }
-            .tab-content { max-height: 340px; }
+        /* PLO cells row */
+        .plo-cells-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            flex-wrap: wrap;
         }
+        .plo-cell {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            background: rgba(245,240,232,0.06);
+            border: 1px solid rgba(245,240,232,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: transparent;
+            cursor: default;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .plo-cell.covered { color: rgba(0,0,0,0.7); }
+        .plo-cell .plo-index {
+            position: absolute;
+            bottom: 2px;
+            right: 3px;
+            font-size: 8px;
+            font-weight: 400;
+            opacity: 0.5;
+            color: rgba(0,0,0,0.5);
+        }
+        .plo-cell:not(.covered) .plo-index { color: rgba(245,240,232,0.2); opacity: 1; }
+
+        /* Tooltip */
+        .tooltip {
+            position: fixed;
+            background: #0e0b09;
+            border: 1px solid rgba(245,240,232,0.15);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 12px;
+            line-height: 1.5;
+            max-width: 280px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+        .tooltip.visible { opacity: 1; }
+        .tooltip-ploname { font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+        .tooltip-catname { font-size: 10px; color: rgba(245,240,232,0.35); margin-bottom: 6px; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+        .tooltip-zero { color: rgba(245,240,232,0.3); font-style: italic; }
+        .tooltip-courses { color: rgba(245,240,232,0.6); }
+        .tooltip-courses span { display: block; margin-top: 2px; color: rgba(245,240,232,0.85); }
     </style>
 </head>
 <body>
 
-<div class="page-nav">
-    <a href="index.html">← Toolkit Home</a>
+<nav class="page-nav">
+    <a href="index.html">&#8592; Toolkit Home</a>
+    <span style="color:rgba(245,240,232,0.15);">/</span>
+    <span style="font-family:'Space Mono',monospace; font-size:12px; color:rgba(245,240,232,0.6);">Student Journey</span>
     <span class="poc-badge">Proof of Concept</span>
-</div>
+</nav>
 
 <div class="hero">
-    <h1>Student Journey</h1>
-    <p>Select courses from the catalog or paste your transcript to see how your coursework maps to the Informatics Program Learning Outcomes. Hover over any PLO cell for details.</p>
+    <h1>Student PLO Coverage</h1>
+    <p>Select courses from the catalog or paste a transcript to see which Program Learning Outcomes your coursework covers — and identify gaps.</p>
 </div>
 
 <div class="main-layout">
 
-    <!-- ── Left: Course Selector ── -->
+    <!-- ── Left panel ── -->
     <div class="selector-panel">
-
         <div class="panel-tabs">
-            <button class="panel-tab active" onclick="setTab('catalog')">📚 Catalog</button>
-            <button class="panel-tab" onclick="setTab('transcript')">📄 Transcript</button>
+            <button class="panel-tab active" onclick="setTab('catalog')">Course Catalog</button>
+            <button class="panel-tab" onclick="setTab('transcript')">Transcript</button>
         </div>
 
         <!-- Catalog tab -->
@@ -590,19 +499,19 @@
         <!-- Transcript tab -->
         <div class="tab-content" id="tab-transcript">
             <div class="transcript-wrap">
-                <div style="font-size:12px; color:rgba(245,240,232,0.45); line-height:1.6;">
-                    Paste your unofficial transcript below. The parser will extract course codes and match them against the course database.
+                <div style="font-size:12px; color:rgba(245,240,232,0.5); line-height:1.5;">
+                    Paste any unofficial transcript or course list. We'll match course codes (e.g. INFO-I 101, I 211) against the catalog.
                 </div>
-                <textarea class="transcript-area" id="transcript-input" placeholder="Paste transcript text here…"></textarea>
+                <textarea class="transcript-area" id="transcript-input" placeholder="Paste transcript here…"></textarea>
                 <div class="btn-row">
-                    <button class="btn btn-primary" onclick="parseTranscript()">Parse</button>
+                    <button class="btn btn-primary" onclick="parseTranscript()">Parse Transcript</button>
                     <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
                 </div>
                 <div id="parse-results" class="parse-results"></div>
             </div>
         </div>
 
-        <!-- Selected courses strip -->
+        <!-- Selected strip -->
         <div class="selected-strip">
             <div class="selected-strip-header">
                 <span class="selected-strip-label">Selected (<span id="sel-count">0</span>)</span>
@@ -640,124 +549,96 @@
 
 <script>
 // ═══════════════════════════════════════════════
-// PLO DATA
+// PLO DATA — Official 8-Category Framework
 // ═══════════════════════════════════════════════
-const pillars = [
-    {
-        id: 'comp', name: 'Computational Thinking', color: '#d97706',
-        categories: [
-            { id: 'comp-reason', name: 'Reason Logically', plos: [
-                'Translate arguments into formal language',
-                'Manipulate mathematical objects',
-                'Recognize equivalence between structures',
-                'Decompose problems into simpler structures',
-                'Apply data-driven approaches'
-            ]},
-            { id: 'comp-data', name: 'Curate Data', plos: [
-                'Apply visual methods for complex structures',
-                'Recognize and use basic data structures',
-                'Construct data models of systems',
-                'Evaluate data quality',
-                'Convert data into knowledge',
-                'Manage data securely'
-            ]},
-            { id: 'comp-algo', name: 'Apply Algorithms', plos: [
-                'Translate strategies into algorithms',
-                'Apply graph theory to solve problems',
-                'Integrate algorithms into complex ones',
-                'Research new problem-solving strategies',
-                'Address security concerns'
-            ]},
-            { id: 'comp-impl', name: 'Effectively Implement', plos: [
-                'Apply basic programming structures',
-                'Translate algorithms into code',
-                'Construct distributed systems',
-                'Research new software tools',
-                'Implement security solutions',
-                'Evaluate solution effectiveness'
-            ]}
-        ]
+const PLO_CATEGORIES = [
+    { id: 'knowledge', name: 'Core Knowledge', color: '#6d28d9',
+      plos: [
+        'Information systems architecture and development',
+        'Data structures, algorithms, and databases',
+        'Human-computer interaction and user experience design',
+        'Sociotechnical systems analysis',
+        'Ethics in technology design and deployment',
+        'Information policy, privacy, and security'
+      ]
     },
-    {
-        id: 'socio', name: 'Sociotechnical Thinking', color: '#4a9e3f',
-        categories: [
-            { id: 'socio-ethics', name: 'Ethical Sensibility', plos: [
-                'Formulate and articulate ideas',
-                'Recognize assumptions and biases',
-                'Weigh connections between actors',
-                'Consider diversity and responsibility',
-                'Contribute to human well-being'
-            ]},
-            { id: 'socio-analyze', name: 'Analyze Solutions', plos: [
-                'Identify stakeholders',
-                'Identify values at stake',
-                'Discuss diverse perspectives',
-                'Explain technical and social processes',
-                'Assess technological affordances',
-                'Evaluate power dynamics'
-            ]},
-            { id: 'socio-create', name: 'Create Solutions', plos: [
-                'Engage imagination for possibilities',
-                'Collaborate with diverse teams',
-                'Propose harm-reducing solutions',
-                'Communicate with stakeholders',
-                'Make values-based decisions',
-                'Assess policy and governance'
-            ]}
-        ]
+    { id: 'technical', name: 'Technical Practice', color: '#c2410c',
+      plos: [
+        'Multiple programming languages and paradigms',
+        'Modern development frameworks and APIs',
+        'Version control and collaborative development tools',
+        'Prototyping and design tools (low- to high-fidelity)',
+        'Database design and query languages',
+        'Cloud platforms and deployment pipelines',
+        'Accessibility standards (WCAG) and responsive design'
+      ]
     },
-    {
-        id: 'design', name: 'Design Thinking', color: '#3b82f6',
-        categories: [
-            { id: 'design-research', name: 'Research', plos: [
-                'Classify HCI research methods',
-                'Execute ethical research',
-                'Deconstruct and reframe problems',
-                'Identify design opportunities',
-                'Use design thinking process',
-                'Translate research to prototypes'
-            ]},
-            { id: 'design-design', name: 'Design', plos: [
-                'Select appropriate methods',
-                'Design with HCI techniques',
-                'Generate user personas',
-                'Develop proof-of-concept',
-                'Produce interactive prototypes'
-            ]},
-            { id: 'design-eval', name: 'Evaluate', plos: [
-                'Evaluate with feedback',
-                'Critique designs',
-                'Summarize research insights',
-                'Generate recommendations',
-                'Create improved designs'
-            ]},
-            { id: 'design-dissem', name: 'Disseminate', plos: [
-                'Create design portfolio',
-                'Generate documentation',
-                'Design presentations',
-                'Present research posters'
-            ]},
-            { id: 'design-collab', name: 'Collaborate', plos: [
-                'Work in peer teams',
-                'Understand project roles',
-                'Judge contributions'
-            ]}
-        ]
+    { id: 'data', name: 'Data & Analysis', color: '#0e7490',
+      plos: [
+        'Applying statistical methods and computational analysis',
+        'Conducting qualitative research (interviews, observations, usability testing)',
+        'Evaluating information quality, bias, and limitations',
+        'Creating data visualizations appropriate to audience and context',
+        'Using analytical tools (R, Python, SQL, Tableau, etc.)'
+      ]
+    },
+    { id: 'problem', name: 'Problem Solving', color: '#15803d',
+      plos: [
+        'Address real-world needs through human-centered design',
+        'Consider technical feasibility, social impact, and sustainability',
+        'Balance stakeholder requirements and constraints',
+        'Iterate based on testing, feedback, and evaluation',
+        'Scale solutions appropriately to context'
+      ]
+    },
+    { id: 'communication', name: 'Communication', color: '#b45309',
+      plos: [
+        'Written documentation (technical specs, user guides, reports)',
+        'Oral presentations to technical and non-technical audiences',
+        'Visual communication (wireframes, diagrams, posters, demos)',
+        'Adaptation to diverse audiences, contexts, and cultural perspectives'
+      ]
+    },
+    { id: 'collaboration', name: 'Collaboration', color: '#be185d',
+      plos: [
+        'Coordinating work using project management tools and methodologies',
+        'Negotiating roles, responsibilities, and decision-making processes',
+        'Integrating diverse perspectives and expertise',
+        'Giving and receiving constructive feedback',
+        'Resolving conflicts productively'
+      ]
+    },
+    { id: 'ethics', name: 'Ethics & Responsibility', color: '#991b1b',
+      plos: [
+        'Privacy, surveillance, and data protection',
+        'Algorithmic bias, fairness, and transparency',
+        'Accessibility and inclusive design',
+        'Environmental sustainability',
+        'Power dynamics and equity in technology access and design',
+        'Professional codes of conduct'
+      ]
+    },
+    { id: 'lifelong', name: 'Lifelong Learning', color: '#1e40af',
+      plos: [
+        'Learning new programming languages, tools, and frameworks independently',
+        'Evaluating emerging technologies critically',
+        'Engaging with professional communities and resources',
+        'Reflecting on own practice and growth',
+        'Recognizing limits of knowledge and seeking appropriate expertise'
+      ]
     }
 ];
 
-// Build flat PLO lookup
+// Build flat PLO lookup: id → { text, category, color }
 const ploLookup = {};
-pillars.forEach(p => {
-    p.categories.forEach(cat => {
-        cat.plos.forEach((text, i) => {
-            ploLookup[`${cat.id}-${i}`] = { text, category: cat.name, pillar: p.name, color: p.color };
-        });
+PLO_CATEGORIES.forEach(cat => {
+    cat.plos.forEach((text, i) => {
+        ploLookup[`${cat.id}-${i}`] = { text, category: cat.name, color: cat.color };
     });
 });
 
 // ═══════════════════════════════════════════════
-// COURSE DATABASE (mock)
+// COURSE DATABASE
 // ═══════════════════════════════════════════════
 const courseDB = [
     {
@@ -765,21 +646,10 @@ const courseDB = [
         credits: 3, level: 100,
         description: 'Foundational survey of informatics covering technology, society, and data.',
         clos: [
-            { text: 'Describe the social impacts of information technology', ploMappings: ['socio-ethics-0','socio-analyze-3','socio-analyze-4'] },
-            { text: 'Identify stakeholders in information systems', ploMappings: ['socio-analyze-0','socio-analyze-1'] },
-            { text: 'Apply basic data organization principles', ploMappings: ['comp-data-1','comp-data-4'] },
-            { text: 'Recognize ethical considerations in technology use', ploMappings: ['socio-ethics-1','socio-ethics-3','socio-ethics-4'] }
-        ]
-    },
-    {
-        id: 'I201', courseNumber: 'INFO-I 201', courseTitle: 'Social Informatics',
-        credits: 3, level: 200,
-        description: 'Examines relationships between information technology and social systems.',
-        clos: [
-            { text: 'Analyze power dynamics in sociotechnical systems', ploMappings: ['socio-analyze-5','socio-ethics-2'] },
-            { text: 'Discuss diverse perspectives on technology adoption', ploMappings: ['socio-analyze-2','socio-ethics-1','socio-ethics-3'] },
-            { text: 'Evaluate policy implications of information systems', ploMappings: ['socio-create-5','socio-analyze-4'] },
-            { text: 'Formulate arguments about technology\'s role in society', ploMappings: ['socio-ethics-0','socio-ethics-4'] }
+            { text: 'Describe the social and technical dimensions of information systems', ploMappings: ['knowledge-0','knowledge-3'] },
+            { text: 'Identify ethical considerations in technology design and deployment', ploMappings: ['knowledge-4','ethics-0','ethics-1'] },
+            { text: 'Recognize stakeholder perspectives in sociotechnical contexts', ploMappings: ['knowledge-3','problem-2'] },
+            { text: 'Apply basic data organization and information management principles', ploMappings: ['knowledge-1','data-2'] }
         ]
     },
     {
@@ -787,10 +657,10 @@ const courseDB = [
         credits: 4, level: 200,
         description: 'Fundamentals of programming using Python with emphasis on problem-solving.',
         clos: [
-            { text: 'Apply basic programming structures to solve problems', ploMappings: ['comp-impl-0','comp-impl-1'] },
-            { text: 'Decompose problems into algorithmic solutions', ploMappings: ['comp-reason-3','comp-algo-0'] },
-            { text: 'Translate algorithms into working code', ploMappings: ['comp-impl-1','comp-algo-0'] },
-            { text: 'Evaluate the effectiveness of programming solutions', ploMappings: ['comp-impl-5','comp-algo-3'] }
+            { text: 'Apply basic programming structures to solve real-world problems', ploMappings: ['technical-0','problem-0'] },
+            { text: 'Decompose problems into algorithmic solutions', ploMappings: ['problem-0','problem-3'] },
+            { text: 'Use version control for managing code projects', ploMappings: ['technical-2'] },
+            { text: 'Evaluate the effectiveness of programming solutions', ploMappings: ['problem-3','data-2'] }
         ]
     },
     {
@@ -798,10 +668,21 @@ const courseDB = [
         credits: 3, level: 200,
         description: 'Technical foundations of networked information systems, databases, and storage.',
         clos: [
-            { text: 'Construct data models for information systems', ploMappings: ['comp-data-2','comp-data-1'] },
-            { text: 'Recognize and use appropriate data structures', ploMappings: ['comp-data-1','comp-data-3'] },
-            { text: 'Manage data with attention to security and quality', ploMappings: ['comp-data-5','comp-data-3','comp-algo-4'] },
-            { text: 'Construct distributed information systems', ploMappings: ['comp-impl-2','comp-impl-4'] }
+            { text: 'Design data models for information systems', ploMappings: ['technical-4','knowledge-0'] },
+            { text: 'Implement database queries and data retrieval operations', ploMappings: ['technical-4','technical-0'] },
+            { text: 'Manage data with attention to security and integrity', ploMappings: ['knowledge-5','ethics-0'] },
+            { text: 'Deploy and configure networked system components', ploMappings: ['technical-5','knowledge-0'] }
+        ]
+    },
+    {
+        id: 'I270', courseNumber: 'INFO-I 270', courseTitle: 'Data Analysis and Visualization',
+        credits: 3, level: 200,
+        description: 'Introduces quantitative and visual methods for analyzing and presenting data.',
+        clos: [
+            { text: 'Apply statistical methods to analyze real-world datasets', ploMappings: ['data-0','data-4'] },
+            { text: 'Evaluate data quality, bias, and limitations', ploMappings: ['data-2','ethics-1'] },
+            { text: 'Create visualizations appropriate to audience and context', ploMappings: ['data-3','communication-2'] },
+            { text: 'Use analytical tools (Python, R, or Tableau) to process data', ploMappings: ['data-4','technical-0'] }
         ]
     },
     {
@@ -809,10 +690,10 @@ const courseDB = [
         credits: 3, level: 300,
         description: 'Methods and ethics of research in the field of informatics.',
         clos: [
-            { text: 'Classify and apply informatics research methods', ploMappings: ['design-research-0','design-research-1'] },
-            { text: 'Deconstruct and reframe research problems', ploMappings: ['design-research-2','design-research-3'] },
-            { text: 'Execute research following ethical guidelines', ploMappings: ['design-research-1','socio-ethics-3'] },
-            { text: 'Summarize and communicate research findings', ploMappings: ['design-eval-2','design-dissem-1','socio-ethics-0'] }
+            { text: 'Conduct qualitative research including interviews and observations', ploMappings: ['data-1','knowledge-3'] },
+            { text: 'Execute research following ethical guidelines', ploMappings: ['ethics-5','ethics-2'] },
+            { text: 'Evaluate information quality, bias, and limitations of sources', ploMappings: ['data-2','lifelong-1'] },
+            { text: 'Communicate research findings through written reports and presentations', ploMappings: ['communication-0','communication-1'] }
         ]
     },
     {
@@ -820,22 +701,22 @@ const courseDB = [
         credits: 3, level: 300,
         description: 'Human-centered design methods, prototyping, and user research.',
         clos: [
-            { text: 'Use design thinking process to address user needs', ploMappings: ['design-research-4','design-research-2'] },
-            { text: 'Generate user personas and map user journeys', ploMappings: ['design-design-2','design-research-3'] },
-            { text: 'Develop and test proof-of-concept prototypes', ploMappings: ['design-design-3','design-design-4'] },
-            { text: 'Select appropriate design methods for context', ploMappings: ['design-design-0','design-design-1'] },
-            { text: 'Translate research insights into design directions', ploMappings: ['design-research-5','design-eval-3'] }
+            { text: 'Address user needs through human-centered design process', ploMappings: ['problem-0','knowledge-2'] },
+            { text: 'Generate user personas and conduct usability testing', ploMappings: ['data-1','problem-3'] },
+            { text: 'Develop and test prototypes (low- to high-fidelity)', ploMappings: ['technical-3','problem-3'] },
+            { text: 'Select and apply appropriate design methods for context', ploMappings: ['problem-0','problem-2'] },
+            { text: 'Communicate design decisions visually and orally', ploMappings: ['communication-2','communication-1'] }
         ]
     },
     {
         id: 'I340', courseNumber: 'INFO-I 340', courseTitle: 'Technology, Society and Culture',
         credits: 3, level: 300,
-        description: 'Critical examination of technology\'s cultural, political, and economic dimensions.',
+        description: "Critical examination of technology's cultural, political, and economic dimensions.",
         clos: [
-            { text: 'Weigh connections between technology, actors, and institutions', ploMappings: ['socio-ethics-2','socio-analyze-3'] },
-            { text: 'Engage imagination to envision sociotechnical possibilities', ploMappings: ['socio-create-0','socio-ethics-0'] },
-            { text: 'Propose harm-reducing approaches to technology design', ploMappings: ['socio-create-2','socio-ethics-4','socio-ethics-3'] },
-            { text: 'Make values-based decisions about technology use', ploMappings: ['socio-create-4','socio-ethics-1'] }
+            { text: 'Analyze power dynamics and equity in technology access and design', ploMappings: ['ethics-4','knowledge-3'] },
+            { text: 'Evaluate algorithmic bias and fairness in information systems', ploMappings: ['ethics-1','data-2'] },
+            { text: 'Propose harm-reducing approaches to technology deployment', ploMappings: ['ethics-4','problem-1'] },
+            { text: 'Engage with diverse cultural perspectives on technology', ploMappings: ['communication-3','ethics-4'] }
         ]
     },
     {
@@ -843,10 +724,10 @@ const courseDB = [
         credits: 3, level: 300,
         description: 'Principles and practices of information security for networked environments.',
         clos: [
-            { text: 'Address security concerns in algorithm design', ploMappings: ['comp-algo-4','comp-reason-0'] },
-            { text: 'Implement security solutions for networked systems', ploMappings: ['comp-impl-4','comp-impl-2'] },
-            { text: 'Evaluate the effectiveness of security measures', ploMappings: ['comp-impl-5','comp-data-5'] },
-            { text: 'Research new security tools and strategies', ploMappings: ['comp-impl-3','comp-algo-3'] }
+            { text: 'Analyze security vulnerabilities in networked systems', ploMappings: ['knowledge-5','technical-0'] },
+            { text: 'Implement security solutions for information infrastructure', ploMappings: ['technical-5','knowledge-5'] },
+            { text: 'Evaluate privacy and data protection practices', ploMappings: ['ethics-0','knowledge-5'] },
+            { text: 'Research and assess emerging security tools and strategies', ploMappings: ['lifelong-0','lifelong-1'] }
         ]
     },
     {
@@ -854,11 +735,10 @@ const courseDB = [
         credits: 3, level: 400,
         description: 'Advanced algorithmic techniques with applications to informatics problems.',
         clos: [
-            { text: 'Translate complex strategies into efficient algorithms', ploMappings: ['comp-algo-0','comp-reason-0'] },
-            { text: 'Apply graph theory and data structures to real problems', ploMappings: ['comp-algo-1','comp-data-1'] },
-            { text: 'Integrate algorithms into complex systems', ploMappings: ['comp-algo-2','comp-impl-2'] },
-            { text: 'Research and evaluate emerging algorithmic approaches', ploMappings: ['comp-algo-3','comp-impl-5'] },
-            { text: 'Apply data-driven and mathematical reasoning', ploMappings: ['comp-reason-4','comp-reason-1'] }
+            { text: 'Implement complex algorithms using multiple programming paradigms', ploMappings: ['technical-0','knowledge-1'] },
+            { text: 'Apply data structures to optimize information retrieval', ploMappings: ['knowledge-1','technical-4'] },
+            { text: 'Scale algorithmic solutions to organizational contexts', ploMappings: ['problem-4','problem-1'] },
+            { text: 'Research and evaluate emerging computational approaches', ploMappings: ['lifelong-1','lifelong-0'] }
         ]
     },
     {
@@ -866,10 +746,10 @@ const courseDB = [
         credits: 3, level: 400,
         description: 'Foundations of HCI theory and practice, evaluation methods, and design.',
         clos: [
-            { text: 'Classify and critique HCI research methods', ploMappings: ['design-research-0','design-eval-1'] },
-            { text: 'Evaluate designs through user feedback and testing', ploMappings: ['design-eval-0','design-eval-2'] },
-            { text: 'Generate actionable recommendations from evaluations', ploMappings: ['design-eval-3','design-eval-4'] },
-            { text: 'Design interfaces applying HCI techniques', ploMappings: ['design-design-1','design-design-0'] }
+            { text: 'Apply HCI principles and design guidelines', ploMappings: ['knowledge-2','technical-6'] },
+            { text: 'Conduct usability evaluations and user studies', ploMappings: ['data-1','problem-3'] },
+            { text: 'Generate evidence-based design recommendations', ploMappings: ['problem-0','communication-0'] },
+            { text: 'Ensure accessibility in interface design (WCAG)', ploMappings: ['technical-6','ethics-2'] }
         ]
     },
     {
@@ -877,10 +757,10 @@ const courseDB = [
         credits: 3, level: 400,
         description: 'Principles and techniques for visual representation of complex data.',
         clos: [
-            { text: 'Apply visual methods to represent complex data structures', ploMappings: ['comp-data-0','comp-data-4'] },
-            { text: 'Convert raw data into actionable knowledge', ploMappings: ['comp-data-4','comp-reason-4'] },
-            { text: 'Evaluate data quality and its visualization impact', ploMappings: ['comp-data-3','comp-data-2'] },
-            { text: 'Recognize equivalence and patterns in data', ploMappings: ['comp-reason-2','comp-data-1'] }
+            { text: 'Apply visual methods to represent complex datasets effectively', ploMappings: ['data-3','communication-2'] },
+            { text: 'Use analytical tools to process and prepare data for visualization', ploMappings: ['data-4','technical-0'] },
+            { text: 'Evaluate visualization designs for accuracy, clarity, and accessibility', ploMappings: ['data-2','ethics-2'] },
+            { text: 'Adapt visualizations for diverse audiences and communication contexts', ploMappings: ['communication-3','communication-2'] }
         ]
     },
     {
@@ -888,11 +768,11 @@ const courseDB = [
         credits: 3, level: 400,
         description: 'First semester of a year-long capstone project on a real-world informatics problem.',
         clos: [
-            { text: 'Collaborate with diverse teams on a multi-semester project', ploMappings: ['design-collab-0','design-collab-1','socio-create-1'] },
-            { text: 'Communicate with stakeholders and gather requirements', ploMappings: ['socio-create-3','socio-analyze-0'] },
-            { text: 'Identify design opportunities from user research', ploMappings: ['design-research-3','design-research-4'] },
-            { text: 'Produce interactive prototypes for stakeholder feedback', ploMappings: ['design-design-4','design-design-3'] },
-            { text: 'Create project documentation and design portfolio', ploMappings: ['design-dissem-0','design-dissem-1'] }
+            { text: 'Coordinate project work using project management tools and workflows', ploMappings: ['collaboration-0','collaboration-1'] },
+            { text: 'Integrate diverse team expertise and balance stakeholder requirements', ploMappings: ['collaboration-2','problem-2'] },
+            { text: 'Apply human-centered design to address a real-world need', ploMappings: ['problem-0','problem-1'] },
+            { text: 'Develop prototypes and iterate based on user feedback', ploMappings: ['technical-3','problem-3'] },
+            { text: 'Produce project documentation and present progress', ploMappings: ['communication-0','communication-1'] }
         ]
     },
     {
@@ -900,10 +780,10 @@ const courseDB = [
         credits: 3, level: 400,
         description: 'Completion of capstone with public presentation and dissemination.',
         clos: [
-            { text: 'Present research and design work to public audiences', ploMappings: ['design-dissem-2','design-dissem-3'] },
-            { text: 'Create improved designs based on evaluation feedback', ploMappings: ['design-eval-4','design-eval-0'] },
-            { text: 'Judge and reflect on team contributions', ploMappings: ['design-collab-2','design-collab-0'] },
-            { text: 'Contribute to human well-being through responsible design', ploMappings: ['socio-ethics-4','socio-create-2','socio-create-4'] }
+            { text: 'Present completed work to public and technical audiences', ploMappings: ['communication-1','communication-2'] },
+            { text: 'Give and receive constructive feedback across team roles', ploMappings: ['collaboration-3','collaboration-4'] },
+            { text: 'Reflect on personal growth and professional practice', ploMappings: ['lifelong-3','lifelong-4'] },
+            { text: 'Assess environmental and ethical implications of the designed solution', ploMappings: ['ethics-3','ethics-4','problem-1'] }
         ]
     }
 ];
@@ -920,7 +800,7 @@ INFO-I 211   Introduction to Programming      4.0  B+
 
 ─────────────────────────────────────────────
 SPRING 2022
-INFO-I 201   Social Informatics               3.0  A-
+INFO-I 270   Data Analysis and Visualization  3.0  A-
 INFO-I 230   Information Infrastructure       3.0  B
 
 ─────────────────────────────────────────────
@@ -979,7 +859,6 @@ function renderCatalog() {
     }
     levels.forEach(lv => {
         const grp = document.createElement('div');
-        grp.className = 'level-group';
         grp.innerHTML = `<div class="level-label">${lv}-level</div>`;
         grouped[lv].forEach(c => {
             const item = document.createElement('div');
@@ -992,10 +871,7 @@ function renderCatalog() {
                 </div>
                 <div class="course-item-clo-count">${c.clos.length} CLO${c.clos.length !== 1 ? 's' : ''}</div>
             `;
-            item.addEventListener('click', (e) => {
-                if (e.target.tagName === 'INPUT') return;
-                toggleCourse(c.id);
-            });
+            item.addEventListener('click', (e) => { if (e.target.tagName === 'INPUT') return; toggleCourse(c.id); });
             item.querySelector('input').addEventListener('change', () => toggleCourse(c.id));
             grp.appendChild(item);
         });
@@ -1020,13 +896,10 @@ function loadSample() {
 
 function parseTranscript() {
     const text = document.getElementById('transcript-input').value;
-    // Match patterns: INFO-I 101, I 101, I101
     const regex = /(?:INFO-)?I[-\s]?(\d{3})/gi;
     const found = new Set();
     let m;
-    while ((m = regex.exec(text)) !== null) {
-        found.add('I' + m[1]);
-    }
+    while ((m = regex.exec(text)) !== null) found.add('I' + m[1]);
 
     const hits = [], misses = [];
     found.forEach(code => {
@@ -1034,24 +907,16 @@ function parseTranscript() {
         if (course) hits.push(course);
         else misses.push(code);
     });
-
-    // Add found courses to selection
     hits.forEach(c => selected.add(c.id));
 
-    // Render results
     const el = document.getElementById('parse-results');
     if (found.size === 0) {
         el.innerHTML = '<div style="font-size:12px;color:rgba(245,240,232,0.3);margin-top:8px;">No course codes found. Try the sample transcript.</div>';
         return;
     }
-
-    let html = `<div class="parse-found"><div class="parse-found-label">Found ${found.size} code${found.size!==1?'s':''} — ${hits.length} matched in database:</div>`;
-    hits.forEach(c => {
-        html += `<span class="parse-match hit">✓ ${c.courseNumber}</span>`;
-    });
-    misses.forEach(code => {
-        html += `<span class="parse-match miss">I ${code.replace('I','')}</span>`;
-    });
+    let html = `<div><div class="parse-found-label">Found ${found.size} code${found.size!==1?'s':''} — ${hits.length} matched:</div>`;
+    hits.forEach(c => { html += `<span class="parse-match hit">✓ ${c.courseNumber}</span>`; });
+    misses.forEach(code => { html += `<span class="parse-match miss">I ${code.replace('I','')}</span>`; });
     html += '</div>';
     el.innerHTML = html;
 
@@ -1065,8 +930,7 @@ function parseTranscript() {
 // ═══════════════════════════════════════════════
 function renderSelected() {
     const chips = document.getElementById('selected-chips');
-    const count = document.getElementById('sel-count');
-    count.textContent = selected.size;
+    document.getElementById('sel-count').textContent = selected.size;
 
     if (selected.size === 0) {
         chips.innerHTML = '<span class="selected-empty">No courses selected</span>';
@@ -1093,10 +957,8 @@ function clearAll() {
 // COVERAGE
 // ═══════════════════════════════════════════════
 function computeCoverage() {
-    // Map: ploId → Set of course IDs that cover it
     const coverage = {};
     Object.keys(ploLookup).forEach(id => coverage[id] = new Set());
-
     courseDB.filter(c => selected.has(c.id)).forEach(course => {
         course.clos.forEach(clo => {
             clo.ploMappings.forEach(ploId => {
@@ -1121,7 +983,6 @@ function renderCoverage() {
 
     const courses = courseDB.filter(c => selected.has(c.id));
     const coverage = computeCoverage();
-
     const allPloIds = Object.keys(coverage);
     const coveredCount = allPloIds.filter(id => coverage[id].size > 0).length;
     const totalClos = courses.reduce((s, c) => s + c.clos.length, 0);
@@ -1132,88 +993,88 @@ function renderCoverage() {
         <div class="stat-card"><div class="stat-value">${courses.length}</div><div class="stat-label">Courses</div></div>
         <div class="stat-card"><div class="stat-value">${totalClos}</div><div class="stat-label">CLOs</div></div>
         <div class="stat-card"><div class="stat-value">${coveredCount}<span style="font-size:13px;color:rgba(245,240,232,0.3)">/${allPloIds.length}</span></div><div class="stat-label">PLOs Covered</div></div>
-        <div class="stat-card"><div class="stat-value" style="color:${pct>=70?'#4ade80':pct>=40?'var(--amber)':'var(--rust)'}">${pct}%</div><div class="stat-label">Coverage</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:${pct>=70?'#4ade80':pct>=40?'#d97706':'#c4541a'}">${pct}%</div><div class="stat-label">Coverage</div></div>
     `;
 
-    // Legend swatches – show all 3 pillar levels
-    setLegendCell('leg1', pillars[0].color, 0.45);
-    setLegendCell('leg2', pillars[0].color, 0.70);
-    setLegendCell('leg3', pillars[0].color, 1.0);
+    // Legend — use a neutral purple
+    setLegendCell('leg1', '#7c3aed', 0.4);
+    setLegendCell('leg2', '#7c3aed', 0.7);
+    setLegendCell('leg3', '#7c3aed', 1.0);
 
-    // Pillar sections
+    // Category sections
     const grid = document.getElementById('coverage-grid');
     grid.innerHTML = '';
 
-    pillars.forEach(pillar => {
-        const pillarPlos = pillar.categories.flatMap(cat =>
-            cat.plos.map((_, i) => `${cat.id}-${i}`)
-        );
-        const pillarCovered = pillarPlos.filter(id => coverage[id] && coverage[id].size > 0).length;
-        const pillarPct = Math.round(pillarCovered / pillarPlos.length * 100);
+    PLO_CATEGORIES.forEach(cat => {
+        const catPloIds = cat.plos.map((_, i) => `${cat.id}-${i}`);
+        const catCovered = catPloIds.filter(id => coverage[id] && coverage[id].size > 0).length;
+        const catPct = Math.round(catCovered / catPloIds.length * 100);
 
         const section = document.createElement('div');
         section.className = 'coverage-section';
 
-        const barFill = `<div class="section-bar-fill" style="width:${pillarPct}%;background:${pillar.color}"></div>`;
         section.innerHTML = `
             <div class="section-header">
-                <div class="section-dot" style="background:${pillar.color}"></div>
-                <div class="section-title">${pillar.name}</div>
-                <div class="section-bar-wrap">${barFill}</div>
-                <div class="section-coverage">${pillarCovered}/${pillarPlos.length}</div>
+                <div class="section-dot" style="background:${cat.color}"></div>
+                <div class="section-title" style="color:${cat.color}">${cat.name}</div>
+                <div class="section-bar-wrap">
+                    <div class="section-bar-fill" style="width:${catPct}%;background:${cat.color}"></div>
+                </div>
+                <div class="section-coverage">${catCovered}/${catPloIds.length}</div>
             </div>
         `;
 
-        pillar.categories.forEach(cat => {
-            const row = document.createElement('div');
-            row.className = 'category-row';
-            row.innerHTML = `<div class="cat-label">${cat.name}</div>`;
+        const cellsRow = document.createElement('div');
+        cellsRow.className = 'plo-cells-row';
 
-            const cellsWrap = document.createElement('div');
-            cellsWrap.className = 'cat-plos';
+        cat.plos.forEach((ploText, i) => {
+            const ploId = `${cat.id}-${i}`;
+            const hits = coverage[ploId] ? coverage[ploId].size : 0;
+            const cell = document.createElement('div');
+            cell.className = 'plo-cell';
 
-            cat.plos.forEach((ploText, i) => {
-                const ploId = `${cat.id}-${i}`;
-                const hits = coverage[ploId] ? coverage[ploId].size : 0;
-                const cell = document.createElement('div');
-                cell.className = 'plo-cell';
+            if (hits === 1) {
+                cell.classList.add('covered');
+                cell.style.background = hexToRgba(cat.color, 0.4);
+                cell.style.borderColor = hexToRgba(cat.color, 0.6);
+                cell.textContent = '1';
+            } else if (hits === 2) {
+                cell.classList.add('covered');
+                cell.style.background = hexToRgba(cat.color, 0.7);
+                cell.style.borderColor = hexToRgba(cat.color, 0.85);
+                cell.textContent = '2';
+            } else if (hits >= 3) {
+                cell.classList.add('covered');
+                cell.style.background = cat.color;
+                cell.style.borderColor = cat.color;
+                cell.textContent = hits;
+            }
 
-                if (hits === 1) {
-                    cell.classList.add('covered-1');
-                    cell.style.background = hexToRgba(pillar.color, 0.45);
-                    cell.style.borderColor = hexToRgba(pillar.color, 0.6);
-                    cell.textContent = '1';
-                } else if (hits === 2) {
-                    cell.classList.add('covered-2');
-                    cell.style.background = hexToRgba(pillar.color, 0.70);
-                    cell.style.borderColor = hexToRgba(pillar.color, 0.8);
-                    cell.textContent = '2';
-                } else if (hits >= 3) {
-                    cell.classList.add('covered-3');
-                    cell.style.background = pillar.color;
-                    cell.style.borderColor = pillar.color;
-                    cell.textContent = hits;
-                }
+            // Index label for uncovered cells
+            const idx = document.createElement('span');
+            idx.className = 'plo-index';
+            idx.textContent = i;
+            cell.appendChild(idx);
 
-                // Tooltip
-                cell.addEventListener('mouseenter', (e) => showTooltip(e, ploId, ploText, coverage[ploId], courses));
-                cell.addEventListener('mousemove', (e) => moveTooltip(e));
-                cell.addEventListener('mouseleave', hideTooltip);
+            cell.addEventListener('mouseenter', (e) => showTooltip(e, ploId, ploText, cat.name, coverage[ploId], courses));
+            cell.addEventListener('mousemove', moveTooltip);
+            cell.addEventListener('mouseleave', hideTooltip);
 
-                cellsWrap.appendChild(cell);
-            });
-
-            row.appendChild(cellsWrap);
-            section.appendChild(row);
+            cellsRow.appendChild(cell);
         });
 
+        section.appendChild(cellsRow);
         grid.appendChild(section);
     });
 }
 
 function setLegendCell(id, color, alpha) {
     const el = document.getElementById(id);
-    if (el) el.style.background = hexToRgba(color, alpha);
+    if (el) {
+        el.style.background = hexToRgba(color, alpha);
+        el.style.border = `1px solid ${hexToRgba(color, alpha + 0.2)}`;
+        el.style.borderRadius = '3px';
+    }
 }
 
 function hexToRgba(hex, alpha) {
@@ -1228,38 +1089,31 @@ function hexToRgba(hex, alpha) {
 // ═══════════════════════════════════════════════
 const tooltip = document.getElementById('tooltip');
 
-function showTooltip(e, ploId, ploText, coverSet, courses) {
-    const hits = coverSet.size;
-    let html = `<div class="tooltip-ploname">${ploText}</div>`;
-
+function showTooltip(e, ploId, ploText, catName, coverSet, courses) {
+    const hits = coverSet ? coverSet.size : 0;
+    let html = `<div class="tooltip-catname">${catName} · ${ploId}</div>`;
+    html += `<div class="tooltip-ploname">${ploText}</div>`;
     if (hits === 0) {
         html += `<div class="tooltip-zero">Not covered by selected courses</div>`;
     } else {
         const covCourses = courses.filter(c => coverSet.has(c.id));
         html += `<div class="tooltip-courses">Covered by ${hits} course${hits!==1?'s':''}:`;
-        covCourses.forEach(c => {
-            html += `<span>${c.courseNumber} — ${c.courseTitle}</span>`;
-        });
+        covCourses.forEach(c => { html += `<span>${c.courseNumber} — ${c.courseTitle}</span>`; });
         html += `</div>`;
     }
-
     tooltip.innerHTML = html;
     tooltip.classList.add('visible');
     moveTooltip(e);
 }
 
 function moveTooltip(e) {
-    const x = e.clientX + 14;
-    const y = e.clientY - 10;
-    const tw = tooltip.offsetWidth;
-    const th = tooltip.offsetHeight;
+    const x = e.clientX + 14, y = e.clientY - 10;
+    const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
     tooltip.style.left = (x + tw > window.innerWidth - 8 ? x - tw - 28 : x) + 'px';
     tooltip.style.top  = (y + th > window.innerHeight - 8 ? y - th : y) + 'px';
 }
 
-function hideTooltip() {
-    tooltip.classList.remove('visible');
-}
+function hideTooltip() { tooltip.classList.remove('visible'); }
 
 // ═══════════════════════════════════════════════
 // INIT
