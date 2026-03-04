@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2023 PLOs — Informatics Programmatic Learning Outcomes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink:    #1a1612;
+            --cream:  #f5f0e8;
+            --warm:   #e8dcc8;
+            --rust:   #c4541a;
+            --amber:  #d97706;
+            --border: rgba(245,240,232,0.1);
+            --muted:  rgba(245,240,232,0.5);
+            --dim:    rgba(245,240,232,0.25);
+
+            --knowledge:   #6d28d9;
+            --technical:   #c2410c;
+            --data:        #0e7490;
+            --problem:     #15803d;
+            --comm:        #b45309;
+            --collab:      #be185d;
+            --ethics:      #991b1b;
+            --lifelong:    #1e40af;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--ink);
+            color: var(--cream);
+            min-height: 100vh;
+            line-height: 1.65;
+        }
+
+        /* ── Nav ── */
+        .page-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--ink);
+            z-index: 50;
+        }
+        .page-nav a {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .page-nav a:hover { color: var(--amber); }
+        .nav-sep { color: var(--dim); font-size: 12px; }
+
+        /* ── Header ── */
+        .doc-header {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 56px 32px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+        .doc-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 14px;
+        }
+        .doc-title {
+            font-size: clamp(24px, 4vw, 34px);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .doc-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        /* ── Fall 2025 notice ── */
+        .notice-bar {
+            max-width: 780px;
+            margin: 28px auto 0;
+            padding: 0 32px;
+        }
+        .notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: rgba(217,119,6,0.08);
+            border: 1px solid rgba(217,119,6,0.25);
+            border-left: 3px solid var(--amber);
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-size: 13.5px;
+            color: rgba(245,240,232,0.8);
+        }
+        .notice-icon {
+            font-size: 15px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── Main content ── */
+        .doc-body {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 48px 32px 80px;
+        }
+
+        /* Program Goal */
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .program-goal {
+            margin-bottom: 48px;
+        }
+        .program-goal h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .program-goal p {
+            font-size: 15px;
+            color: rgba(245,240,232,0.85);
+            margin-bottom: 20px;
+        }
+        .thinking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin: 24px 0;
+        }
+        .thinking-card {
+            background: rgba(245,240,232,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .thinking-card h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--amber);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .thinking-card p {
+            font-size: 13px;
+            color: rgba(245,240,232,0.72);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+        .footnote {
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            margin-top: 8px;
+        }
+
+        /* PLO section */
+        .plos-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+        .plo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .plo-item {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .plo-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px;
+        }
+        .plo-swatch {
+            width: 4px;
+            border-radius: 2px;
+            align-self: stretch;
+            flex-shrink: 0;
+            min-height: 32px;
+        }
+        .plo-name {
+            font-size: 16px;
+            font-weight: 700;
+            flex: 1;
+        }
+        .plo-body {
+            padding: 0 20px 20px 38px;
+        }
+        .plo-body p {
+            font-size: 14.5px;
+            color: rgba(245,240,232,0.8);
+            line-height: 1.7;
+        }
+        .plo-extended-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: rgba(217,119,6,0.7);
+            border: 1px solid rgba(217,119,6,0.2);
+            border-radius: 3px;
+            padding: 2px 7px;
+            margin-top: 10px;
+            white-space: nowrap;
+        }
+
+        /* Knowledge */
+        .plo-item.knowledge .plo-swatch  { background: var(--knowledge); }
+        .plo-item.knowledge .plo-name    { color: #a78bfa; }
+        /* Technical */
+        .plo-item.technical .plo-swatch  { background: var(--technical); }
+        .plo-item.technical .plo-name    { color: #fb923c; }
+        /* Data */
+        .plo-item.data .plo-swatch       { background: var(--data); }
+        .plo-item.data .plo-name         { color: #38bdf8; }
+        /* Problem */
+        .plo-item.problem .plo-swatch    { background: var(--problem); }
+        .plo-item.problem .plo-name      { color: #4ade80; }
+        /* Communication */
+        .plo-item.comm .plo-swatch       { background: var(--comm); }
+        .plo-item.comm .plo-name         { color: #fbbf24; }
+        /* Collaboration */
+        .plo-item.collab .plo-swatch     { background: var(--collab); }
+        .plo-item.collab .plo-name       { color: #f472b6; }
+        /* Ethics */
+        .plo-item.ethics .plo-swatch     { background: var(--ethics); }
+        .plo-item.ethics .plo-name       { color: #fca5a5; }
+        /* Lifelong */
+        .plo-item.lifelong .plo-swatch   { background: var(--lifelong); }
+        .plo-item.lifelong .plo-name     { color: #93c5fd; }
+
+        /* Print */
+        @media print {
+            .page-nav, .notice-bar { display: none; }
+            body { background: white; color: black; }
+            .plo-body p { color: #333; }
+        }
+
+        @media (max-width: 600px) {
+            .doc-header, .doc-body, .notice-bar { padding-left: 20px; padding-right: 20px; }
+            .thinking-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="page-nav">
+    <a href="index.html">&#8592; Toolkit Home</a>
+    <span class="nav-sep">/</span>
+    <span style="color: rgba(245,240,232,0.35); font-family: 'Space Mono', monospace; font-size: 12px;">2023 PLOs</span>
+</nav>
+
+<div class="doc-header">
+    <div class="doc-eyebrow">Official Reference Document</div>
+    <h1 class="doc-title">Informatics Undergraduate<br>Programmatic Learning Outcomes</h1>
+    <div class="doc-meta">Draft April 7, 2023</div>
+    <div class="doc-meta">Informatics Undergraduate Curriculum Committee</div>
+</div>
+
+<div class="notice-bar">
+    <div class="notice">
+        <span class="notice-icon">📌</span>
+        <span>These are the <strong>2023 faculty-approved PLOs</strong>, reproduced here with their original language and structure. Each of the eight categories was extended with additional sub-outcomes in <strong>Fall 2025</strong> — those extended versions are used in the CLO mapping tools.</span>
+    </div>
+</div>
+
+<div class="doc-body">
+
+    <!-- Program Goal -->
+    <div class="program-goal">
+        <div class="section-label">Program Goal</div>
+        <p>Upon completion of the Informatics BS degree students will be able to evaluate and create solutions to problems using a combination of sociotechnical, computational, and design thinking.</p>
+
+        <div class="thinking-grid">
+            <div class="thinking-card">
+                <h3>Computational Thinking</h3>
+                <p>A problem-solving methodology that involves breaking down complex problems into smaller, more manageable parts and using mathematical and algorithmic thinking to develop solutions.</p>
+            </div>
+            <div class="thinking-card">
+                <h3>Sociotechnical Thinking</h3>
+                <p>A way of understanding, designing, managing, and evaluating systems that considers both the social and technical aspects of the system, as well as the interdependence of these aspects.</p>
+            </div>
+            <div class="thinking-card">
+                <h3>Design Thinking</h3>
+                <p>A human-centered approach to problem-solving that emphasizes empathy, creativity, collaboration, and iteration to envision, prototype, and revise solutions.</p>
+            </div>
+        </div>
+
+        <p class="footnote">While presented in eight categories, the programmatic learning outcomes listed above are not wholly separate domains; rather, each informs and shapes the other.</p>
+        <p class="footnote" style="margin-top: 12px;">We recognize that the Informatics curriculum is just one part of a student's educational experience at IU and within Luddy and that their education will be informed, and enriched by university general education, cognates, minors, and elective courses.</p>
+    </div>
+
+    <!-- PLOs -->
+    <div class="plos-section">
+        <div class="section-label">Programmatic Learning Outcomes</div>
+
+        <div class="plo-list">
+
+            <div class="plo-item knowledge">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Knowledge</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will demonstrate knowledge of key concepts, principles, and theories in Informatics, including ethics, design, data structures and algorithms, human-computer interaction, databases, sociotechnical analysis, and information systems development.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item technical">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Technical Skills</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will develop skills in applying knowledge to design, develop, and implement information systems and applications using a wide variety of programming languages, frameworks, prototyping, and development tools.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item data">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Analytical Skills</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to analyze and interpret systems and data in context using statistical, computational, and critical theories. They will also be able to use qualitative and information literacy methods to draw conclusions and make decisions.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item problem">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Problem-solving Skills</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to identify, decompose, and solve complex problems in various domains using sociotechnical, computational, and design methodologies to create innovative, sustainable, and equitable solutions for real-world problems.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item comm">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Communication</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to communicate effectively to diverse audiences.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item collab">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Collaboration</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to work collaboratively in interdisciplinary teams to develop and implement solutions to complex problems, and work effectively with and within diverse groups.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item ethics">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Ethics</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to identify ethical concerns and dilemmas so they can understand and apply ethical principles and practices in the local and global design and use of technologies.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+            <div class="plo-item lifelong">
+                <div class="plo-header">
+                    <div class="plo-swatch"></div>
+                    <div class="plo-name">Lifelong Learning</div>
+                </div>
+                <div class="plo-body">
+                    <p>Students will be able to engage in self-directed learning and professional development to recognize and engage with emerging trends, technologies, skills, and practices in order to adapt to changing contexts and challenges.</p>
+                    <div class="plo-extended-tag">&#10133; Extended Fall 2025</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

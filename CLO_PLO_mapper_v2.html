@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLO–PLO Mapper v2 — 2025 Framework</title>
+    <title>CLO–PLO Mapper v2 — 2023 PLOs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -440,8 +440,8 @@
     <div id="container">
         <div id="header">
             <h1>CLO–PLO Mapper</h1>
-            <span class="v-badge">2025 Framework</span>
-            <div id="subtitle">Map Course Learning Outcomes to the 2025 Informatics Program Learning Outcomes</div>
+            <span class="v-badge">2023 PLOs</span>
+            <div id="subtitle">Map Course Learning Outcomes to the 2023 Informatics Program Learning Outcomes — expanded for mapping in 2025</div>
             <button class="header-btn" onclick="goToDataEntry()" title="Open manual CLO data entry form">Data Entry ↗</button>
             <button class="header-btn" id="sidebar-toggle" onclick="toggleSidebar()">+ Add Courses</button>
         </div>
@@ -478,7 +478,7 @@
         <div class="modal-overlay" id="statsModal" onclick="if(event.target===this)closeStats()">
             <div class="modal">
                 <div class="modal-header">
-                    <h2>PLO Coverage Analysis — 2025 Framework</h2>
+                    <h2>PLO Coverage Analysis — 2023 PLOs</h2>
                     <button class="modal-close" onclick="closeStats()">&times;</button>
                 </div>
                 <div class="modal-body" id="statsBody"></div>
@@ -544,7 +544,7 @@
 
     <script>
     // ═══════════════════════════════════════════════════════════
-    // STATIC PLO DATA — 2025 Informatics BS Learning Outcomes
+    // STATIC PLO DATA — 2023 Informatics BS Learning Outcomes (expanded for mapping in 2025)
     // 8 flat categories (no pillar level)
     // ID pattern: {category}-{index}  e.g. knowledge-0, technical-3
     // ═══════════════════════════════════════════════════════════
