@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informatics CLO–PLO Mapping Toolkit</title>
+    <title>Informatics CLO-PLO Mapping Toolkit</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -16,51 +16,78 @@
             --forest: #2d5a27;
             --slate: #64748b;
             --border: #d1c4aa;
+            --blue: #2563eb;
+            --panel: rgba(245, 240, 232, 0.04);
+            --panel-border: rgba(245, 240, 232, 0.08);
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: "Space Grotesk", sans-serif;
             background: var(--ink);
             min-height: 100vh;
             color: var(--cream);
         }
 
-        /* ── Header ── */
-        .hero {
+        a { color: inherit; }
+
+        .hero-wrap {
             border-bottom: 3px solid var(--rust);
-            padding: 60px 24px 48px;
+            padding: 28px 24px 48px;
+        }
+
+        .hero {
             text-align: center;
-            max-width: 720px;
-            margin: 0 auto;
-        }
-        .hero h1 {
-            font-family: 'Space Mono', monospace;
-            font-size: 28px;
-            color: var(--amber);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 12px;
-        }
-        .hero p {
-            font-size: 15px;
-            color: rgba(245,240,232,0.55);
-            line-height: 1.6;
-            max-width: 540px;
+            max-width: 760px;
             margin: 0 auto;
         }
 
-        /* ── Content ── */
+        .eyebrow {
+            display: inline-block;
+            font-family: "Space Mono", monospace;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #93c5fd;
+            border: 1px solid rgba(147, 197, 253, 0.35);
+            background: rgba(37, 99, 235, 0.12);
+            padding: 4px 8px;
+            border-radius: 999px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-family: "Space Mono", monospace;
+            font-size: 30px;
+            color: var(--amber);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            font-size: 15px;
+            color: rgba(245, 240, 232, 0.72);
+            line-height: 1.75;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .hero p + p {
+            margin-top: 12px;
+        }
+
         .content {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
             padding: 40px 24px 80px;
         }
 
-        /* ── Section headers ── */
+        .section { margin-bottom: 48px; }
+
         h2 {
-            font-family: 'Space Mono', monospace;
+            font-family: "Space Mono", monospace;
             font-size: 14px;
             color: var(--amber);
             font-weight: 700;
@@ -68,40 +95,82 @@
             text-transform: uppercase;
             margin-bottom: 16px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(245,240,232,0.08);
+            border-bottom: 1px solid var(--panel-border);
         }
 
-        .section { margin-bottom: 48px; }
+        h3, h4 {
+            color: var(--cream);
+        }
 
         p, li {
             font-size: 14px;
-            color: rgba(245,240,232,0.7);
+            color: rgba(245, 240, 232, 0.72);
             line-height: 1.7;
         }
+
         p + p { margin-top: 12px; }
 
-        /* ── Tool Cards ── */
+        .callout {
+            padding: 16px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(217, 119, 6, 0.25);
+            background: rgba(217, 119, 6, 0.08);
+        }
+
+        .callout strong {
+            color: var(--cream);
+        }
+
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .focus-card {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .focus-card h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-family: "Space Mono", monospace;
+            color: var(--amber);
+        }
+
+        .focus-card p {
+            font-size: 13px;
+            color: rgba(245, 240, 232, 0.62);
+            line-height: 1.6;
+        }
+
         .tools {
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin-bottom: 40px;
         }
+
         .tool-card {
             display: flex;
             gap: 20px;
             align-items: flex-start;
-            background: rgba(245,240,232,0.03);
-            border: 1px solid rgba(245,240,232,0.08);
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
             border-radius: 8px;
             padding: 24px;
             text-decoration: none;
             transition: all 0.2s;
         }
+
         .tool-card:hover {
             border-color: var(--amber);
-            background: rgba(245,240,232,0.05);
+            background: rgba(245, 240, 232, 0.06);
         }
+
         .tool-icon {
             width: 48px;
             height: 48px;
@@ -112,60 +181,70 @@
             flex-shrink: 0;
             font-size: 20px;
         }
-        .tool-icon.entry  { background: rgba(196,84,26,0.2);  color: var(--rust); }
-        .tool-icon.viewer { background: rgba(45,90,39,0.2);   color: #4ade80; }
-        .tool-icon.gpt    { background: rgba(217,119,6,0.2);  color: var(--amber); }
-        .tool-icon.journey{ background: rgba(59,130,246,0.2); color: #60a5fa; }
-        .tool-icon.ref    { background: rgba(109,40,217,0.2); color: #a78bfa; }
+
+        .tool-icon.entry  { background: rgba(196, 84, 26, 0.2); color: var(--rust); }
+        .tool-icon.viewer { background: rgba(45, 90, 39, 0.2); color: #4ade80; }
+        .tool-icon.gpt    { background: rgba(217, 119, 6, 0.2); color: var(--amber); }
+        .tool-icon.journey{ background: rgba(37, 99, 235, 0.2); color: #93c5fd; }
+        .tool-icon.ref    { background: rgba(109, 40, 217, 0.2); color: #c4b5fd; }
+
         .tool-card.poc { border-style: dashed; }
-        .tool-card.poc:hover { border-color: #60a5fa; border-style: solid; }
-        .poc-tag {
-            font-family: 'Space Mono', monospace;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            border: 1px solid rgba(59,130,246,0.4);
-            color: #60a5fa;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
+
         .tool-info { flex: 1; }
+
         .tool-info h3 {
             font-size: 16px;
-            color: var(--cream);
             font-weight: 600;
             margin-bottom: 4px;
         }
+
         .tool-info .tool-desc {
             font-size: 13px;
-            color: rgba(245,240,232,0.5);
-            line-height: 1.5;
+            color: rgba(245, 240, 232, 0.55);
+            line-height: 1.55;
         }
+
         .tool-badge {
-            font-family: 'Space Mono', monospace;
+            font-family: "Space Mono", monospace;
             font-size: 10px;
             padding: 3px 8px;
             border-radius: 3px;
-            background: rgba(245,240,232,0.06);
-            color: rgba(245,240,232,0.4);
+            background: rgba(245, 240, 232, 0.06);
+            color: rgba(245, 240, 232, 0.45);
             margin-top: 8px;
             display: inline-block;
         }
 
-        /* ── Steps ── */
+        .poc-tag {
+            font-family: "Space Mono", monospace;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            color: #93c5fd;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
         .steps {
             counter-reset: step;
             list-style: none;
             padding: 0;
         }
+
         .steps li {
             counter-increment: step;
             position: relative;
             padding: 0 0 24px 48px;
-            border-left: 1px solid rgba(245,240,232,0.08);
+            border-left: 1px solid var(--panel-border);
             margin-left: 16px;
         }
-        .steps li:last-child { border-left: none; padding-bottom: 0; }
+
+        .steps li:last-child {
+            border-left: none;
+            padding-bottom: 0;
+        }
+
         .steps li::before {
             content: counter(step);
             position: absolute;
@@ -178,86 +257,157 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Space Mono', monospace;
+            font-family: "Space Mono", monospace;
             font-size: 13px;
             font-weight: 700;
             color: white;
         }
+
         .steps li strong {
             color: var(--cream);
             display: block;
             margin-bottom: 4px;
         }
 
-        /* ── Category grid ── */
         .cat-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
             margin-top: 16px;
         }
+
         .cat-card {
-            background: rgba(245,240,232,0.03);
-            border: 1px solid rgba(245,240,232,0.08);
-            border-radius: 6px;
-            padding: 14px;
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 16px;
             border-top: 3px solid;
         }
+
         .cat-card h4 {
-            font-size: 12px;
-            color: var(--cream);
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             line-height: 1.3;
         }
+
         .cat-card p {
-            font-size: 11px;
-            color: rgba(245,240,232,0.4);
-            line-height: 1.4;
+            font-size: 12px;
+            color: rgba(245, 240, 232, 0.55);
+            line-height: 1.55;
         }
 
-        /* ── Code sample ── */
+        details.advanced {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        details.advanced summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 16px 18px;
+            font-family: "Space Mono", monospace;
+            font-size: 12px;
+            color: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        details.advanced summary::-webkit-details-marker { display: none; }
+
+        details.advanced[open] summary {
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .advanced-body {
+            padding: 16px 18px 18px;
+        }
+
         .code-block {
-            background: rgba(245,240,232,0.03);
-            border: 1px solid rgba(245,240,232,0.08);
+            background: rgba(245, 240, 232, 0.03);
+            border: 1px solid rgba(245, 240, 232, 0.08);
             border-radius: 6px;
             padding: 16px;
-            font-family: 'Space Mono', monospace;
+            font-family: "Space Mono", monospace;
             font-size: 11px;
-            color: rgba(245,240,232,0.55);
+            color: rgba(245, 240, 232, 0.6);
             line-height: 1.6;
             overflow-x: auto;
             white-space: pre;
             margin-top: 12px;
         }
+
         .code-block .key { color: var(--amber); }
         .code-block .str { color: #4ade80; }
 
-        /* ── Footer ── */
         .footer {
             text-align: center;
             padding: 24px;
-            border-top: 1px solid rgba(245,240,232,0.06);
+            border-top: 1px solid rgba(245, 240, 232, 0.06);
+            font-family: "Space Mono", monospace;
             font-size: 11px;
-            color: rgba(245,240,232,0.2);
+            color: rgba(245, 240, 232, 0.28);
         }
 
         @media (max-width: 640px) {
-            .cat-grid { grid-template-columns: repeat(2, 1fr); }
-            .tool-card { flex-direction: column; gap: 12px; }
+            .focus-grid,
+            .cat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-card {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="hero">
-    <h1>CLO–PLO Mapping Toolkit</h1>
-    <p>Map your Course Learning Outcomes to the Informatics program's official Program Learning Outcomes. Understand curriculum coverage and identify gaps across the program.</p>
+<div class="hero-wrap">
+    <div class="hero">
+        <span class="eyebrow">Learning outcome mapping</span>
+        <h1>CLO-PLO Mapping Toolkit</h1>
+        <p>Map Course Learning Outcomes from syllabi to specific Program Learning Outcome statements in the Informatics curriculum.</p>
+        <p>The category groups on this site are only a way to browse the PLO set more easily. The actual mapping task is always outcome to outcome: <strong>CLO statement to PLO statement</strong>.</p>
+    </div>
 </div>
 
 <div class="content">
 
-    <!-- Tools -->
+    <div class="section">
+        <h2>What This Maps</h2>
+        <div class="callout">
+            <p><strong>This tool is for learning outcome alignment, not topic tagging.</strong> Faculty enter course-level learning outcomes, match each one to the most relevant PLO statements, and then review where the program shows strong coverage, thin coverage, or possible gaps.</p>
+        </div>
+        <div class="focus-grid">
+            <div class="focus-card">
+                <h3>Input</h3>
+                <p>Course Learning Outcomes taken from a syllabus or entered manually by faculty.</p>
+            </div>
+            <div class="focus-card">
+                <h3>Target</h3>
+                <p>Specific 2023 Program Learning Outcome statements, not just broad themes or content areas.</p>
+            </div>
+            <div class="focus-card">
+                <h3>Browse Layer</h3>
+                <p>Eight category groups help users find the right PLO statement faster, but those groups are not the final unit of mapping.</p>
+            </div>
+            <div class="focus-card">
+                <h3>Result</h3>
+                <p>A visible map of which PLO statements are covered across courses and which outcomes may need more attention.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="section">
         <h2>Tools</h2>
         <div class="tools">
@@ -265,148 +415,153 @@
                 <div class="tool-icon entry">&#9998;</div>
                 <div class="tool-info">
                     <h3>CLO Data Entry</h3>
-                    <p class="tool-desc">Enter your course learning outcomes and link each one to the program's 8 PLO categories. Color-coded category browser with full PLO descriptions on hover.</p>
-                    <span class="tool-badge">Start here</span>
+                    <p class="tool-desc">Enter Course Learning Outcomes and align each one to one or more specific PLO statements. The category tabs are there to narrow the list, not to replace the PLO statements themselves.</p>
+                    <span class="tool-badge">Start with faculty judgment</span>
                 </div>
             </a>
             <a class="tool-card" href="CLO_PLO_mapper_v2.html">
                 <div class="tool-icon viewer">&#9673;</div>
                 <div class="tool-info">
                     <h3>Interactive Mapper</h3>
-                    <p class="tool-desc">Visualize CLO–PLO relationships as an interactive force-directed graph. Expand categories, isolate courses, and open the PLO coverage histogram to identify gaps.</p>
-                    <span class="tool-badge">Visualize &amp; analyze</span>
+                    <p class="tool-desc">See course to CLO to PLO relationships in one view. Use the map and coverage analysis to discuss where program outcomes are reinforced, thinly represented, or absent.</p>
+                    <span class="tool-badge">Review alignment patterns</span>
                 </div>
             </a>
             <a class="tool-card" href="gpt_prompt_official.html">
                 <div class="tool-icon gpt">&#9881;</div>
                 <div class="tool-info">
                     <h3>GPT Prompt Guide</h3>
-                    <p class="tool-desc">Configure a custom GPT to extract CLOs from your syllabus and map them to PLO IDs automatically. Upload a syllabus, get ready-to-paste JSON.</p>
-                    <span class="tool-badge">Automated extraction</span>
+                    <p class="tool-desc">Extract draft CLOs from a syllabus and generate candidate PLO matches for faculty review. The output is a starting point for judgment, not a final mapping decision.</p>
+                    <span class="tool-badge">Draft support</span>
                 </div>
             </a>
             <a class="tool-card poc" href="student_journey.html">
                 <div class="tool-icon journey">&#9685;</div>
                 <div class="tool-info">
-                    <h3>Student Journey <span class="poc-tag">Proof of Concept</span></h3>
-                    <p class="tool-desc">Select courses from the catalog or paste a transcript to see which Program Learning Outcomes a student's coursework covers — and what gaps remain.</p>
+                    <h3>Student Journey <span class="poc-tag">Proof of concept</span></h3>
+                    <p class="tool-desc">Explore how a student's completed coursework may contribute to program learning outcome coverage across the curriculum.</p>
                     <span class="tool-badge">Student-facing view</span>
                 </div>
             </a>
             <a class="tool-card" href="plo_2023.html">
                 <div class="tool-icon ref">&#128196;</div>
                 <div class="tool-info">
-                    <h3>2023 PLOs</h3>
-                    <p class="tool-desc">The original faculty-approved Programmatic Learning Outcomes from April 2023, reproduced with exact language. Each category was extended with additional sub-outcomes in Fall 2025.</p>
-                    <span class="tool-badge">Reference</span>
+                    <h3>2023 PLO Reference</h3>
+                    <p class="tool-desc">Read the faculty-approved 2023 Program Learning Outcomes. The tool uses these statements as the reference point and groups them for easier browsing during mapping.</p>
+                    <span class="tool-badge">Official reference</span>
                 </div>
             </a>
         </div>
     </div>
 
-    <!-- How it works -->
     <div class="section">
         <h2>How It Works</h2>
         <ol class="steps">
             <li>
-                <strong>Enter your CLOs</strong>
-                Open the Data Entry tool. Add your course number, title, and a short description. Then add each Course Learning Outcome — the specific, measurable things students will be able to do after completing your course.
+                <strong>Enter the course and its CLOs</strong>
+                Start with the learning outcomes listed in the syllabus. Each CLO should describe something students will be able to do, explain, analyze, create, evaluate, or apply by the end of the course.
             </li>
             <li>
-                <strong>Link CLOs to PLOs</strong>
-                For each CLO, use the 8 color-coded category buttons to browse PLOs. Click chips to select alignments. Hover any chip to read the full PLO text. Most CLOs map to 1–4 PLOs.
+                <strong>Match each CLO to specific PLO statements</strong>
+                Use the category groups only to browse the official PLO set. The actual choice is a PLO statement, not a topic label. Most CLOs will align with a small number of PLO statements rather than an entire category.
             </li>
             <li>
-                <strong>Review and send</strong>
-                Click "Send to Mapper" to preview your data. The preview shows warnings for incomplete entries. Confirm, and the mapper opens with your course loaded automatically.
+                <strong>Review the course-to-outcome map</strong>
+                The mapper shows how courses connect to CLOs and how CLOs connect to program outcomes. This makes it easier to see which learning outcomes are reinforced in multiple places and which are touched less often.
             </li>
             <li>
-                <strong>Explore the map</strong>
-                Your courses appear connected to PLOs through their CLOs. Click nodes to expand, drag to rearrange, right-click to pin. Open the PLO Coverage histogram to see which outcomes are well-covered and which have gaps.
+                <strong>Use the results as a faculty conversation tool</strong>
+                Coverage counts can surface patterns and prompts for discussion, but the interpretation still depends on faculty judgment about wording, emphasis, and level of performance expected in each course.
             </li>
         </ol>
     </div>
 
-    <!-- PLO Framework -->
     <div class="section">
-        <h2>Program Learning Outcomes — 8 Categories</h2>
-        <p>The Informatics BS Program Learning Outcomes are organized into 8 competency categories with 43 specific, assessable sub-outcomes.</p>
+        <h2>PLO Statements, Grouped for Browsing</h2>
+        <p>The faculty-approved 2023 PLO language remains the reference point for this toolkit. The eight groups below are only a navigation aid that helps users find the right PLO statement more quickly during mapping.</p>
         <div class="cat-grid">
             <div class="cat-card" style="border-top-color:#6d28d9;">
                 <h4>Core Knowledge</h4>
-                <p>Info systems, data structures, HCI, sociotechnical analysis, ethics, policy. 6 PLOs.</p>
+                <p>Includes PLO statements about explaining information systems, data structures, databases, user experience, sociotechnical systems, ethics, privacy, and policy.</p>
             </div>
             <div class="cat-card" style="border-top-color:#c2410c;">
                 <h4>Technical Practice</h4>
-                <p>Programming, frameworks, version control, prototyping, databases, cloud, accessibility. 7 PLOs.</p>
+                <p>Includes PLO statements about writing and revising code, using frameworks and APIs, working with version control, prototyping, databases, cloud tools, and accessibility practices.</p>
             </div>
             <div class="cat-card" style="border-top-color:#0e7490;">
-                <h4>Data &amp; Analysis</h4>
-                <p>Statistical methods, qualitative research, data quality, visualization, analytical tools. 5 PLOs.</p>
+                <h4>Data and Analysis</h4>
+                <p>Includes PLO statements about using statistical and qualitative methods, evaluating data quality, building visualizations, and interpreting evidence.</p>
             </div>
             <div class="cat-card" style="border-top-color:#15803d;">
                 <h4>Problem Solving</h4>
-                <p>Human-centered design, feasibility, stakeholder balance, iteration, scale. 5 PLOs.</p>
+                <p>Includes PLO statements about framing human-centered problems, balancing stakeholder needs, testing feasibility, iterating on designs, and reasoning about scale.</p>
             </div>
             <div class="cat-card" style="border-top-color:#b45309;">
                 <h4>Communication</h4>
-                <p>Written docs, oral presentations, visual communication, diverse audiences. 4 PLOs.</p>
+                <p>Includes PLO statements about documenting work, presenting findings, and tailoring written, oral, and visual communication to different audiences.</p>
             </div>
             <div class="cat-card" style="border-top-color:#be185d;">
                 <h4>Collaboration</h4>
-                <p>Project management, roles, integrating expertise, feedback, conflict resolution. 5 PLOs.</p>
+                <p>Includes PLO statements about teamwork, project management, integrating expertise, responding to feedback, and handling conflict productively.</p>
             </div>
             <div class="cat-card" style="border-top-color:#991b1b;">
-                <h4>Ethics &amp; Responsibility</h4>
-                <p>Privacy, algorithmic bias, accessibility, sustainability, equity, professional codes. 6 PLOs.</p>
+                <h4>Ethics and Responsibility</h4>
+                <p>Includes PLO statements about privacy, bias, accessibility, sustainability, equity, and professional responsibility in technology work.</p>
             </div>
             <div class="cat-card" style="border-top-color:#1e40af;">
                 <h4>Lifelong Learning</h4>
-                <p>Independent learning, critical evaluation of tech, professional community, reflection. 5 PLOs.</p>
+                <p>Includes PLO statements about independent learning, critical evaluation of technology, professional community engagement, and reflective growth.</p>
             </div>
         </div>
     </div>
 
-    <!-- JSON format -->
     <div class="section">
-        <h2>JSON Format Reference</h2>
-        <p>PLO IDs follow <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">category-index</code> — for example <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">knowledge-0</code>, <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">ethics-3</code>, <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">technical-6</code>. Indexes start at 0 within each category. Use the GPT Prompt Guide to generate this JSON automatically from a syllabus.</p>
-        <div class="code-block">{
+        <h2>Advanced Import Format</h2>
+        <details class="advanced">
+            <summary>
+                <span>Open JSON import and export reference</span>
+                <span>optional</span>
+            </summary>
+            <div class="advanced-body">
+                <p>Most faculty users do not need to start here. This format is mainly for GPT-assisted extraction, import, export, or batch review workflows.</p>
+                <p>PLO IDs follow <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">category-index</code>, such as <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">knowledge-0</code> or <code style="font-family:'Space Mono',monospace; font-size:11px; color:var(--amber); background:rgba(217,119,6,0.1); padding:1px 5px; border-radius:3px;">ethics-3</code>. The ID format supports navigation, but the mapping logic still points back to a specific PLO statement.</p>
+                <div class="code-block">{
   <span class="key">"courses"</span>: [
     {
       <span class="key">"courseNumber"</span>: <span class="str">"INFO-I 101"</span>,
       <span class="key">"courseTitle"</span>: <span class="str">"Introduction to Informatics"</span>,
-      <span class="key">"description"</span>: <span class="str">"A ~50-word course description..."</span>,
+      <span class="key">"description"</span>: <span class="str">"A short course description..."</span>,
       <span class="key">"clos"</span>: [
         {
-          <span class="key">"text"</span>: <span class="str">"Decompose real-world problems into sub-problems"</span>,
+          <span class="key">"text"</span>: <span class="str">"Analyze a real-world problem and break it into smaller parts"</span>,
           <span class="key">"ploMappings"</span>: [<span class="str">"problem-0"</span>, <span class="str">"knowledge-1"</span>]
         }
       ]
     }
   ]
 }</div>
+            </div>
+        </details>
     </div>
 
-    <!-- Tips -->
     <div class="section">
-        <h2>Tips for Good Mappings</h2>
+        <h2>Tips for Stronger Mappings</h2>
         <ol class="steps">
             <li>
-                <strong>Start with action verbs</strong>
-                Write CLOs that begin with measurable verbs: analyze, construct, evaluate, design, implement. This makes it easier to identify which PLOs align.
+                <strong>Write CLOs as observable learning outcomes</strong>
+                Verbs such as analyze, design, implement, compare, evaluate, explain, and critique make alignment decisions clearer than broad topic phrases.
             </li>
             <li>
-                <strong>Aim for 1–4 PLO mappings per CLO</strong>
-                If a CLO maps to more than 4 PLOs it's probably too broad — consider splitting it. If it maps to zero, it may not align with program goals.
+                <strong>Map what students do, not only what the course covers</strong>
+                A course may discuss many topics, but the mapping should focus on the learning outcome students are expected to demonstrate.
             </li>
             <li>
-                <strong>Check cross-category coverage</strong>
-                Many courses naturally span multiple categories. A technical course might also touch Communication or Ethics — don't overlook those connections.
+                <strong>Choose the most specific PLO statements you can defend</strong>
+                If a CLO seems to match an entire category, the better move is usually to identify the smaller set of PLO statements that best capture the actual expected performance.
             </li>
             <li>
-                <strong>Use the coverage histogram</strong>
-                After loading your courses, open the PLO Coverage panel. Look for PLOs with zero hits (gaps) and PLOs with unusually high counts (potential over-emphasis).
+                <strong>Use coverage views to prompt discussion, not to end it</strong>
+                Strong mapping work still depends on faculty interpretation of wording, emphasis, and depth across courses.
             </li>
         </ol>
     </div>
@@ -414,7 +569,7 @@
 </div>
 
 <div class="footer">
-    Informatics CLO–PLO Mapping Toolkit
+    Informatics CLO-PLO Mapping Toolkit
 </div>
 
 </body>
